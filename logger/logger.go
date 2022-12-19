@@ -16,6 +16,7 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
+// InitLogger 初始化日志
 func InitLogger(cfg *settings.LogConfig) error {
 	encoder := getEncode()
 	syncer := getLogWriter(

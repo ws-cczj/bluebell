@@ -20,9 +20,17 @@ func Setup(cfg *settings.AppConfig) *gin.Engine {
 	}
 	r := gin.New()
 	r.Use(logger.GinLogger(), logger.GinRecovery(true))
+	r.GET("/index", func(c *gin.Context) {
+		c.Request.URL.Path = "/"
+		r.HandleContext(c)
+	})
 	r.GET("/", func(c *gin.Context) {
 		c.JSON(http.StatusOK, "routes build ok")
 	})
-	r.POST("/register", api.UserRegister)
+	user := r.Group("/user")
+	{
+		user.POST("/register", api.UserRegister)
+		user.POST("/login", api.UserLogin)
+	}
 	return r
 }

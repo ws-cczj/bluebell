@@ -1,8 +1,12 @@
 package serializer
 
-// -- Response 基础序列化器
+import (
+	"bluebell/pkg/e"
+)
+
+// Response 基础序列化器
 type Response struct {
-	Status int         `json:"status"`
+	Status e.ResCode   `json:"status"`
 	Data   interface{} `json:"data,omitempty"`
-	Msg    interface{} `json:"msg,omitempty"`
+	Msg    interface{} `json:"msg"`
 }
