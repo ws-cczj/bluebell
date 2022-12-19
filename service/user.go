@@ -5,7 +5,9 @@ import (
 	"bluebell/models"
 	"bluebell/pkg/e"
 	"bluebell/pkg/utils"
-	"bluebell/serializer"
+	silr "bluebell/serializer"
+	"database/sql"
+	"errors"
 )
 
 type RegisterService struct {
@@ -17,21 +19,22 @@ type RegisterService struct {
 }
 
 type LoginService struct {
-	Username string `json:"username" binding:"required"`
-	Password string `json:"password" binding:"required"`
-	Token    string `json:"token"`
+	Username string `json:"username" form:"username" binding:"required"`
+	Password string `json:"password" form:"password" binding:"required"`
+	//Token    string `json:"token"`
 }
 
 // Register 用户注册
-func (service *RegisterService) Register() (serializer.Response, error) {
-	code := e.SUCCESS
+func (service *RegisterService) Register() (silr.Response, error) {
+	code := e.CodeSUCCESS
 	// 1. 校验用户名
 	if err := mysql.CheckUsername(service.Username); err != nil {
-		code = e.ERROR
-		return serializer.Response{
-			Status: code,
-			Msg:    e.GetMsg(code),
-		}, err
+		if errors.Is(err, mysql.ErrorUserExist) {
+			code = e.CodeExistUser
+			return silr.Response{Status: code, Msg: err.Error()}, err
+		}
+		code = e.ErrorQueryDatabase
+		return silr.Response{Status: code, Msg: code.Msg()}, err
 	}
 	// 2. 生成UserID
 	id := utils.GenID()
@@ -45,19 +48,24 @@ func (service *RegisterService) Register() (serializer.Response, error) {
 		Gender:   service.Gender,
 	}
 	if err := mysql.InsertUser(u); err != nil {
-		code = e.ERROR
-		return serializer.Response{
-			Status: code,
-			Msg:    e.GetMsg(code),
-		}, err
+		code = e.ErrorExecDatabase
+		return silr.Response{Status: code, Msg: code}, err
 	}
-	return serializer.Response{
-		Status: code,
-		Msg:    e.GetMsg(code),
-	}, nil
+	return silr.Response{Status: code, Data: nil, Msg: code.Msg()}, nil
 }
 
 // Login 用户登录
-func (service *LoginService) Login() (serializer.Response, error) {
-	return serializer.Response{}, nil
+func (service *LoginService) Login() (silr.Response, error) {
+	code := e.CodeSUCCESS
+	if err := mysql.CheckLoginInfo(service.Username, service.Password); err != nil {
+		if errors.Is(err, mysql.ErrorNotComparePwd) {
+			code = e.CodeNotComparePassword
+		} else if err == sql.ErrNoRows {
+			code = e.CodeNotExistUser
+		} else {
+			code = e.CodeServerBusy
+		}
+		return silr.Response{Status: code, Msg: code.Msg()}, err
+	}
+	return silr.Response{Status: code, Msg: code.Msg()}, nil
 }

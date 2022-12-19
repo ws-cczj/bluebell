@@ -1,10 +1,7 @@
 package api
 
 import (
-	"bluebell/pkg/e"
-	"bluebell/serializer"
 	"bluebell/service"
-	"encoding/json"
 	"fmt"
 	"reflect"
 	"strings"
@@ -84,31 +81,5 @@ func UserServiceStructLevelValidation(sl validator.StructLevel) {
 	if su.Password != su.RePassword {
 		// 输出错误提示信息，最后一个参数就是传递的param
 		sl.ReportError(su.RePassword, "re_password", "RePassword", "eqfield", "password")
-	}
-}
-
-// -- ErrorResponse 返回错误信息
-func ErrorResponse(err error) serializer.Response {
-	if errs, ok := err.(validator.ValidationErrors); ok {
-		return serializer.Response{
-			Status: 400,
-			Msg:    removeTopStruct(errs.Translate(trans)),
-		}
-	}
-	if _, ok := err.(*validator.InvalidValidationError); ok {
-		return serializer.Response{
-			Status: 400,
-			Msg:    e.GetMsg(e.InvalidParams),
-		}
-	}
-	if _, ok := err.(*json.UnmarshalTypeError); ok {
-		return serializer.Response{
-			Status: 400,
-			Msg:    e.GetMsg(e.InvalidParams),
-		}
-	}
-	return serializer.Response{
-		Status: 400,
-		Msg:    e.GetMsg(e.ERROR),
 	}
 }
