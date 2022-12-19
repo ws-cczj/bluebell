@@ -1,0 +1,28 @@
+app:
+  name: "bluebell"
+  #mode: "release"
+  mode: "debug"
+  version: "v0.1.3"
+  port: ":4399"
+  start_time: "2022-12-31"
+  machine_id: 1
+log:
+  level: "debug"
+  filename: "bluebell.log"
+  max_size: 200
+  max_age: 30
+  max_backups: 7
+mysql:
+  host: "127.0.0.1"
+  port: 3306
+  dbname: "go_db"
+  username: "root"
+  password: "541688"
+  max_idles_conns: 50
+  max_opens_conns: 200
+redis:
+  host: "cczj"
+  port: 6379
+  password: ""
+  db: 0
+  pool_size: 100
