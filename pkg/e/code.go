@@ -9,6 +9,11 @@ const (
 	CodeNotExistUser
 	CodeFailEncryption
 	CodeNotComparePassword
+	// -- Token错误
+	TokenFailGenerate
+	TokenFailVerify
+	TokenNullNeedLogin
+	TokenInvalidAuth
 	// -- 数据库错误
 	ErrorQueryDatabase
 	ErrorExecDatabase

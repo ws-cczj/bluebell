@@ -51,11 +51,11 @@ func InsertUser(user *models.User) (err error) {
 }
 
 // CheckLoginInfo 验证用户登录信息
-func CheckLoginInfo(username, password string) error {
+func CheckLoginInfo(user *models.User) error {
 	// 1. 通过username找到password
-	var oPassword string
-	qStr := "select password from bluebell.user where username = ?"
-	err := db.Get(&oPassword, qStr, username)
+	var oPassword = user.Password
+	qStr := "select user_id,username,password from bluebell.user where username = ?"
+	err := db.Get(user, qStr, user.Username)
 	if err == sql.ErrNoRows {
 		zap.L().Error("LoginInfo is not compared", zap.Error(err))
 		return err
@@ -65,8 +65,8 @@ func CheckLoginInfo(username, password string) error {
 		return err
 	}
 	// 2. 验证password
-	if oPassword != encryptPassword(password) {
-		zap.L().Error("LoginInfo is not compared", zap.String("用户: ", username), zap.Error(ErrorNotComparePwd))
+	if encryptPassword(oPassword) != user.Password {
+		zap.L().Error("LoginInfo is not compared", zap.String("用户名: ", user.Username), zap.Error(ErrorNotComparePwd))
 		return ErrorNotComparePwd
 	}
 	return nil

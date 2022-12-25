@@ -10,9 +10,12 @@ var CodeMsgMap = map[ResCode]string{
 	CodeExistUser:          "用户已经存在!",
 	CodeNotExistUser:       "用户不存在!",
 	CodeNotComparePassword: "用户密码不匹配",
-
-	ErrorExecDatabase:  "数据库执行操作失败!",
-	ErrorQueryDatabase: "数据库查询失败!",
+	TokenFailGenerate:      "token颁发失败",
+	TokenFailVerify:        "token验证错误",
+	TokenNullNeedLogin:     "请先登录",
+	TokenInvalidAuth:       "请求头中token格式无效",
+	ErrorExecDatabase:      "数据库执行操作失败!",
+	ErrorQueryDatabase:     "数据库查询失败!",
 }
 
 // Msg 获取状态码对应信息
