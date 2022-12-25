@@ -4,7 +4,7 @@ import (
 	"bluebell/dao/mysql"
 	"bluebell/dao/redis"
 	"bluebell/logger"
-	"bluebell/pkg/utils"
+	"bluebell/pkg/snowflake"
 	"bluebell/routes"
 	"bluebell/settings"
 	"context"
@@ -44,7 +44,7 @@ func main() {
 	}
 	defer redis.Close()
 	// 4. 初始化分布式ID生成器
-	err = utils.InitSnowID(settings.Conf.AppConfig.StartTime, settings.Conf.AppConfig.MachineID)
+	err = snowflake.InitSnowID(settings.Conf.AppConfig.StartTime, settings.Conf.AppConfig.MachineID)
 	if err != nil {
 		zap.L().Error("init snowflake fail!", zap.Error(err))
 		return

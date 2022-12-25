@@ -3,6 +3,7 @@ package routes
 import (
 	"bluebell/api"
 	"bluebell/logger"
+	"bluebell/middleware"
 	"bluebell/settings"
 	"net/http"
 
@@ -20,7 +21,7 @@ func Setup(cfg *settings.AppConfig) *gin.Engine {
 	}
 	r := gin.New()
 	r.Use(logger.GinLogger(), logger.GinRecovery(true))
-	r.GET("/index", func(c *gin.Context) {
+	r.GET("/index", middleware.JWTAuthMiddleware(), func(c *gin.Context) {
 		c.Request.URL.Path = "/"
 		r.HandleContext(c)
 	})
@@ -32,5 +33,11 @@ func Setup(cfg *settings.AppConfig) *gin.Engine {
 		user.POST("/register", api.UserRegister)
 		user.POST("/login", api.UserLogin)
 	}
+
+	r.NoRoute(func(c *gin.Context) {
+		c.JSON(http.StatusNotFound, gin.H{
+			"Msg": "请求的路径不存在",
+		})
+	})
 	return r
 }

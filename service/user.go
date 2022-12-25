@@ -4,7 +4,8 @@ import (
 	"bluebell/dao/mysql"
 	"bluebell/models"
 	"bluebell/pkg/e"
-	"bluebell/pkg/utils"
+	"bluebell/pkg/jwt"
+	"bluebell/pkg/snowflake"
 	silr "bluebell/serializer"
 	"database/sql"
 	"errors"
@@ -21,7 +22,6 @@ type RegisterService struct {
 type LoginService struct {
 	Username string `json:"username" form:"username" binding:"required"`
 	Password string `json:"password" form:"password" binding:"required"`
-	//Token    string `json:"token"`
 }
 
 // Register 用户注册
@@ -37,7 +37,7 @@ func (service *RegisterService) Register() (silr.Response, error) {
 		return silr.Response{Status: code, Msg: code.Msg()}, err
 	}
 	// 2. 生成UserID
-	id := utils.GenID()
+	id := snowflake.GenID()
 	// 3. 生成token
 	// 4. 添加用户到数据库
 	u := &models.User{
@@ -57,7 +57,10 @@ func (service *RegisterService) Register() (silr.Response, error) {
 // Login 用户登录
 func (service *LoginService) Login() (silr.Response, error) {
 	code := e.CodeSUCCESS
-	if err := mysql.CheckLoginInfo(service.Username, service.Password); err != nil {
+	user := new(models.User)
+	user.Username = service.Username
+	user.Password = service.Password
+	if err := mysql.CheckLoginInfo(user); err != nil {
 		if errors.Is(err, mysql.ErrorNotComparePwd) {
 			code = e.CodeNotComparePassword
 		} else if err == sql.ErrNoRows {
@@ -67,5 +70,11 @@ func (service *LoginService) Login() (silr.Response, error) {
 		}
 		return silr.Response{Status: code, Msg: code.Msg()}, err
 	}
-	return silr.Response{Status: code, Msg: code.Msg()}, nil
+	// 颁发token
+	token, err := jwt.GenToken(user.UserID, user.Username)
+	if err != nil {
+		code = e.TokenFailGenerate
+		return silr.Response{Status: code, Msg: code.Msg()}, err
+	}
+	return silr.Response{Data: token}, nil
 }

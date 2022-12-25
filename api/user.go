@@ -51,5 +51,5 @@ func UserLogin(c *gin.Context) {
 		ResponseErrorWithRes(c, res)
 		return
 	}
-	ResponseSuccess(c, nil)
+	ResponseSuccess(c, res.Data)
 }
