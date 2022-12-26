@@ -2,6 +2,7 @@ package service
 
 import (
 	"bluebell/dao/mysql"
+	"bluebell/dao/redis"
 	"bluebell/models"
 	"bluebell/pkg/e"
 	"bluebell/pkg/jwt"
@@ -38,8 +39,7 @@ func (service *RegisterService) Register() (silr.Response, error) {
 	}
 	// 2. 生成UserID
 	id := snowflake.GenID()
-	// 3. 生成token
-	// 4. 添加用户到数据库
+	// 3. 添加用户到数据库
 	u := &models.User{
 		UserID:   id,
 		Username: service.Username,
@@ -74,6 +74,11 @@ func (service *LoginService) Login() (silr.Response, error) {
 	token, err := jwt.GenToken(user.UserID, user.Username)
 	if err != nil {
 		code = e.TokenFailGenerate
+		return silr.Response{Status: code, Msg: code.Msg()}, err
+	}
+	// 将token存入redis中一份
+	if err = redis.SetSingleUserToken(user.Username, token); err != nil {
+		code = e.CodeServerBusy
 		return silr.Response{Status: code, Msg: code.Msg()}, err
 	}
 	return silr.Response{Data: token}, nil

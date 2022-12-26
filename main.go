@@ -59,7 +59,7 @@ func main() {
 
 	// -- 开启协程进行监听
 	go func() {
-		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+		if err = srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			zap.L().Fatal("listen is fail!", zap.Error(err))
 		}
 	}()
@@ -77,7 +77,7 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	// -- 5s内优雅关闭服务（将正在处理的服务处理完毕后结束进程）, 超过5s就强制结束
-	if err := srv.Shutdown(ctx); err != nil {
+	if err = srv.Shutdown(ctx); err != nil {
 		zap.L().Error("Server Shutdown fail!", zap.Error(err))
 	}
 	zap.L().Info("Server exiting...")

@@ -2,8 +2,10 @@ package middleware
 
 import (
 	"bluebell/api"
+	"bluebell/dao/redis"
 	"bluebell/pkg/e"
 	"bluebell/pkg/jwt"
+	"net/http"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -35,8 +37,20 @@ func JWTAuthMiddleware() func(c *gin.Context) {
 			c.Abort()
 			return
 		}
+		// 通过获取redis中的token来校验是否单用户登录
+		token, err := redis.GetSingleUserToken(mc.Username)
+		if err != nil {
+			api.ResponseError(c, e.CodeServerBusy)
+			c.Abort()
+			return
+		}
+		if token != parts[1] {
+			api.ResponseErrorWithCode(c, http.StatusUnauthorized, e.CodeRepeatLogin)
+			c.Abort()
+			return
+		}
 		// 将当前请求的username信息保存到请求的上下文c上
 		c.Set(api.ContextUserIDKey, mc.UserID)
-		c.Next() // 后续的处理函数可以用过c.Get("username")来获取当前请求的用户信息
+		c.Next() // 后续的处理函数可以用过c.Get("userID")来获取当前请求的用户信息
 	}
 }
