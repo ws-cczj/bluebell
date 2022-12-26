@@ -10,6 +10,7 @@ var CodeMsgMap = map[ResCode]string{
 	CodeExistUser:          "用户已经存在!",
 	CodeNotExistUser:       "用户不存在!",
 	CodeNotComparePassword: "用户密码不匹配",
+	CodeRepeatLogin:        "账号在其他地区登录",
 	TokenFailGenerate:      "token颁发失败",
 	TokenFailVerify:        "token验证错误",
 	TokenNullNeedLogin:     "请先登录",

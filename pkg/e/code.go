@@ -9,6 +9,7 @@ const (
 	CodeNotExistUser
 	CodeFailEncryption
 	CodeNotComparePassword
+	CodeRepeatLogin
 	// -- Token错误
 	TokenFailGenerate
 	TokenFailVerify

@@ -106,3 +106,13 @@
 2022-12-25 20:52:39	debug	logger/logger.go:113	/index	{"status": 200, "Method": "GET", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "error": "", "cost": 0.0013363}
 2022-12-25 22:21:25	info	bluebell/main.go:75	Shutdown Server...
 2022-12-25 22:21:25	info	bluebell/main.go:83	Server exiting...
+2022-12-26 18:19:20	debug	logger/logger.go:113	/user/login	{"status": 200, "Method": "POST", "query": "username=zhangsan&password=123456", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "error": "", "cost": 0.0316517}
+2022-12-26 18:19:40	debug	logger/logger.go:113	/	{"status": 200, "Method": "GET", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "error": "", "cost": 0}
+2022-12-26 18:19:40	debug	logger/logger.go:113	/index	{"status": 200, "Method": "GET", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "error": "", "cost": 0.0012582}
+2022-12-26 18:21:05	debug	logger/logger.go:113	/user/login	{"status": 200, "Method": "POST", "query": "username=zhangsan&password=123456", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "error": "", "cost": 0.0012204}
+2022-12-26 18:21:17	debug	logger/logger.go:113	/	{"status": 200, "Method": "GET", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "error": "", "cost": 0}
+2022-12-26 18:21:17	debug	logger/logger.go:113	/index	{"status": 200, "Method": "GET", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "error": "", "cost": 0.0014021}
+2022-12-26 18:21:30	debug	logger/logger.go:113	/user/login	{"status": 200, "Method": "POST", "query": "username=zhangsan&password=123456", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "error": "", "cost": 0.0007333}
+2022-12-26 18:21:44	debug	logger/logger.go:113	/index	{"status": 401, "Method": "GET", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "error": "", "cost": 0}
+2022-12-26 18:33:21	info	bluebell/main.go:75	Shutdown Server...
+2022-12-26 18:33:21	info	bluebell/main.go:83	Server exiting...
