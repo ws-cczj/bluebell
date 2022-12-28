@@ -21,17 +21,20 @@ func Setup(cfg *settings.AppConfig) *gin.Engine {
 	}
 	r := gin.New()
 	r.Use(logger.GinLogger(), logger.GinRecovery(true))
-	r.GET("/index", middleware.JWTAuthMiddleware(), func(c *gin.Context) {
-		c.Request.URL.Path = "/"
-		r.HandleContext(c)
-	})
-	r.GET("/", func(c *gin.Context) {
-		c.JSON(http.StatusOK, "routes build ok")
-	})
-	user := r.Group("/user")
+
+	v1 := r.Group("/api/v1")
+	v1.POST("/register", api.UserRegister)
+	v1.POST("/login", api.UserLogin)
+
+	v1.Use(middleware.JWTAuthMiddleware())
 	{
-		user.POST("/register", api.UserRegister)
-		user.POST("/login", api.UserLogin)
+		v1.GET("/community", api.CommunityHandler)
+		v1.GET("/community/:id", api.CommunityDetailHandler)
+
+		v1.POST("/post", api.PostPublishHandler)
+		v1.GET("/post/:id", api.PostDetailHandler)
+		v1.GET("/posts", api.PostListHandler)
+		v1.POST("/post/votes", api.PostVotesHandler)
 	}
 
 	r.NoRoute(func(c *gin.Context) {

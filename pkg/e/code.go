@@ -15,7 +15,4 @@ const (
 	TokenFailVerify
 	TokenNullNeedLogin
 	TokenInvalidAuth
-	// -- 数据库错误
-	ErrorQueryDatabase
-	ErrorExecDatabase
 )

@@ -17,7 +17,7 @@
   "mysql": {
     "host": "127.0.0.1",
     "port": 3306,
-    "dbname": "go_db",
+    "dbname": "bluebell",
     "username": "root",
     "password": "541688",
     "max_idles_conns": 50,

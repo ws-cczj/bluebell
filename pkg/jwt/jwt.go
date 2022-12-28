@@ -7,7 +7,7 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 )
 
-const TokenExpireDuration = 2 * time.Hour
+const TokenExpireDuration = 6 * time.Hour
 const TokenIssuedAtDuration = 0
 const TokenNotBeforeDuration = -1 * time.Second
 const TokenIssuer = "bluebell"

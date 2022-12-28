@@ -15,12 +15,13 @@ const secret = "cczjblog.top"
 var (
 	ErrorUserExist     = errors.New("用户名已经存在")
 	ErrorNotComparePwd = errors.New("用户密码不匹配")
+	ErrorInvalidParam  = errors.New("无效的参数")
 )
 
 // CheckUsername 检查用户名是否重复
 func CheckUsername(username string) (err error) {
 	var count int
-	qStr := "select count(id) from bluebell.user where username = ?"
+	qStr := `select count(id) from user where username = ?`
 	err = db.Get(&count, qStr, username)
 	if err != nil {
 		zap.L().Error("CheckUsername db get failed", zap.Error(err))
@@ -35,7 +36,7 @@ func CheckUsername(username string) (err error) {
 
 // InsertUser 登记用户信息到数据库
 func InsertUser(user *models.User) (err error) {
-	iStr := "insert into bluebell.user(user_id,username,password,email,gender) values(?,?,?,?,?)"
+	iStr := `insert into user(user_id,username,password,email,gender) values(?,?,?,?,?)`
 	_, err = db.Exec(iStr,
 		user.UserID,
 		user.Username,
@@ -54,7 +55,7 @@ func InsertUser(user *models.User) (err error) {
 func CheckLoginInfo(user *models.User) error {
 	// 1. 通过username找到password
 	var oPassword = user.Password
-	qStr := "select user_id,username,password from bluebell.user where username = ?"
+	qStr := `select user_id,username,password from user where username = ?`
 	err := db.Get(user, qStr, user.Username)
 	if err == sql.ErrNoRows {
 		zap.L().Error("LoginInfo is not compared", zap.Error(err))
@@ -77,4 +78,12 @@ func encryptPassword(password string) string {
 	h := md5.New()
 	h.Write([]byte(secret))
 	return hex.EncodeToString(h.Sum([]byte(password)))
+}
+
+// GetUserById 根据用户ID查找到用户信息
+func GetUserById(uid int64) (user *models.User, err error) {
+	user = new(models.User)
+	qStr := `select user_id,username,password,email,gender from user where user_id = ?`
+	err = db.Get(user, qStr, uid)
+	return
 }

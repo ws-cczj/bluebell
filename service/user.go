@@ -34,7 +34,7 @@ func (service *RegisterService) Register() (silr.Response, error) {
 			code = e.CodeExistUser
 			return silr.Response{Status: code, Msg: err.Error()}, err
 		}
-		code = e.ErrorQueryDatabase
+		code = e.CodeServerBusy
 		return silr.Response{Status: code, Msg: code.Msg()}, err
 	}
 	// 2. 生成UserID
@@ -48,7 +48,7 @@ func (service *RegisterService) Register() (silr.Response, error) {
 		Gender:   service.Gender,
 	}
 	if err := mysql.InsertUser(u); err != nil {
-		code = e.ErrorExecDatabase
+		code = e.CodeServerBusy
 		return silr.Response{Status: code, Msg: code}, err
 	}
 	return silr.Response{Status: code, Data: nil, Msg: code.Msg()}, nil
@@ -57,9 +57,10 @@ func (service *RegisterService) Register() (silr.Response, error) {
 // Login 用户登录
 func (service *LoginService) Login() (silr.Response, error) {
 	code := e.CodeSUCCESS
-	user := new(models.User)
-	user.Username = service.Username
-	user.Password = service.Password
+	user := &models.User{
+		Username: service.Username,
+		Password: service.Password,
+	}
 	if err := mysql.CheckLoginInfo(user); err != nil {
 		if errors.Is(err, mysql.ErrorNotComparePwd) {
 			code = e.CodeNotComparePassword
