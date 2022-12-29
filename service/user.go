@@ -8,7 +8,6 @@ import (
 	"bluebell/pkg/jwt"
 	"bluebell/pkg/snowflake"
 	silr "bluebell/serializer"
-	"database/sql"
 	"errors"
 )
 
@@ -64,7 +63,7 @@ func (service *LoginService) Login() (silr.Response, error) {
 	if err := mysql.CheckLoginInfo(user); err != nil {
 		if errors.Is(err, mysql.ErrorNotComparePwd) {
 			code = e.CodeNotComparePassword
-		} else if err == sql.ErrNoRows {
+		} else if err == mysql.ErrNoRows {
 			code = e.CodeNotExistUser
 		} else {
 			code = e.CodeServerBusy

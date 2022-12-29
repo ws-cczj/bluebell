@@ -2,6 +2,8 @@ package mysql
 
 import (
 	"bluebell/settings"
+	"database/sql"
+	"errors"
 	"fmt"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -9,7 +11,13 @@ import (
 	"go.uber.org/zap"
 )
 
-var db *sqlx.DB
+var (
+	db                 *sqlx.DB
+	ErrNoRows          = sql.ErrNoRows
+	ErrorUserExist     = errors.New("用户名已经存在")
+	ErrorNotComparePwd = errors.New("用户密码不匹配")
+	ErrorInvalidParam  = errors.New("无效的参数")
+)
 
 func InitMysql(cfg *settings.MysqlConfig) (err error) {
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True",

@@ -2,13 +2,17 @@ package redis
 
 import (
 	"bluebell/settings"
+	"errors"
 	"fmt"
 
 	"github.com/go-redis/redis"
 	"go.uber.org/zap"
 )
 
-var rdb *redis.Client
+var (
+	rdb                *redis.Client
+	ErrVoteTimeExpired = errors.New("post vote time was expired")
+)
 
 func InitRedis(cfg *settings.RedisConfig) error {
 	red := redis.NewClient(&redis.Options{

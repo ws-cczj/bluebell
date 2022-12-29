@@ -3,20 +3,12 @@ package mysql
 import (
 	"bluebell/models"
 	"crypto/md5"
-	"database/sql"
 	"encoding/hex"
-	"errors"
 
 	"go.uber.org/zap"
 )
 
 const secret = "cczjblog.top"
-
-var (
-	ErrorUserExist     = errors.New("用户名已经存在")
-	ErrorNotComparePwd = errors.New("用户密码不匹配")
-	ErrorInvalidParam  = errors.New("无效的参数")
-)
 
 // CheckUsername 检查用户名是否重复
 func CheckUsername(username string) (err error) {
@@ -57,7 +49,7 @@ func CheckLoginInfo(user *models.User) error {
 	var oPassword = user.Password
 	qStr := `select user_id,username,password from user where username = ?`
 	err := db.Get(user, qStr, user.Username)
-	if err == sql.ErrNoRows {
+	if err == ErrNoRows {
 		zap.L().Error("LoginInfo is not compared", zap.Error(err))
 		return err
 	}

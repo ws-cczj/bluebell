@@ -2,6 +2,7 @@ package service
 
 import (
 	"bluebell/dao/mysql"
+	"bluebell/dao/redis"
 	"bluebell/models"
 	"bluebell/pkg/e"
 	"bluebell/pkg/snowflake"
@@ -36,6 +37,14 @@ func (p PublishService) PublishPost() (silr.Response, error) {
 	}
 	if err := mysql.CreatePost(post); err != nil {
 		code = e.CodeServerBusy
+		zap.L().Error("mysql CreatePost method is failed",
+			zap.Error(err))
+		return silr.Response{Status: code, Msg: code.Msg()}, err
+	}
+	if err := redis.CreatePost(post.PostId); err != nil {
+		code = e.CodeServerBusy
+		zap.L().Error("redis CreatePost method is failed",
+			zap.Error(err))
 		return silr.Response{Status: code, Msg: code.Msg()}, err
 	}
 	return silr.Response{Status: code, Msg: code.Msg()}, nil

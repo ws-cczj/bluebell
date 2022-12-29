@@ -10,6 +10,7 @@ const (
 	CodeFailEncryption
 	CodeNotComparePassword
 	CodeRepeatLogin
+	CodePostVoteExpired
 	// -- Token错误
 	TokenFailGenerate
 	TokenFailVerify
