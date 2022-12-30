@@ -30,11 +30,14 @@ func Setup(cfg *settings.AppConfig) *gin.Engine {
 	{
 		v1.GET("/community", api.CommunityHandler)
 		v1.GET("/community/:id", api.CommunityDetailHandler)
+		v1.GET("/community/:id/posts", api.CommunityPostHandler)
 
 		v1.POST("/post", api.PostPublishHandler)
 		v1.GET("/post/:id", api.PostDetailHandler)
 		v1.GET("/posts", api.PostListHandler)
-		v1.POST("/post/votes", api.PostVotesHandler)
+		v1.GET("/postsOrder", api.PostListOrderHandler)
+
+		v1.POST("/votes", api.PostVotesHandler)
 	}
 
 	r.NoRoute(func(c *gin.Context) {

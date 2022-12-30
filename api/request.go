@@ -27,10 +27,11 @@ func getCurrentUser(c *gin.Context) (userID int64, err error) {
 }
 
 // getPostListInfo 获取帖子的参数信息
-func getPostListInfo(c *gin.Context) (page int64, size int64) {
+func getPostListInfo(c *gin.Context) (page, size int64, order string) {
 	var err error
 	pageStr := c.Query("page")
 	sizeStr := c.Query("size")
+	order = c.Query("order")
 	page, err = strconv.ParseInt(pageStr, 10, 64)
 	if err != nil {
 		page = 1

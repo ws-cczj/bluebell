@@ -2,7 +2,9 @@ package mysql
 
 import (
 	"bluebell/models"
-	"database/sql"
+	"strings"
+
+	"github.com/jmoiron/sqlx"
 
 	"go.uber.org/zap"
 )
@@ -30,7 +32,7 @@ func GetPostDetailById(id int64) (data *models.Post, err error) {
 				from post
 				where post_id = ?`
 	err = db.Get(data, qStr, id)
-	if err == sql.ErrNoRows {
+	if err == ErrNoRows {
 		zap.L().Error("getPostDetail data is null", zap.Error(err))
 		err = ErrorInvalidParam
 	}
@@ -42,8 +44,23 @@ func GetPostList(page, size int64) (posts []*models.Post, err error) {
 	qStr := `select 
 				post_id,community_id,author_id,title,content,status,create_time
 				from post
+				order by create_time DESC
 				limit ?,?`
 	posts = make([]*models.Post, 0, size)
 	err = db.Select(&posts, qStr, (page-1)*size, size)
+	return
+}
+
+// GetPostListInOrder 根据指定顺序查询帖子
+func GetPostListInOrder(ids []string) (posts []*models.Post, err error) {
+	qStr := `select 
+				post_id,community_id,author_id,title,content,status,create_time
+				from post
+				where post_id in (?)
+				order by FIND_IN_SET(post_id, ?)`
+	posts = make([]*models.Post, 0, len(ids))
+	query, args, err := sqlx.In(qStr, ids, strings.Join(ids, ","))
+	query = db.Rebind(query)
+	err = db.Select(&posts, query, args...)
 	return
 }

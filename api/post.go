@@ -62,11 +62,46 @@ func PostDetailHandler(c *gin.Context) {
 
 // PostListHandler 获取所有的帖子
 func PostListHandler(c *gin.Context) {
-	page, size := getPostListInfo(c)
+	page, size, _ := getPostListInfo(c)
 	p := &service.PostService{}
 	data, err := p.PostList(page, size)
 	if err != nil {
 		zap.L().Error("PostList select data is failed", zap.Error(err))
+		ResponseError(c, e.CodeServerBusy)
+		return
+	}
+	ResponseSuccess(c, data)
+}
+
+// PostListOrderHandler 顺序获取所有帖子
+func PostListOrderHandler(c *gin.Context) {
+	page, size, order := getPostListInfo(c)
+	p := &service.PostService{}
+	data, err := p.PostListInOrder(page, size, order)
+	if err != nil {
+		zap.L().Error("PostListInOrder select data is failed", zap.Error(err))
+		ResponseError(c, e.CodeServerBusy)
+		return
+	}
+	ResponseSuccess(c, data)
+}
+
+// CommunityPostHandler 获取社区的帖子
+func CommunityPostHandler(c *gin.Context) {
+	page, size, order := getPostListInfo(c)
+	cidStr := c.Param("id")
+	cid, err := strconv.ParseInt(cidStr, 10, 64)
+	if err != nil {
+		zap.L().Error("get param cid Invalid",
+			zap.Any("cid", cid),
+			zap.Error(err))
+		ResponseError(c, e.CodeInvalidParams)
+		return
+	}
+	p := &service.PostService{}
+	data, err := p.CommunityPostListInOrder(page, size, cid, order)
+	if err != nil {
+		zap.L().Error("CommunityPostListInOrder select data is failed", zap.Error(err))
 		ResponseError(c, e.CodeServerBusy)
 		return
 	}
