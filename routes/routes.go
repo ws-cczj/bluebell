@@ -6,10 +6,16 @@ import (
 	"bluebell/middleware"
 	"bluebell/settings"
 	"net/http"
+	"time"
 
 	"go.uber.org/zap"
 
 	"github.com/gin-gonic/gin"
+)
+
+const (
+	RateLimitMaxCaps = 1000        // 令牌桶最大容量
+	RateLimitGenTime = time.Minute // 令牌桶生成每个令牌所需时间
 )
 
 func Setup(cfg *settings.AppConfig) *gin.Engine {
@@ -20,9 +26,13 @@ func Setup(cfg *settings.AppConfig) *gin.Engine {
 		zap.L().Error("init translation fail!", zap.Error(err))
 	}
 	r := gin.New()
-	r.Use(logger.GinLogger(), logger.GinRecovery(true))
+	r.Use(logger.GinLogger(), logger.GinRecovery(true),
+		middleware.RateLimitMiddleware(RateLimitGenTime, RateLimitMaxCaps))
 
 	v1 := r.Group("/api/v1")
+	v1.GET("/ping", func(c *gin.Context) {
+		c.JSON(http.StatusOK, "ping is ok!")
+	})
 	v1.POST("/register", api.UserRegister)
 	v1.POST("/login", api.UserLogin)
 
