@@ -64,7 +64,7 @@ func encodeTimeLayout(t time.Time, layout string, enc zapcore.PrimitiveArrayEnco
 // getEncodeTime 自定义的日志打印时间格式
 func getEncodeTime() func(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
 	return func(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
-		encodeTimeLayout(t, "2006-01-02 15:04:05", enc)
+		encodeTimeLayout(t, "[2006-01-02 15:04:05]", enc)
 	}
 }
 
@@ -81,7 +81,7 @@ func getEncode() zapcore.Encoder {
 		MessageKey:     "msg",
 		StacktraceKey:  "stacktrace",
 		LineEnding:     zapcore.DefaultLineEnding,
-		EncodeLevel:    zapcore.LowercaseLevelEncoder,
+		EncodeLevel:    zapcore.CapitalColorLevelEncoder,
 		EncodeTime:     getEncodeTime(),
 		EncodeDuration: zapcore.SecondsDurationEncoder,
 		EncodeCaller:   zapcore.ShortCallerEncoder,
@@ -138,10 +138,11 @@ func GinRecovery(stack bool) gin.HandlerFunc {
 				}
 
 				httpRequest, _ := httputil.DumpRequest(c.Request, false)
+				requests := strings.Split(string(httpRequest), "\r\n")
 				if brokenPipe {
 					zap.L().Error(c.Request.URL.Path,
 						zap.Any("error", err),
-						zap.String("request", string(httpRequest)),
+						zap.Strings("request", requests),
 					)
 					// If the connection is dead, we can't write a status to it.
 					c.Error(err.(error)) // nolint: errcheck
@@ -152,13 +153,13 @@ func GinRecovery(stack bool) gin.HandlerFunc {
 				if stack {
 					zap.L().Error("[Recovery from panic]",
 						zap.Any("error", err),
-						zap.String("request", string(httpRequest)),
-						zap.String("stack", string(debug.Stack())),
+						zap.Strings("request", requests),
+						zap.Strings("stack", strings.Split(string(debug.Stack()), "\n\t")),
 					)
 				} else {
 					zap.L().Error("[Recovery from panic]",
 						zap.Any("error", err),
-						zap.String("request", string(httpRequest)),
+						zap.Strings("request", requests),
 					)
 				}
 				c.AbortWithStatus(http.StatusInternalServerError)

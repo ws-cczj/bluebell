@@ -17,15 +17,6 @@ func ResponseError(c *gin.Context, code e.ResCode) {
 	})
 }
 
-// ResponseErrorWithCode 错误响应体自指定code
-func ResponseErrorWithCode(c *gin.Context, htc int, code e.ResCode) {
-	c.JSON(htc, silr.Response{
-		Status: code,
-		Data:   nil,
-		Msg:    code.Msg(),
-	})
-}
-
 // ResponseErrorWithRes 带有响应体的响应体
 func ResponseErrorWithRes(c *gin.Context, res silr.Response) {
 	c.JSON(http.StatusServiceUnavailable, res)

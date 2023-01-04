@@ -27,6 +27,16 @@ func CreatePost(pid, community int64) (err error) {
 	return
 }
 
+// DeletePost 删除帖子信息
+func DeletePost(pid, community int64) (err error) {
+	pipeline := rdb.Pipeline()
+	pipeline.ZRem(addKeyPrefix(KeyPostTimeZSet), pid)
+	pipeline.ZRem(addKeyPrefix(KeyPostScoreZSet), pid)
+	pipeline.SRem(addKeyPrefix(KeyCommunitySetPF+stvI64toa(community)), pid)
+	_, err = pipeline.Exec()
+	return
+}
+
 // GetPostVote 获取帖子的票数
 func GetPostVote(pid int64) int64 {
 	return rdb.ZCount(addKeyPrefix(KeyPostVotedZSetPF+stvI64toa(pid)), "1", "1").Val()

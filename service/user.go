@@ -71,7 +71,7 @@ func (service *LoginService) Login() (silr.Response, error) {
 		return silr.Response{Status: code, Msg: code.Msg()}, err
 	}
 	// 颁发token
-	token, err := jwt.GenToken(user.UserID, user.Username)
+	token, rtoken, err := jwt.GenToken(user.UserID, user.Username)
 	if err != nil {
 		code = e.TokenFailGenerate
 		return silr.Response{Status: code, Msg: code.Msg()}, err
@@ -81,5 +81,5 @@ func (service *LoginService) Login() (silr.Response, error) {
 		code = e.CodeServerBusy
 		return silr.Response{Status: code, Msg: code.Msg()}, err
 	}
-	return silr.Response{Data: token}, nil
+	return silr.Response{Data: []string{token, rtoken}}, nil
 }

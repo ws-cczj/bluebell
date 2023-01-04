@@ -42,3 +42,9 @@ func getPostListInfo(c *gin.Context) (page, size int64, order string) {
 	}
 	return
 }
+
+// getPostId 获取参数 ID
+func getPostId(c *gin.Context) (int64, error) {
+	idStr := c.Param("id")
+	return strconv.ParseInt(idStr, 10, 64)
+}

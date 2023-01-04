@@ -15,7 +15,9 @@ func PostVotesHandler(c *gin.Context) {
 	v := new(service.PostVoteService)
 	if err := c.ShouldBind(v); err != nil {
 		zap.L().Error("postVote ShouldBind method failed", zap.Error(err))
-		errs := err.(validator.ValidationErrors)
+		errs, ok := err.(validator.ValidationErrors)
+		if ok {
+		}
 		ResponseErrorWithMsg(c, e.CodeInvalidParams, errs.Translate(trans))
 		return
 	}

@@ -4,7 +4,7 @@ import (
 	"time"
 )
 
-const RTExpiredDuration = 6*time.Hour + 1*time.Second
+const RTExpiredDuration = 610 * time.Second
 
 // SetSingleUserToken 设置redis单用户token
 func SetSingleUserToken(username string, token string) (err error) {

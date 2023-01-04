@@ -30,7 +30,7 @@ func GetPostDetailById(id int64) (data *models.Post, err error) {
 	qStr := `select 
 				post_id,community_id,author_id,title,content,status,create_time
 				from post
-				where post_id = ?`
+				where post_id = ? and status = 1`
 	err = db.Get(data, qStr, id)
 	if err == ErrNoRows {
 		zap.L().Error("getPostDetail data is null", zap.Error(err))
@@ -39,15 +39,41 @@ func GetPostDetailById(id int64) (data *models.Post, err error) {
 	return
 }
 
+// FindCidByPid 通过帖子id查找社区id
+func FindCidByPid(pid int64) (cid int64, err error) {
+	qStr := `select community_id 
+				from post
+				where post_id = ?`
+	err = db.Get(&cid, qStr, pid)
+	return
+}
+
+// UpdatePost 更新帖子数据
+func UpdatePost(pid int64, title, content string) (err error) {
+	uStr := `update post 
+				set title = ?, content = ? 
+				where post_id = ?`
+	_, err = db.Exec(uStr, title, content, pid)
+	return
+}
+
+// DeletePost 删除帖子
+func DeletePost(pid int64) (err error) {
+	dStr := `delete from post where post_id = ?`
+	_, err = db.Exec(dStr, pid)
+	return
+}
+
 // GetPostList 获取所有帖子
-func GetPostList(page, size int64) (posts []*models.Post, err error) {
+func GetPostList(page, size int64, order string) (posts []*models.Post, err error) {
 	qStr := `select 
 				post_id,community_id,author_id,title,content,status,create_time
 				from post
-				order by create_time DESC
+				where status = 1
+				order by ? DESC
 				limit ?,?`
 	posts = make([]*models.Post, 0, size)
-	err = db.Select(&posts, qStr, (page-1)*size, size)
+	err = db.Select(&posts, qStr, order, (page-1)*size, size)
 	return
 }
 
@@ -56,7 +82,7 @@ func GetPostListInOrder(ids []string) (posts []*models.Post, err error) {
 	qStr := `select 
 				post_id,community_id,author_id,title,content,status,create_time
 				from post
-				where post_id in (?)
+				where post_id in (?) and status = 1
 				order by FIND_IN_SET(post_id, ?)`
 	posts = make([]*models.Post, 0, len(ids))
 	query, args, err := sqlx.In(qStr, ids, strings.Join(ids, ","))

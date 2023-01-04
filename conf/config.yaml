@@ -6,6 +6,9 @@ app:
   port: ":4399"
   start_time: "2022-12-31"
   machine_id: 1
+  ratelimit: # 限流令牌桶中间件
+    gen_interval: 60  # 令牌桶生成每个令牌所需时间
+    max_caps: 1000  # 令牌桶最大容量
 log:
   level: "debug"
   filename: "bluebell.log"
