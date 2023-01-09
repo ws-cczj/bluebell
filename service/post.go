@@ -7,6 +7,7 @@ import (
 	"bluebell/pkg/e"
 	"bluebell/pkg/snowflake"
 	silr "bluebell/serializer"
+	"errors"
 
 	"go.uber.org/zap"
 )
@@ -14,8 +15,9 @@ import (
 const (
 	OPostTime  = "time"
 	OPostScore = "score"
-	PostStatus = 1
 )
+
+var ErrPostExpired = errors.New("该帖子已经过期")
 
 type PublishService struct {
 	AuthorId    int64  `json:"author_id,string" form:"author_id"`
@@ -26,7 +28,6 @@ type PublishService struct {
 
 type PostService struct {
 	AuthorName string `json:"author_name"`
-	VoteNum    int64  `json:"vote_num"`
 	*models.Post
 	*models.CommunityDetail `json:"community_detail"`
 }
@@ -40,7 +41,7 @@ func (p PublishService) PublishPost() (silr.Response, error) {
 		CommunityId: p.CommunityId,
 		Title:       p.Title,
 		Content:     p.Content,
-		Status:      PostStatus,
+		Status:      mysql.PostPublish,
 	}
 	if err := mysql.CreatePost(post); err != nil {
 		code = e.CodeServerBusy
@@ -58,9 +59,20 @@ func (p PublishService) PublishPost() (silr.Response, error) {
 }
 
 // PostPut 修改帖子数据
-func (p *PublishService) PostPut(pid int64) (silr.Response, error) {
+func (p PublishService) PostPut(pid int64) (silr.Response, error) {
 	code := e.CodeSUCCESS
-	if err := mysql.UpdatePost(pid, p.Title, p.Content); err != nil {
+	status, err := mysql.GetPostStatus(pid)
+	if err != nil {
+		code = e.CodeServerBusy
+		zap.L().Error("mysql CheckPostStatus method is failed",
+			zap.Error(err))
+		return silr.Response{Status: code, Msg: code.Msg()}, err
+	}
+	if status == mysql.PostExpired {
+		code = e.CodePostVoteExpired
+		return silr.Response{Status: code, Msg: code.Msg()}, ErrPostExpired
+	}
+	if err = mysql.UpdatePost(pid, p.Title, p.Content); err != nil {
 		code = e.CodeServerBusy
 		zap.L().Error("mysql UpdatePost method is failed",
 			zap.Error(err))
@@ -92,7 +104,16 @@ func (p *PostService) PostDetailById(pid int64) (err error) {
 			zap.Error(err))
 		return err
 	}
-	p.VoteNum = redis.GetPostVote(pid)
+	if p.Post.Status != mysql.PostExpired {
+		p.Post.VoteNum = redis.GetPostVote(pid)
+	} else {
+		if p.Post.VoteNum, err = mysql.GetPostVote(pid); err != nil {
+			zap.L().Error("GetPostVote method is failed",
+				zap.Int64("post_id", p.Post.PostId),
+				zap.Error(err))
+			return err
+		}
+	}
 	p.AuthorName = user.Username
 	return nil
 }
@@ -140,7 +161,10 @@ func DeletePost(pid int64) (err error) {
 		if err = mysql.DeletePost(pid); err != nil {
 			zap.L().Error("mysql DeletePost method is err",
 				zap.Error(err))
-			return err
+			return
+		}
+		if status, _ := mysql.GetPostStatus(pid); status == mysql.PostExpired {
+			return
 		}
 		if err = redis.DeletePost(pid, cid); err != nil {
 			zap.L().Error("redis DeletePost method is err",
@@ -181,9 +205,9 @@ func getPostListByIds(ids []string) (postList []*PostService, err error) {
 				zap.Error(err))
 			continue
 		}
+		post.VoteNum = tickets[i]
 		plist := &PostService{
 			AuthorName:      user.Username,
-			VoteNum:         tickets[i],
 			Post:            post,
 			CommunityDetail: community,
 		}
@@ -191,5 +215,3 @@ func getPostListByIds(ids []string) (postList []*PostService, err error) {
 	}
 	return
 }
-
-// TODO 开启定时任务，将redis中投票时间已经过期的帖子转移到数据库中，并通过数据库进行查询

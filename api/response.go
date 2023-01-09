@@ -8,6 +8,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+const NotFoundRoute = "请求路径未找到"
+
 // ResponseError 错误响应体
 func ResponseError(c *gin.Context, code e.ResCode) {
 	c.JSON(http.StatusServiceUnavailable, silr.Response{
@@ -23,11 +25,11 @@ func ResponseErrorWithRes(c *gin.Context, res silr.Response) {
 }
 
 // ResponseErrorWithMsg 带有消息的错误响应体
-func ResponseErrorWithMsg(c *gin.Context, code e.ResCode, Msg interface{}) {
+func ResponseErrorWithMsg(c *gin.Context, code e.ResCode, msg interface{}) {
 	c.JSON(int(code), silr.Response{
 		Status: code,
 		Data:   nil,
-		Msg:    Msg,
+		Msg:    msg,
 	})
 }
 
@@ -38,5 +40,13 @@ func ResponseSuccess(c *gin.Context, data interface{}) {
 		Status: code,
 		Data:   data,
 		Msg:    code.Msg(),
+	})
+}
+
+// ResponseNotFound 路由未找到
+func ResponseNotFound(c *gin.Context) {
+	c.JSON(http.StatusNotFound, silr.Response{
+		Status: http.StatusNotFound,
+		Msg:    NotFoundRoute,
 	})
 }

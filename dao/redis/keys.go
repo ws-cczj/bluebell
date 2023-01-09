@@ -48,3 +48,11 @@ func redisZS(compare string) redis.ZStore {
 		Aggregate: compare,
 	}
 }
+
+// redisZRBy 对redisZRByScore进行封装
+func redisZRBy(min, max int64) redis.ZRangeBy {
+	return redis.ZRangeBy{
+		Min: stvI64toa(min),
+		Max: stvI64toa(max),
+	}
+}

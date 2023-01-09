@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bluebell/crontab"
 	"bluebell/dao/mysql"
 	"bluebell/dao/redis"
 	"bluebell/logger"
@@ -49,9 +50,14 @@ func main() {
 		zap.L().Error("init snowflake fail!", zap.Error(err))
 		return
 	}
-	// 5. 初始化路由
+	// 6. 初始化路由
 	r := routes.Setup(settings.Conf.AppConfig)
-	// 6. 开启web监听服务,设置优雅关机
+	// 5. 开启定时任务
+	ctab := crontab.NewCrontabInstance()
+	crontab.MysqlTask()
+	crontab.MonitorTask()
+	ctab.RunAll()
+	// 7. 开启web监听服务,设置优雅关机
 	srv := &http.Server{
 		Addr:    settings.Conf.AppConfig.Port,
 		Handler: r,
@@ -71,7 +77,8 @@ func main() {
 	// kill -9 发送 syscall.SIGKILL 信号, 但是不能被捕获到， 所以不需要添加该信号
 	// signal.Notify会把收到的 syscall.SIGINT 或者 syscall.SIGTERM 信号转发给quit
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
-	<-quit // -- 如果接收不到信号就在这里一直堵塞
+	<-quit         // -- 如果接收不到信号就在这里一直堵塞
+	ctab.StopAll() // 关闭定时任务
 	zap.L().Info("Shutdown Server...")
 	// -- 创建一个超过5秒超时的context
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)

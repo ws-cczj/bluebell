@@ -39,7 +39,7 @@ func DeletePost(pid, community int64) (err error) {
 
 // GetPostVote 获取帖子的票数
 func GetPostVote(pid int64) int64 {
-	return rdb.ZCount(addKeyPrefix(KeyPostVotedZSetPF+stvI64toa(pid)), "1", "1").Val()
+	return rdb.ZCount(addKeyPrefix(KeyPostVotedZSetPF+stvI64toa(pid)), ZCountMAX, ZCountMIN).Val()
 }
 
 // GetPostIds 根据顺序查询帖子列表
@@ -85,4 +85,10 @@ func GetCommunityPostIds(page, size, cid int64, orderkey string) (ids []string, 
 		}
 	}
 	return GetPostIds(page, size, orderkey+stvI64toa(cid))
+}
+
+// GetPostExpired 获取已经过期的帖子集合
+func GetPostExpired(min, max int64) (ids []string, err error) {
+	return rdb.ZRangeByScore(addKeyPrefix(KeyPostTimeZSet),
+		redisZRBy(min-OneWeekPostTime, max-OneWeekPostTime)).Result()
 }

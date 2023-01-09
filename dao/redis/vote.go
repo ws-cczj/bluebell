@@ -32,8 +32,8 @@ func PostVoteDirect(pid, uid int64, direct float64) (diff float64) {
 	return -diff
 }
 
-// ChangePostInfo 更改帖子分数和用户投票情况
-func ChangePostInfo(pid, uid int64, diff, direct float64) (err error) {
+// ChangeVoteInfo 更改帖子分数和用户投票情况
+func ChangeVoteInfo(pid, uid int64, diff, direct float64) (err error) {
 	pipe := rdb.TxPipeline()
 	if diff == 0 && direct != 0 {
 		pipe.ZRem(addKeyPrefix(KeyPostVotedZSetPF+stvI64toa(pid)), stvI64toa(uid))

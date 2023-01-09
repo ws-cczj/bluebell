@@ -5,7 +5,6 @@ import (
 	"bluebell/logger"
 	"bluebell/middleware"
 	"bluebell/settings"
-	"net/http"
 
 	"go.uber.org/zap"
 
@@ -24,16 +23,18 @@ func Setup(cfg *settings.AppConfig) *gin.Engine {
 		middleware.RateLimitMiddleware(cfg.RateLimit.GenInterval, cfg.RateLimit.MaxCaps))
 
 	//pprof.Register(r)
+	// api/v1
 	v1 := r.Group("/api/v1")
 	v1.POST("/register", api.UserRegister)
 	v1.POST("/login", api.UserLogin)
-
+	// community 社区
 	v1.GET("/community", api.CommunityHandler)
 	v1.GET("/community/:id", api.CommunityDetailHandler)
 	v1.GET("/community/:id/posts", api.CommunityPostHandler)
+	// post 帖子
 	v1.GET("/posts", api.PostListHandler)
 	v1.GET("/post/:id", api.PostDetailHandler)
-
+	// jwt auth 用户认证
 	v1.Use(middleware.JWTAuthMiddleware())
 	{
 		v1.POST("/post", api.PostPublishHandler)
@@ -43,9 +44,7 @@ func Setup(cfg *settings.AppConfig) *gin.Engine {
 	}
 
 	r.NoRoute(func(c *gin.Context) {
-		c.JSON(http.StatusNotFound, gin.H{
-			"Msg": "请求的路径不存在",
-		})
+		api.ResponseNotFound(c)
 	})
 	return r
 }
