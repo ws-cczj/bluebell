@@ -7,12 +7,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const ContextUserIDKey = "userID"
+const ContextUserIDKey = "user_id"
+const ContextUsernameKey = "username"
 
 var ErrorUserNotLogin = errors.New("用户还未登录")
 
-// getCurrentUser 获取当前的username
-func getCurrentUser(c *gin.Context) (userID int64, err error) {
+// getCurrentUserId 获取当前的userId
+func getCurrentUserId(c *gin.Context) (userID int64, err error) {
 	uid, ok := c.Get(ContextUserIDKey)
 	if !ok {
 		err = ErrorUserNotLogin
@@ -21,7 +22,20 @@ func getCurrentUser(c *gin.Context) (userID int64, err error) {
 	userID, ok = uid.(int64)
 	if !ok {
 		err = ErrorUserNotLogin
+	}
+	return
+}
+
+// getCurrentUserId 获取当前用户的username
+func getCurrentUsername(c *gin.Context) (username string, err error) {
+	uname, ok := c.Get(ContextUsernameKey)
+	if !ok {
+		err = ErrorUserNotLogin
 		return
+	}
+	username, ok = uname.(string)
+	if !ok {
+		err = ErrorUserNotLogin
 	}
 	return
 }
@@ -43,8 +57,8 @@ func getPostListInfo(c *gin.Context) (page, size int64, order string) {
 	return
 }
 
-// getPostId 获取参数 ID
-func getPostId(c *gin.Context) (int64, error) {
-	idStr := c.Param("id")
+// getParamId 获取参数 ID
+func getParamId(c *gin.Context, param string) (int64, error) {
+	idStr := c.Param(param)
 	return strconv.ParseInt(idStr, 10, 64)
 }

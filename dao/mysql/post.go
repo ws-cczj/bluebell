@@ -4,8 +4,9 @@ import (
 	"bluebell/models"
 	"strings"
 
-	"github.com/jmoiron/sqlx"
 	"go.uber.org/zap"
+
+	"github.com/jmoiron/sqlx"
 )
 
 const (
@@ -13,27 +14,31 @@ const (
 	PostPublish
 	PostSave
 	PostExpired
+	PostDelete
 )
 
 // CreatePost 创建帖子
 func CreatePost(post *models.Post) (err error) {
 	iStr := `insert into post(
-				post_id,title,content,author_id,community_id,status)
-				values (?,?,?,?,?,?)`
+				post_id,title,content,author_id,author_name,community_id,status)
+				values (?,?,?,?,?,?,?)`
 	_, err = db.Exec(iStr,
 		post.PostId,
 		post.Title,
 		post.Content,
 		post.AuthorId,
+		post.AuthorName,
 		post.CommunityId,
 		post.Status)
 	return
 }
 
-// DeletePost 删除帖子
+// DeletePost 软删除帖子
 func DeletePost(pid int64) (err error) {
-	dStr := `delete from post where post_id = ?`
-	_, err = db.Exec(dStr, pid)
+	uStr := `update post 
+				set status = ?
+				where post_id = ?`
+	_, err = db.Exec(uStr, PostDelete, pid)
 	return
 }
 
@@ -46,8 +51,8 @@ func UpdatePost(pid int64, title, content string) (err error) {
 	return
 }
 
-// UpdateCtbPost 定实更新帖子
-func UpdateCtbPost(pid, vote_num int64) (err error) {
+// UpdateCtbPost 更新帖子的票数
+func UpdateCtbPost(pid int64, vote_num uint32) (err error) {
 	uStr := `update post 
 				set vote_num = ?, status = ? 
 				where post_id = ?`
@@ -59,14 +64,10 @@ func UpdateCtbPost(pid, vote_num int64) (err error) {
 func GetPostDetailById(id int64) (data *models.Post, err error) {
 	data = new(models.Post)
 	qStr := `select 
-				post_id,community_id,author_id,title,content,status,create_time
+				post_id,community_id,author_id,title,content,vote_num,status,create_time
 				from post
-				where post_id = ?`
-	err = db.Get(data, qStr, id)
-	if err == ErrNoRows {
-		zap.L().Error("getPostDetail data is null", zap.Error(err))
-		err = ErrorInvalidParam
-	}
+				where post_id = ? and status <> ?`
+	err = db.Get(data, qStr, id, PostDelete)
 	return
 }
 
@@ -88,37 +89,20 @@ func GetPostStatus(pid int64) (status uint8, err error) {
 	return
 }
 
-// GetPostVote 根据id获取过期帖子投票数
-func GetPostVote(pid int64) (ticket int64, err error) {
-	qStr := `select vote_num
-				from post
-				where post_id = ? AND status = ?`
-	err = db.Get(&ticket, qStr, pid, PostExpired)
-	return
-}
-
-// GetPostList 获取所有帖子
-func GetPostList(page, size int64, order string) (posts []*models.Post, err error) {
-	qStr := `select 
-				post_id,community_id,author_id,title,content,status,create_time
-				from post
-				order by ? DESC
-				limit ?,?`
-	posts = make([]*models.Post, 0, size)
-	err = db.Select(&posts, qStr, order, (page-1)*size, size)
-	return
-}
-
 // GetPostListInOrder 根据指定顺序查询帖子
 func GetPostListInOrder(ids []string) (posts []*models.Post, err error) {
 	qStr := `select 
-				post_id,community_id,author_id,title,content,status,create_time
+				post_id,community_id,author_id,author_name,title,content,status,create_time,update_time
 				from post
 				where post_id in (?)
 				order by FIND_IN_SET(post_id, ?)`
 	posts = make([]*models.Post, 0, len(ids))
-	query, args, err := sqlx.In(qStr, ids, strings.Join(ids, ","))
+	query, args, _ := sqlx.In(qStr, ids, strings.Join(ids, ","))
 	query = db.Rebind(query)
 	err = db.Select(&posts, query, args...)
+	if err == ErrNoRows {
+		zap.L().Warn("GetPostList method data is null")
+		err = nil
+	}
 	return
 }

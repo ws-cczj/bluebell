@@ -31,7 +31,7 @@
     "host": "cczj",
     "port": 6379,
     "password": "",
-    "db": 0,
+    "db": 8,
     "pool_size": 100
   }
 }

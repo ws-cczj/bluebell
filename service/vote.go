@@ -14,10 +14,10 @@ type PostVoteService struct {
 	Direction int8  `json:"direction" form:"direction" bidding:"oneof=1 0 -1"` // 规定 1为赞成，0为取消投票，-1为反对
 }
 
-// VoteBuild 投票构建
-func (v PostVoteService) VoteBuild(uid int64) (silr.Response, error) {
+// Build 投票构建
+func (v PostVoteService) Build(uid int64) (silr.Response, error) {
 	code := e.CodeSUCCESS
-	// 1. 判断帖子投票时间是否过期
+	// 1. 判断帖子状态
 	status, err := mysql.GetPostStatus(v.PostId)
 	if err != nil {
 		code = e.CodeServerBusy
@@ -27,21 +27,21 @@ func (v PostVoteService) VoteBuild(uid int64) (silr.Response, error) {
 			zap.Error(err))
 		return silr.Response{Status: code, Msg: code.Msg()}, err
 	}
-	if status == 4 {
+	// 如果帖子已经被删除直接返回参数错误
+	if status == mysql.PostDelete {
+		code = e.CodeInvalidParams
+		zap.L().Error(code.Msg(),
+			zap.Int64("postId", v.PostId),
+			zap.Int64("userId", uid),
+			zap.Error(err))
+		return silr.Response{Status: code, Msg: code.Msg()}, mysql.ErrNoRows
+	} else if status == mysql.PostExpired {
 		code = e.CodePostVoteExpired
 		zap.L().Error(code.Msg(),
 			zap.Int64("postId", v.PostId),
 			zap.Int64("userId", uid),
 			zap.Error(err))
-		return silr.Response{Status: code, Msg: code.Msg()}, err
-	}
-	if err = redis.CheckVoteTime(v.PostId); err != nil {
-		code = e.CodePostVoteExpired
-		zap.L().Error(code.Msg(),
-			zap.Int64("postId", v.PostId),
-			zap.Int64("userId", uid),
-			zap.Error(err))
-		return silr.Response{Status: code, Msg: code.Msg()}, err
+		return silr.Response{Status: code, Msg: code.Msg()}, redis.ErrVoteTimeExpired
 	}
 	// 2. 判断帖子投票情况
 	diff := redis.PostVoteDirect(v.PostId, uid, float64(v.Direction))

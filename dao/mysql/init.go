@@ -16,7 +16,6 @@ var (
 	ErrNoRows          = sql.ErrNoRows
 	ErrorUserExist     = errors.New("用户名已经存在")
 	ErrorNotComparePwd = errors.New("用户密码不匹配")
-	ErrorInvalidParam  = errors.New("无效的参数")
 )
 
 func InitMysql(cfg *settings.MysqlConfig) (err error) {
@@ -25,8 +24,7 @@ func InitMysql(cfg *settings.MysqlConfig) (err error) {
 		cfg.Password,
 		cfg.Host,
 		cfg.Port,
-		cfg.Dbname,
-	)
+		cfg.Dbname)
 	db, err = sqlx.Connect("mysql", dsn)
 	if err != nil {
 		// -- 将日志记录到日志库中

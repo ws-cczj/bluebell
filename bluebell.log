@@ -3804,3 +3804,455 @@
 [2023-01-09 17:09:04]	[34mINFO[0m	logger/crontablogger.go:12	stop
 [2023-01-09 17:09:04]	[34mINFO[0m	bluebell/main.go:82	Shutdown Server...
 [2023-01-09 17:09:04]	[34mINFO[0m	bluebell/main.go:90	Server exiting...
+[2023-01-12 21:42:36]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-01-12 21:42:36]	[35mDEBUG[0m	crontab/taskExec.go:47	监视任务执行情况开启!
+[2023-01-12 21:42:36]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-01-12 21:42:36]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-12 21:42:36]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-12 21:44:07]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/post/-498760719265792	{"status": 200, "Method": "GET", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0223908}
+[2023-01-12 21:45:31]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/login	{"status": 200, "Method": "POST", "query": "username=zhangsan&password=123456", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0021624}
+[2023-01-12 21:48:28]	[31mERROR[0m	logger/ginlogger.go:65	[Recovery from panic]	{"error": "Undefined validation function 'type' on field 'Type'", "request": ["POST /api/v1/comment?post_id=-498760719265792&type=0&author_id=-4495712263860224&author_name=zhangsan&content=%E6%B5%8B%E8%AF%95%E8%AF%84%E8%AE%BA HTTP/1.1", "Host: localhost:4399", "Accept: */*", "Accept-Encoding: gzip, deflate, br", "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjotNDQ5NTcxMjI2Mzg2MDIyNCwidXNlcm5hbWUiOiJ6aGFuZ3NhbiIsImlzcyI6ImJsdWViZWxsIiwiZXhwIjoxNjczNTMxNzMxLCJuYmYiOjE2NzM1MzEwNzEsImlhdCI6MTY3MzUzMTEzMX0.d3JAlQshVJIuzL5GaLpdg3q8d8vEljUawJqsDlSk7v4", "Cache-Control: no-cache", "Connection: keep-alive", "Content-Length: 0", "Grant_type: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJibHVlYmVsbCIsImV4cCI6MTY3NjEyMzEzMSwibmJmIjoxNjczNTMxMDcxLCJpYXQiOjE2NzM1MzExMzF9.F5onWERNycVFXVfqLuAh-nxiWtHJ_3N_XGJkLPB50Js", "Postman-Token: ce8271fb-11c6-49c6-b13c-d73b15144527", "User-Agent: PostmanRuntime/7.29.0", "", ""], "stack": ["goroutine 25 [running]:\nruntime/debug.Stack()", "C:/Environment/Go/src/runtime/debug/stack.go:24 +0x65\nbluebell/logger.GinRecovery.func1.1()", "C:/Users/18446/GolandProjects/project/bluebell/logger/ginlogger.go:68 +0x34f\npanic({0x6f1de0, 0xc000404930})", "C:/Environment/Go/src/runtime/panic.go:884 +0x212\ngithub.com/go-playground/validator/v10.(*Validate).parseFieldTagsRecursive(0xc0004985b0, {0x6d9b28?, 0x0?}, {0x6d9af8, 0x4}, {0x0, 0x0}, 0x0)", "C:/Environment/Go/go_work/pkg/mod/github.com/go-playground/validator/v10@v10.11.1/cache.go:294 +0xa19\ngithub.com/go-playground/validator/v10.(*Validate).extractStructCache(0xc0004985b0, {0x777720?, 0xc000412080?, 0x1df2c6?}, {0x6c10b1, 0x7})", "C:/Environment/Go/go_work/pkg/mod/github.com/go-playground/validator/v10@v10.11.1/cache.go:155 +0x60f\ngithub.com/go-playground/validator/v10.(*validate).validateStruct(0xc00049a360, {0x8a10d0, 0xc0000221d0}, {0x759ca0?, 0xc0003f2630?, 0x0?}, {0x777720?, 0xc000412080?, 0x0?}, {0x8a8e20, ...}, ...)", "C:/Environment/Go/go_work/pkg/mod/github.com/go-playground/validator/v10@v10.11.1/validator.go:37 +0x190\ngithub.com/go-playground/validator/v10.(*validate).traverseField(0xc00049a360, {0x8a10d0, 0xc0000221d0}, {0x759ca0?, 0xc0003f2630?, 0xc00011e600?}, {0x6da180?, 0xc0003f2650?, 0x26a52b90598?}, {0xc0000a8200, ...}, ...)", "C:/Environment/Go/go_work/pkg/mod/github.com/go-playground/validator/v10@v10.11.1/validator.go:225 +0x1410\ngithub.com/go-playground/validator/v10.(*validate).validateStruct(0xc00049a360, {0x8a10d0, 0xc0000221d0}, {0x759ca0?, 0xc0003f2630?, 0x2030000?}, {0x759ca0?, 0xc0003f2630?, 0x89e020?}, {0x8a8e20, ...}, ...)", "C:/Environment/Go/go_work/pkg/mod/github.com/go-playground/validator/v10@v10.11.1/validator.go:77 +0x725\ngithub.com/go-playground/validator/v10.(*Validate).StructCtx(0xc0004985b0, {0x8a10d0, 0xc0000221d0}, {0x759ca0, 0xc0003f2630?})", "C:/Environment/Go/go_work/pkg/mod/github.com/go-playground/validator/v10@v10.11.1/validator_instance.go:385 +0x46c\ngithub.com/go-playground/validator/v10.(*Validate).Struct(...)", "C:/Environment/Go/go_work/pkg/mod/github.com/go-playground/validator/v10@v10.11.1/validator_instance.go:358\ngithub.com/gin-gonic/gin/binding.(*defaultValidator).validateStruct(0xbd1900, {0x759ca0, 0xc0003f2630})", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/binding/default_validator.go:80 +0x4e\ngithub.com/gin-gonic/gin/binding.(*defaultValidator).ValidateStruct(0x759ca0?, {0x759ca0?, 0xc0003f2630?})", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/binding/default_validator.go:59 +0x189\ngithub.com/gin-gonic/gin/binding.(*defaultValidator).ValidateStruct(0x6da200?, {0x6da200?, 0xc0003f2540?})", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/binding/default_validator.go:57 +0x105\ngithub.com/gin-gonic/gin/binding.validate(...)", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/binding/binding.go:121\ngithub.com/gin-gonic/gin/binding.formBinding.Bind({}, 0xc000468200, {0x6da200, 0xc0003f2540})", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/binding/form.go:32 +0xc2\ngithub.com/gin-gonic/gin.(*Context).ShouldBindWith(...)", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/context.go:725\ngithub.com/gin-gonic/gin.(*Context).ShouldBind(0xc000468300, {0x6da200, 0xc0003f2540})", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/context.go:680 +0x263\nbluebell/api.CommentPublishHandler(0xc000468300?)", "C:/Users/18446/GolandProjects/project/bluebell/api/comment.go:17 +0x53\ngithub.com/gin-gonic/gin.(*Context).Next(...)", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/context.go:173\nbluebell/middleware.JWTAuthMiddleware.func1(0xc000468300)", "C:/Users/18446/GolandProjects/project/bluebell/middleware/auth.go:62 +0x4da\ngithub.com/gin-gonic/gin.(*Context).Next(...)", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/context.go:173\nbluebell/middleware.RateLimitMiddleware.func1(0xc000468300)", "C:/Users/18446/GolandProjects/project/bluebell/middleware/ratelimit.go:24 +0xb4\ngithub.com/gin-gonic/gin.(*Context).Next(...)", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/context.go:173\nbluebell/logger.GinRecovery.func1(0xc000468300)", "C:/Users/18446/GolandProjects/project/bluebell/logger/ginlogger.go:79 +0x76\ngithub.com/gin-gonic/gin.(*Context).Next(...)", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/context.go:173\nbluebell/logger.GinLogger.func1(0xc000468300)", "C:/Users/18446/GolandProjects/project/bluebell/logger/ginlogger.go:22 +0x97\ngithub.com/gin-gonic/gin.(*Context).Next(...)", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/context.go:173\ngithub.com/gin-gonic/gin.(*Engine).handleHTTPRequest(0xc0003df1e0, 0xc000468300)", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/gin.go:616 +0x671\ngithub.com/gin-gonic/gin.(*Engine).ServeHTTP(0xc0003df1e0, {0x8a0888?, 0xc0003b61c0}, 0xc000468200)", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/gin.go:572 +0x1dd\nnet/http.serverHandler.ServeHTTP({0xc0003f2480?}, {0x8a0888, 0xc0003b61c0}, 0xc000468200)", "C:/Environment/Go/src/net/http/server.go:2947 +0x30c\nnet/http.(*conn).serve(0xc00041c1e0, {0x8a1140, 0xc000089200})", "C:/Environment/Go/src/net/http/server.go:1991 +0x607\ncreated by net/http.(*Server).Serve", "C:/Environment/Go/src/net/http/server.go:3102 +0x4db\n"]}
+[2023-01-12 21:48:28]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment	{"status": 500, "Method": "POST", "query": "post_id=-498760719265792&type=0&author_id=-4495712263860224&author_name=zhangsan&content=%E6%B5%8B%E8%AF%95%E8%AF%84%E8%AE%BA", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0162472}
+[2023-01-12 21:50:00]	[34mINFO[0m	bluebell/main.go:82	Shutdown Server...
+[2023-01-12 21:50:00]	[34mINFO[0m	logger/crontablogger.go:12	stop
+[2023-01-12 21:50:00]	[34mINFO[0m	bluebell/main.go:90	Server exiting...
+[2023-01-12 21:50:04]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-01-12 21:50:04]	[35mDEBUG[0m	crontab/taskExec.go:47	监视任务执行情况开启!
+[2023-01-12 21:50:04]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-01-12 21:50:04]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-12 21:50:04]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-12 21:50:18]	[31mERROR[0m	logger/ginlogger.go:65	[Recovery from panic]	{"error": "Undefined validation function 'post_id' on field 'PostId'", "request": ["POST /api/v1/comment?post_id=-498760719265792&type=0&author_id=-4495712263860224&author_name=zhangsan&content=%E6%B5%8B%E8%AF%95%E8%AF%84%E8%AE%BA HTTP/1.1", "Host: localhost:4399", "Accept: */*", "Accept-Encoding: gzip, deflate, br", "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjotNDQ5NTcxMjI2Mzg2MDIyNCwidXNlcm5hbWUiOiJ6aGFuZ3NhbiIsImlzcyI6ImJsdWViZWxsIiwiZXhwIjoxNjczNTMxNzMxLCJuYmYiOjE2NzM1MzEwNzEsImlhdCI6MTY3MzUzMTEzMX0.d3JAlQshVJIuzL5GaLpdg3q8d8vEljUawJqsDlSk7v4", "Cache-Control: no-cache", "Connection: keep-alive", "Content-Length: 0", "Grant_type: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJibHVlYmVsbCIsImV4cCI6MTY3NjEyMzEzMSwibmJmIjoxNjczNTMxMDcxLCJpYXQiOjE2NzM1MzExMzF9.F5onWERNycVFXVfqLuAh-nxiWtHJ_3N_XGJkLPB50Js", "Postman-Token: 26537a7e-467f-4b52-b218-385e6c9b9098", "User-Agent: PostmanRuntime/7.29.0", "", ""], "stack": ["goroutine 12 [running]:\nruntime/debug.Stack()", "C:/Environment/Go/src/runtime/debug/stack.go:24 +0x65\nbluebell/logger.GinRecovery.func1.1()", "C:/Users/18446/GolandProjects/project/bluebell/logger/ginlogger.go:68 +0x34f\npanic({0xc81dc0, 0xc0005a02b0})", "C:/Environment/Go/src/runtime/panic.go:884 +0x212\ngithub.com/go-playground/validator/v10.(*Validate).parseFieldTagsRecursive(0xc0000b2070, {0xc8288f?, 0x0?}, {0xc82853, 0x6}, {0x0, 0x0}, 0x0)", "C:/Environment/Go/go_work/pkg/mod/github.com/go-playground/validator/v10@v10.11.1/cache.go:294 +0xa19\ngithub.com/go-playground/validator/v10.(*Validate).extractStructCache(0xc0000b2070, {0xd07700?, 0xc000458080?, 0x76f2c6?}, {0xc510b1, 0x7})", "C:/Environment/Go/go_work/pkg/mod/github.com/go-playground/validator/v10@v10.11.1/cache.go:155 +0x60f\ngithub.com/go-playground/validator/v10.(*validate).validateStruct(0xc0003f10e0, {0xe310b0, 0xc0000221d0}, {0xce9c80?, 0xc000111c20?, 0x0?}, {0xd07700?, 0xc000458080?, 0x0?}, {0xe38e00, ...}, ...)", "C:/Environment/Go/go_work/pkg/mod/github.com/go-playground/validator/v10@v10.11.1/validator.go:37 +0x190\ngithub.com/go-playground/validator/v10.(*validate).traverseField(0xc0003f10e0, {0xe310b0, 0xc0000221d0}, {0xce9c80?, 0xc000111c20?, 0xc000452c00?}, {0xc6a160?, 0xc000111c40?, 0x2ae3d1d0a28?}, {0xc000303780, ...}, ...)", "C:/Environment/Go/go_work/pkg/mod/github.com/go-playground/validator/v10@v10.11.1/validator.go:225 +0x1410\ngithub.com/go-playground/validator/v10.(*validate).validateStruct(0xc0003f10e0, {0xe310b0, 0xc0000221d0}, {0xce9c80?, 0xc000111c20?, 0x2030000?}, {0xce9c80?, 0xc000111c20?, 0xe2e000?}, {0xe38e00, ...}, ...)", "C:/Environment/Go/go_work/pkg/mod/github.com/go-playground/validator/v10@v10.11.1/validator.go:77 +0x725\ngithub.com/go-playground/validator/v10.(*Validate).StructCtx(0xc0000b2070, {0xe310b0, 0xc0000221d0}, {0xce9c80, 0xc000111c20?})", "C:/Environment/Go/go_work/pkg/mod/github.com/go-playground/validator/v10@v10.11.1/validator_instance.go:385 +0x46c\ngithub.com/go-playground/validator/v10.(*Validate).Struct(...)", "C:/Environment/Go/go_work/pkg/mod/github.com/go-playground/validator/v10@v10.11.1/validator_instance.go:358\ngithub.com/gin-gonic/gin/binding.(*defaultValidator).validateStruct(0x1161900, {0xce9c80, 0xc000111c20})", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/binding/default_validator.go:80 +0x4e\ngithub.com/gin-gonic/gin/binding.(*defaultValidator).ValidateStruct(0xce9c80?, {0xce9c80?, 0xc000111c20?})", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/binding/default_validator.go:59 +0x189\ngithub.com/gin-gonic/gin/binding.(*defaultValidator).ValidateStruct(0xc6a1e0?, {0xc6a1e0?, 0xc000111a70?})", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/binding/default_validator.go:57 +0x105\ngithub.com/gin-gonic/gin/binding.validate(...)", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/binding/binding.go:121\ngithub.com/gin-gonic/gin/binding.formBinding.Bind({}, 0xc00060e000, {0xc6a1e0, 0xc000111a70})", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/binding/form.go:32 +0xc2\ngithub.com/gin-gonic/gin.(*Context).ShouldBindWith(...)", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/context.go:725\ngithub.com/gin-gonic/gin.(*Context).ShouldBind(0xc000456000, {0xc6a1e0, 0xc000111a70})", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/context.go:680 +0x263\nbluebell/api.CommentPublishHandler(0xc000456000?)", "C:/Users/18446/GolandProjects/project/bluebell/api/comment.go:17 +0x53\ngithub.com/gin-gonic/gin.(*Context).Next(...)", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/context.go:173\nbluebell/middleware.JWTAuthMiddleware.func1(0xc000456000)", "C:/Users/18446/GolandProjects/project/bluebell/middleware/auth.go:62 +0x4da\ngithub.com/gin-gonic/gin.(*Context).Next(...)", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/context.go:173\nbluebell/middleware.RateLimitMiddleware.func1(0xc000456000)", "C:/Users/18446/GolandProjects/project/bluebell/middleware/ratelimit.go:24 +0xb4\ngithub.com/gin-gonic/gin.(*Context).Next(...)", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/context.go:173\nbluebell/logger.GinRecovery.func1(0xc000456000)", "C:/Users/18446/GolandProjects/project/bluebell/logger/ginlogger.go:79 +0x76\ngithub.com/gin-gonic/gin.(*Context).Next(...)", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/context.go:173\nbluebell/logger.GinLogger.func1(0xc000456000)", "C:/Users/18446/GolandProjects/project/bluebell/logger/ginlogger.go:22 +0x97\ngithub.com/gin-gonic/gin.(*Context).Next(...)", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/context.go:173\ngithub.com/gin-gonic/gin.(*Engine).handleHTTPRequest(0xc0000849c0, 0xc000456000)", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/gin.go:616 +0x671\ngithub.com/gin-gonic/gin.(*Engine).ServeHTTP(0xc0000849c0, {0xe30868?, 0xc000450000}, 0xc00060e000)", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/gin.go:572 +0x1dd\nnet/http.serverHandler.ServeHTTP({0xc000088690?}, {0xe30868, 0xc000450000}, 0xc00060e000)", "C:/Environment/Go/src/net/http/server.go:2947 +0x30c\nnet/http.(*conn).serve(0xc00020c0a0, {0xe31120, 0xc0000885a0})", "C:/Environment/Go/src/net/http/server.go:1991 +0x607\ncreated by net/http.(*Server).Serve", "C:/Environment/Go/src/net/http/server.go:3102 +0x4db\n"]}
+[2023-01-12 21:50:18]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment	{"status": 500, "Method": "POST", "query": "post_id=-498760719265792&type=0&author_id=-4495712263860224&author_name=zhangsan&content=%E6%B5%8B%E8%AF%95%E8%AF%84%E8%AE%BA", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0028052}
+[2023-01-12 21:50:33]	[34mINFO[0m	logger/crontablogger.go:12	stop
+[2023-01-12 21:50:33]	[34mINFO[0m	bluebell/main.go:82	Shutdown Server...
+[2023-01-12 21:50:33]	[34mINFO[0m	bluebell/main.go:90	Server exiting...
+[2023-01-12 21:54:36]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-01-12 21:54:36]	[35mDEBUG[0m	crontab/taskExec.go:47	监视任务执行情况开启!
+[2023-01-12 21:54:36]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-01-12 21:54:36]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-12 21:54:36]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-12 21:54:40]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment	{"status": 200, "Method": "POST", "query": "post_id=-498760719265792&type=0&author_id=-4495712263860224&author_name=zhangsan&content=%E6%B5%8B%E8%AF%95%E8%AF%84%E8%AE%BA", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0115484}
+[2023-01-12 21:57:46]	[31mERROR[0m	api/user.go:19	register params is not illegal	{"error": "Key: 'RegisterService.password' Error:Field validation for 'password' failed on the 'required' tag\nKey: 'RegisterService.re_password' Error:Field validation for 're_password' failed on the 'eqfield' tag\nKey: 'RegisterService.re_password' Error:Field validation for 're_password' failed on the 'eqfield' tag"}
+[2023-01-12 21:57:46]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/register	{"status": 400, "Method": "POST", "query": "username=cczj&password=&re_password=123456&email=3124122316@qq.com&gender=1", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0010331}
+[2023-01-12 21:57:56]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/register	{"status": 200, "Method": "POST", "query": "username=cczj&password=123456&re_password=123456&email=3124122316@qq.com&gender=1", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0091002}
+[2023-01-12 21:58:16]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/login	{"status": 200, "Method": "POST", "query": "username=cczj&password=123456", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0015794}
+[2023-01-12 21:59:30]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment	{"status": 200, "Method": "POST", "query": "post_id=-498760719265792&type=0&author_id=4559528024608768&author_name=cczj&content=%E6%88%91%E6%98%AF%E7%94%A8%E6%88%B7%E4%BA%8C", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0093316}
+[2023-01-12 22:00:00]	[34mINFO[0m	logger/crontablogger.go:12	wake
+[2023-01-12 22:00:00]	[34mINFO[0m	logger/crontablogger.go:12	run
+[2023-01-12 22:00:00]	[34mINFO[0m	crontab/taskExec.go:36	定时任务日志:	{"[执行]:": "帖子投票时间过期任务", "[Id]:": 1, "[上次执行时间]:": "[2023-01-12 21:54:36]", "[下次执行时间]:": "[2023-01-13 02:00:00]"}
+[2023-01-12 22:00:00]	[34mINFO[0m	crontab/taskExec.go:36	定时任务日志:	{"[执行]:": "监视任务执行情况", "[Id]:": 2, "[上次执行时间]:": "[2023-01-12 21:54:36]", "[下次执行时间]:": "[2023-01-13 00:00:00]"}
+[2023-01-12 22:04:11]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment	{"status": 200, "Method": "POST", "query": "post_id=-498760719265792&type=1&author_id=4559528024608768&author_name=cczj&to_author_id=-4495712263860224&to_author_name=zhangsan&content=%E6%88%91%E8%A7%89%E5%BE%97%E4%BD%A0%E8%AF%B4%E5%BE%97%E5%AF%B9&father_id=1", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0093318}
+[2023-01-12 22:06:35]	[34mINFO[0m	bluebell/main.go:82	Shutdown Server...
+[2023-01-12 22:06:35]	[34mINFO[0m	logger/crontablogger.go:12	stop
+[2023-01-12 22:06:35]	[34mINFO[0m	bluebell/main.go:90	Server exiting...
+[2023-01-12 22:21:55]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-01-12 22:21:55]	[35mDEBUG[0m	crontab/taskExec.go:47	监视任务执行情况开启!
+[2023-01-12 22:21:55]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-01-12 22:21:55]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-12 22:21:55]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-12 22:23:39]	[31mERROR[0m	logger/ginlogger.go:65	[Recovery from panic]	{"error": "Undefined validation function 'ok' on field 'Ok'", "request": ["POST /api/v1/comment/favorite?ok=true&id=1&post_id=-498760719265792&author_id=-4495712263860224&to_author_id=-4495712263860224 HTTP/1.1", "Host: localhost:4399", "Accept: */*", "Accept-Encoding: gzip, deflate, br", "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo0NTU5NTI4MDI0NjA4NzY4LCJ1c2VybmFtZSI6ImNjemoiLCJpc3MiOiJibHVlYmVsbCIsImV4cCI6MTY3MzUzMjQ5NiwibmJmIjoxNjczNTMxODM2LCJpYXQiOjE2NzM1MzE4OTZ9.rWyNfCKltG_PXGcyZhr2-nLJt8RpPizEKwt0vXQ05jk", "Cache-Control: no-cache", "Connection: keep-alive", "Content-Length: 0", "Grant_type: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJibHVlYmVsbCIsImV4cCI6MTY3NjEyMzg5NiwibmJmIjoxNjczNTMxODM2LCJpYXQiOjE2NzM1MzE4OTZ9.b_JBHIslzi3m0j6SJVwLOodtDM6zOZ6fDt5iTxiEMAY", "Postman-Token: b8175d94-60d0-4bc7-83b6-fc5961474832", "User-Agent: PostmanRuntime/7.29.0", "", ""], "stack": ["goroutine 8 [running]:\nruntime/debug.Stack()", "C:/Environment/Go/src/runtime/debug/stack.go:24 +0x65\nbluebell/logger.GinRecovery.func1.1()", "C:/Users/18446/GolandProjects/project/bluebell/logger/ginlogger.go:68 +0x34f\npanic({0x5b1e80, 0xc000407840})", "C:/Environment/Go/src/runtime/panic.go:884 +0x212\ngithub.com/go-playground/validator/v10.(*Validate).parseFieldTagsRecursive(0xc00050c150, {0x594c72?, 0x0?}, {0x594c52, 0x2}, {0x0, 0x0}, 0x0)", "C:/Environment/Go/go_work/pkg/mod/github.com/go-playground/validator/v10@v10.11.1/cache.go:294 +0xa19\ngithub.com/go-playground/validator/v10.(*Validate).extractStructCache(0xc00050c150, {0x6227a0?, 0xc0004e0630?, 0x0?}, {0x582f87, 0x8})", "C:/Environment/Go/go_work/pkg/mod/github.com/go-playground/validator/v10@v10.11.1/cache.go:155 +0x60f\ngithub.com/go-playground/validator/v10.(*validate).validateStruct(0xc0004d87e0, {0x761190, 0xc0000221d0}, {0x6227a0?, 0xc0004e0630?, 0x6227a0?}, {0x6227a0?, 0xc0004e0630?, 0x75e0e0?}, {0x768ee0, ...}, ...)", "C:/Environment/Go/go_work/pkg/mod/github.com/go-playground/validator/v10@v10.11.1/validator.go:37 +0x190\ngithub.com/go-playground/validator/v10.(*Validate).StructCtx(0xc00050c150, {0x761190, 0xc0000221d0}, {0x6227a0, 0xc0004e0630?})", "C:/Environment/Go/go_work/pkg/mod/github.com/go-playground/validator/v10@v10.11.1/validator_instance.go:385 +0x46c\ngithub.com/go-playground/validator/v10.(*Validate).Struct(...)", "C:/Environment/Go/go_work/pkg/mod/github.com/go-playground/validator/v10@v10.11.1/validator_instance.go:358\ngithub.com/gin-gonic/gin/binding.(*defaultValidator).validateStruct(0xa91900, {0x6227a0, 0xc0004e0630})", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/binding/default_validator.go:80 +0x4e\ngithub.com/gin-gonic/gin/binding.(*defaultValidator).ValidateStruct(0x6227a0?, {0x6227a0?, 0xc0004e0630?})", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/binding/default_validator.go:59 +0x189\ngithub.com/gin-gonic/gin/binding.(*defaultValidator).ValidateStruct(0x59a320?, {0x59a320?, 0xc0004e05d0?})", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/binding/default_validator.go:57 +0x105\ngithub.com/gin-gonic/gin/binding.validate(...)", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/binding/binding.go:121\ngithub.com/gin-gonic/gin/binding.formBinding.Bind({}, 0xc000114200, {0x59a320, 0xc0004e05d0})", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/binding/form.go:32 +0xc2\ngithub.com/gin-gonic/gin.(*Context).ShouldBindWith(...)", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/context.go:725\ngithub.com/gin-gonic/gin.(*Context).ShouldBind(0xc000114300, {0x59a320, 0xc0004e05d0})", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/context.go:680 +0x263\nbluebell/api.CommentFavoriteHandler(0xc000114300?)", "C:/Users/18446/GolandProjects/project/bluebell/api/comment.go:32 +0x53\ngithub.com/gin-gonic/gin.(*Context).Next(...)", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/context.go:173\nbluebell/middleware.JWTAuthMiddleware.func1(0xc000114300)", "C:/Users/18446/GolandProjects/project/bluebell/middleware/auth.go:41 +0x557\ngithub.com/gin-gonic/gin.(*Context).Next(...)", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/context.go:173\nbluebell/middleware.RateLimitMiddleware.func1(0xc000114300)", "C:/Users/18446/GolandProjects/project/bluebell/middleware/ratelimit.go:24 +0xb4\ngithub.com/gin-gonic/gin.(*Context).Next(...)", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/context.go:173\nbluebell/logger.GinRecovery.func1(0xc000114300)", "C:/Users/18446/GolandProjects/project/bluebell/logger/ginlogger.go:79 +0x76\ngithub.com/gin-gonic/gin.(*Context).Next(...)", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/context.go:173\nbluebell/logger.GinLogger.func1(0xc000114300)", "C:/Users/18446/GolandProjects/project/bluebell/logger/ginlogger.go:22 +0x97\ngithub.com/gin-gonic/gin.(*Context).Next(...)", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/context.go:173\ngithub.com/gin-gonic/gin.(*Engine).handleHTTPRequest(0xc0004a51e0, 0xc000114300)", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/gin.go:616 +0x671\ngithub.com/gin-gonic/gin.(*Engine).ServeHTTP(0xc0004a51e0, {0x760948?, 0xc0000ec0e0}, 0xc000114200)", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/gin.go:572 +0x1dd\nnet/http.serverHandler.ServeHTTP({0xc0004023c0?}, {0x760948, 0xc0000ec0e0}, 0xc000114200)", "C:/Environment/Go/src/net/http/server.go:2947 +0x30c\nnet/http.(*conn).serve(0xc00009e280, {0x761200, 0xc000507500})", "C:/Environment/Go/src/net/http/server.go:1991 +0x607\ncreated by net/http.(*Server).Serve", "C:/Environment/Go/src/net/http/server.go:3102 +0x4db\n"]}
+[2023-01-12 22:23:39]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment/favorite	{"status": 500, "Method": "POST", "query": "ok=true&id=1&post_id=-498760719265792&author_id=-4495712263860224&to_author_id=-4495712263860224", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0058939}
+[2023-01-12 22:24:11]	[34mINFO[0m	bluebell/main.go:82	Shutdown Server...
+[2023-01-12 22:24:11]	[34mINFO[0m	logger/crontablogger.go:12	stop
+[2023-01-12 22:24:11]	[34mINFO[0m	bluebell/main.go:90	Server exiting...
+[2023-01-12 22:24:14]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-01-12 22:24:14]	[35mDEBUG[0m	crontab/taskExec.go:47	监视任务执行情况开启!
+[2023-01-12 22:24:14]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-01-12 22:24:14]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-12 22:24:14]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-12 22:24:18]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment/favorite	{"status": 503, "Method": "POST", "query": "ok=true&id=1&post_id=-498760719265792&author_id=-4495712263860224&to_author_id=-4495712263860224", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0016392}
+[2023-01-12 22:24:49]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment/favorite	{"status": 503, "Method": "POST", "query": "ok=false&id=1&post_id=-498760719265792&author_id=-4495712263860224&to_author_id=-4495712263860224", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0010909}
+[2023-01-12 22:24:55]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment/favorite	{"status": 503, "Method": "POST", "query": "ok=true&id=1&post_id=-498760719265792&author_id=-4495712263860224&to_author_id=-4495712263860224", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0013896}
+[2023-01-12 22:25:36]	[34mINFO[0m	logger/crontablogger.go:12	stop
+[2023-01-12 22:25:36]	[34mINFO[0m	bluebell/main.go:82	Shutdown Server...
+[2023-01-12 22:25:36]	[34mINFO[0m	bluebell/main.go:90	Server exiting...
+[2023-01-12 22:26:16]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-01-12 22:26:16]	[35mDEBUG[0m	crontab/taskExec.go:47	监视任务执行情况开启!
+[2023-01-12 22:26:16]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-01-12 22:26:16]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-12 22:26:16]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-12 22:26:21]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/login	{"status": 200, "Method": "POST", "query": "username=cczj&password=123456", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0013821}
+[2023-01-12 22:27:24]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment/favorite	{"status": 200, "Method": "POST", "query": "ok=true&id=1&post_id=-498760719265792&author_id=4559528024608768&to_author_id=-4495712263860224", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0006995}
+[2023-01-12 22:28:09]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment	{"status": 503, "Method": "GET", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0}
+[2023-01-12 22:29:36]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment/-498760719265792	{"status": 404, "Method": "GET", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0006564}
+[2023-01-12 22:29:57]	[34mINFO[0m	bluebell/main.go:82	Shutdown Server...
+[2023-01-12 22:29:57]	[34mINFO[0m	logger/crontablogger.go:12	stop
+[2023-01-12 22:29:57]	[34mINFO[0m	bluebell/main.go:90	Server exiting...
+[2023-01-12 22:30:00]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-01-12 22:30:00]	[35mDEBUG[0m	crontab/taskExec.go:47	监视任务执行情况开启!
+[2023-01-12 22:30:00]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-01-12 22:30:00]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-12 22:30:00]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-12 22:30:04]	[31mERROR[0m	service/comment.go:76	redis GetAllCommentId method err	{"error": "WRONGTYPE Operation against a key holding the wrong kind of value"}
+[2023-01-12 22:30:04]	[31mERROR[0m	api/comment.go:81	service favoriteBuild method err	{"error": "WRONGTYPE Operation against a key holding the wrong kind of value"}
+[2023-01-12 22:30:04]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment/-498760719265792	{"status": 503, "Method": "GET", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0015525}
+[2023-01-12 22:38:01]	[34mINFO[0m	bluebell/main.go:82	Shutdown Server...
+[2023-01-12 22:38:01]	[34mINFO[0m	logger/crontablogger.go:12	stop
+[2023-01-12 22:38:01]	[34mINFO[0m	bluebell/main.go:90	Server exiting...
+[2023-01-12 22:43:27]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-01-12 22:43:27]	[35mDEBUG[0m	crontab/taskExec.go:47	监视任务执行情况开启!
+[2023-01-12 22:43:27]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-01-12 22:43:27]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-12 22:43:27]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-12 22:45:56]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment	{"status": 503, "Method": "DELETE", "query": "type=1&id=3&author_id=4559528024608768&post_id=-498760719265792", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0008082}
+[2023-01-12 22:49:55]	[34mINFO[0m	bluebell/main.go:82	Shutdown Server...
+[2023-01-12 22:49:55]	[34mINFO[0m	logger/crontablogger.go:12	stop
+[2023-01-12 22:49:55]	[34mINFO[0m	bluebell/main.go:90	Server exiting...
+[2023-01-12 22:49:58]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-01-12 22:49:58]	[35mDEBUG[0m	crontab/taskExec.go:47	监视任务执行情况开启!
+[2023-01-12 22:49:58]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-01-12 22:49:58]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-12 22:49:58]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-12 22:50:03]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment	{"status": 503, "Method": "DELETE", "query": "type=1&id=3&author_id=4559528024608768&post_id=-498760719265792", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0005122}
+[2023-01-12 22:54:47]	[34mINFO[0m	bluebell/main.go:82	Shutdown Server...
+[2023-01-12 22:54:47]	[34mINFO[0m	logger/crontablogger.go:12	stop
+[2023-01-12 22:54:47]	[34mINFO[0m	bluebell/main.go:90	Server exiting...
+[2023-01-12 22:54:49]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-01-12 22:54:49]	[35mDEBUG[0m	crontab/taskExec.go:47	监视任务执行情况开启!
+[2023-01-12 22:54:49]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-01-12 22:54:49]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-12 22:54:49]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-12 22:54:53]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment	{"status": 503, "Method": "DELETE", "query": "type=1&id=3&author_id=4559528024608768&post_id=-498760719265792", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0005386}
+[2023-01-12 22:54:57]	[34mINFO[0m	bluebell/main.go:82	Shutdown Server...
+[2023-01-12 22:54:57]	[34mINFO[0m	logger/crontablogger.go:12	stop
+[2023-01-12 22:54:57]	[34mINFO[0m	bluebell/main.go:90	Server exiting...
+[2023-01-12 22:55:18]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-01-12 22:55:18]	[35mDEBUG[0m	crontab/taskExec.go:47	监视任务执行情况开启!
+[2023-01-12 22:55:18]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-01-12 22:55:18]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-12 22:55:19]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-12 22:55:23]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment	{"status": 503, "Method": "DELETE", "query": "type=1&id=3&author_id=4559528024608768&post_id=-498760719265792", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0005346}
+[2023-01-12 22:55:28]	[34mINFO[0m	logger/crontablogger.go:12	stop
+[2023-01-12 22:55:28]	[34mINFO[0m	bluebell/main.go:82	Shutdown Server...
+[2023-01-12 22:55:28]	[34mINFO[0m	bluebell/main.go:90	Server exiting...
+[2023-01-12 23:06:43]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-01-12 23:06:43]	[35mDEBUG[0m	crontab/taskExec.go:47	监视任务执行情况开启!
+[2023-01-12 23:06:43]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-01-12 23:06:43]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-12 23:06:43]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-12 23:06:48]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment	{"status": 503, "Method": "DELETE", "query": "type=1&id=3&author_id=4559528024608768&post_id=-498760719265792", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0005563}
+[2023-01-12 23:11:02]	[34mINFO[0m	bluebell/main.go:82	Shutdown Server...
+[2023-01-12 23:11:02]	[34mINFO[0m	logger/crontablogger.go:12	stop
+[2023-01-12 23:11:02]	[34mINFO[0m	bluebell/main.go:90	Server exiting...
+[2023-01-12 23:11:04]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-01-12 23:11:04]	[35mDEBUG[0m	crontab/taskExec.go:47	监视任务执行情况开启!
+[2023-01-12 23:11:04]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-01-12 23:11:04]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-12 23:11:04]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-12 23:11:29]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment/3/0	{"status": 503, "Method": "DELETE", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0007326}
+[2023-01-12 23:12:03]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment/0/3	{"status": 503, "Method": "DELETE", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0015648}
+[2023-01-12 23:13:29]	[31mERROR[0m	logger/ginlogger.go:65	[Recovery from panic]	{"error": "interface conversion: redis.Cmder is *redis.StringSliceCmd, not *redis.SliceCmd", "request": ["GET /api/v1/comment/-498760719265792 HTTP/1.1", "Host: localhost:4399", "Accept: */*", "Accept-Encoding: gzip, deflate, br", "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo0NTU5NTI4MDI0NjA4NzY4LCJ1c2VybmFtZSI6ImNjemoiLCJpc3MiOiJibHVlYmVsbCIsImV4cCI6MTY3MzYxOTk4MSwibmJmIjoxNjczNTMzNTIxLCJpYXQiOjE2NzM1MzM1ODF9.eZmLM5M5uz8VJxpyGBLxkZiDTWzfAlQ9X7xm5r_TQuI", "Cache-Control: no-cache", "Connection: keep-alive", "Postman-Token: e2ac7542-e7fa-4d58-ab66-785a980bcd69", "User-Agent: PostmanRuntime/7.29.0", "", ""], "stack": ["goroutine 22 [running]:\nruntime/debug.Stack()", "C:/Environment/Go/src/runtime/debug/stack.go:24 +0x65\nbluebell/logger.GinRecovery.func1.1()", "C:/Users/18446/GolandProjects/project/bluebell/logger/ginlogger.go:68 +0x34f\npanic({0x72a900, 0xc0003fc570})", "C:/Environment/Go/src/runtime/panic.go:884 +0x212\nbluebell/dao/redis.GetAllCommentId({0xc000092120, 0x2, 0xe?})", "C:/Users/18446/GolandProjects/project/bluebell/dao/redis/comment.go:55 +0x2ea\nbluebell/service.GetCommentList(0xc00045c420?, {0x0?, 0x2b6a05?})", "C:/Users/18446/GolandProjects/project/bluebell/service/comment.go:74 +0x20d\nbluebell/api.CommentListHandler(0xc000086540?)", "C:/Users/18446/GolandProjects/project/bluebell/api/comment.go:76 +0x65\ngithub.com/gin-gonic/gin.(*Context).Next(...)", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/context.go:173\nbluebell/middleware.RateLimitMiddleware.func1(0xc00041e100)", "C:/Users/18446/GolandProjects/project/bluebell/middleware/ratelimit.go:24 +0xb4\ngithub.com/gin-gonic/gin.(*Context).Next(...)", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/context.go:173\nbluebell/logger.GinRecovery.func1(0xc00041e100)", "C:/Users/18446/GolandProjects/project/bluebell/logger/ginlogger.go:79 +0x76\ngithub.com/gin-gonic/gin.(*Context).Next(...)", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/context.go:173\nbluebell/logger.GinLogger.func1(0xc00041e100)", "C:/Users/18446/GolandProjects/project/bluebell/logger/ginlogger.go:22 +0x97\ngithub.com/gin-gonic/gin.(*Context).Next(...)", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/context.go:173\ngithub.com/gin-gonic/gin.(*Engine).handleHTTPRequest(0xc0005191e0, 0xc00041e100)", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/gin.go:616 +0x671\ngithub.com/gin-gonic/gin.(*Engine).ServeHTTP(0xc0005191e0, {0x8b0868?, 0xc000448000}, 0xc00041e300)", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/gin.go:572 +0x1dd\nnet/http.serverHandler.ServeHTTP({0xc000402480?}, {0x8b0868, 0xc000448000}, 0xc00041e300)", "C:/Environment/Go/src/net/http/server.go:2947 +0x30c\nnet/http.(*conn).serve(0xc00020e0a0, {0x8b1120, 0xc000402390})", "C:/Environment/Go/src/net/http/server.go:1991 +0x607\ncreated by net/http.(*Server).Serve", "C:/Environment/Go/src/net/http/server.go:3102 +0x4db\n"]}
+[2023-01-12 23:13:29]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment/-498760719265792	{"status": 500, "Method": "GET", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.002644}
+[2023-01-12 23:18:30]	[34mINFO[0m	logger/crontablogger.go:12	stop
+[2023-01-12 23:18:30]	[34mINFO[0m	bluebell/main.go:82	Shutdown Server...
+[2023-01-12 23:18:30]	[34mINFO[0m	bluebell/main.go:90	Server exiting...
+[2023-01-12 23:18:33]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-01-12 23:18:33]	[35mDEBUG[0m	crontab/taskExec.go:47	监视任务执行情况开启!
+[2023-01-12 23:18:33]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-01-12 23:18:33]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-12 23:18:33]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-12 23:18:40]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment/3	{"status": 503, "Method": "DELETE", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0009923}
+[2023-01-12 23:23:36]	[34mINFO[0m	logger/crontablogger.go:12	stop
+[2023-01-12 23:23:36]	[34mINFO[0m	bluebell/main.go:82	Shutdown Server...
+[2023-01-12 23:23:36]	[34mINFO[0m	bluebell/main.go:90	Server exiting...
+[2023-01-12 23:29:33]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-01-12 23:29:33]	[35mDEBUG[0m	crontab/taskExec.go:47	监视任务执行情况开启!
+[2023-01-12 23:29:33]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-01-12 23:29:33]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-12 23:29:33]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-12 23:30:20]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment	{"status": 503, "Method": "DELETE", "query": "type=1&id=3&author_id=4559528024608768&post_id=-498760719265792", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0010288}
+[2023-01-12 23:30:41]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/login	{"status": 200, "Method": "POST", "query": "username=cczj&password=123456", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0018174}
+[2023-01-12 23:31:21]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment	{"status": 200, "Method": "DELETE", "query": "type=1&id=3&author_id=4559528024608768&post_id=-498760719265792", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0128507}
+[2023-01-12 23:31:43]	[31mERROR[0m	service/comment.go:85	mysql GetCommentById method err	{"error": "missing destination name update_time in *models.Comment"}
+[2023-01-12 23:31:43]	[31mERROR[0m	service/comment.go:85	mysql GetCommentById method err	{"error": "missing destination name update_time in *models.Comment"}
+[2023-01-12 23:31:43]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment/-498760719265792	{"status": 200, "Method": "GET", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0026685}
+[2023-01-12 23:32:35]	[34mINFO[0m	bluebell/main.go:82	Shutdown Server...
+[2023-01-12 23:32:35]	[34mINFO[0m	logger/crontablogger.go:12	stop
+[2023-01-12 23:32:35]	[34mINFO[0m	bluebell/main.go:90	Server exiting...
+[2023-01-12 23:32:37]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-01-12 23:32:37]	[35mDEBUG[0m	crontab/taskExec.go:47	监视任务执行情况开启!
+[2023-01-12 23:32:37]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-01-12 23:32:37]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-12 23:32:37]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-12 23:32:54]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment	{"status": 200, "Method": "POST", "query": "post_id=-498760719265792&type=1&author_id=4559528024608768&author_name=cczj&to_author_id=-4495712263860224&to_author_name=zhangsan&content=%E6%88%91%E8%A7%89%E5%BE%97%E4%BD%A0%E8%AF%B4%E5%BE%97%E5%AF%B9&father_id=1", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.009078}
+[2023-01-12 23:33:20]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment	{"status": 200, "Method": "POST", "query": "post_id=-498760719265792&type=1&author_id=4559528024608768&author_name=cczj&to_author_id=-4495712263860224&to_author_name=zhangsan&content=%E7%9C%9F%E7%9A%84%E5%BE%88%E6%A3%92%E5%95%8A&father_id=1", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0090188}
+[2023-01-12 23:35:11]	[31mERROR[0m	service/comment.go:93	mysql GetCommentList method err	{"error": "Error 1065 (42000): Query was empty"}
+[2023-01-12 23:35:11]	[31mERROR[0m	service/comment.go:93	mysql GetCommentList method err	{"error": "missing destination name to_author_name in *[]*models.CommentDetail"}
+[2023-01-12 23:35:11]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment/-498760719265792	{"status": 200, "Method": "GET", "query": "order=time", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0044151}
+[2023-01-12 23:39:41]	[34mINFO[0m	logger/crontablogger.go:12	stop
+[2023-01-12 23:39:41]	[34mINFO[0m	bluebell/main.go:82	Shutdown Server...
+[2023-01-12 23:39:41]	[34mINFO[0m	bluebell/main.go:90	Server exiting...
+[2023-01-12 23:39:43]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-01-12 23:39:43]	[35mDEBUG[0m	crontab/taskExec.go:47	监视任务执行情况开启!
+[2023-01-12 23:39:43]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-01-12 23:39:43]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-12 23:39:43]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-12 23:39:49]	[31mERROR[0m	service/comment.go:97	mysql GetCommentList method err	{"error": "missing destination name to_author_name in *[]*models.CommentDetail"}
+[2023-01-12 23:39:49]	[31mERROR[0m	api/comment.go:79	service favoriteBuild method err	{"error": "missing destination name to_author_name in *[]*models.CommentDetail"}
+[2023-01-12 23:39:49]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment/-498760719265792	{"status": 503, "Method": "GET", "query": "order=time", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0044506}
+[2023-01-12 23:41:55]	[34mINFO[0m	bluebell/main.go:82	Shutdown Server...
+[2023-01-12 23:41:55]	[34mINFO[0m	logger/crontablogger.go:12	stop
+[2023-01-12 23:41:55]	[34mINFO[0m	bluebell/main.go:90	Server exiting...
+[2023-01-12 23:41:58]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-01-12 23:41:58]	[35mDEBUG[0m	crontab/taskExec.go:47	监视任务执行情况开启!
+[2023-01-12 23:41:58]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-01-12 23:41:58]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-12 23:41:58]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-12 23:42:05]	[31mERROR[0m	service/comment.go:97	mysql GetCommentList method err	{"error": "missing destination name to_author_id in *[]*models.CommentDetail"}
+[2023-01-12 23:42:05]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment/-498760719265792	{"status": 200, "Method": "GET", "query": "order=time", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.00261}
+[2023-01-12 23:44:04]	[34mINFO[0m	bluebell/main.go:82	Shutdown Server...
+[2023-01-12 23:44:04]	[34mINFO[0m	logger/crontablogger.go:12	stop
+[2023-01-12 23:44:04]	[34mINFO[0m	bluebell/main.go:90	Server exiting...
+[2023-01-12 23:44:06]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-01-12 23:44:06]	[35mDEBUG[0m	crontab/taskExec.go:47	监视任务执行情况开启!
+[2023-01-12 23:44:06]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-01-12 23:44:06]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-12 23:44:06]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-12 23:44:09]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment/-498760719265792	{"status": 200, "Method": "GET", "query": "order=time", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.004051}
+[2023-01-12 23:50:22]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment/-498760719265792	{"status": 200, "Method": "GET", "query": "order=time", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0039872}
+[2023-01-12 23:58:08]	[34mINFO[0m	logger/crontablogger.go:12	stop
+[2023-01-12 23:58:08]	[34mINFO[0m	bluebell/main.go:82	Shutdown Server...
+[2023-01-12 23:58:08]	[34mINFO[0m	bluebell/main.go:90	Server exiting...
+[2023-01-12 23:58:11]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-01-12 23:58:11]	[35mDEBUG[0m	crontab/taskExec.go:47	监视任务执行情况开启!
+[2023-01-12 23:58:11]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-01-12 23:58:11]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-12 23:58:11]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-12 23:58:30]	[35mDEBUG[0m	service/comment.go:24	commentId	{"commentID": 6}
+[2023-01-12 23:58:30]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment	{"status": 200, "Method": "POST", "query": "post_id=-498760719265792&type=1&author_id=4559528024608768&author_name=cczj&to_author_id=-4495712263860224&to_author_name=zhangsan&content=%E6%B5%8B%E8%AF%95%E8%AF%84%E8%AE%BA%E6%98%AF%E5%90%A6%E6%88%90%E5%8A%9F%E6%8F%92%E5%85%A5&father_id=1", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0089234}
+[2023-01-12 23:58:38]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment/-498760719265792	{"status": 200, "Method": "GET", "query": "order=time", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0043254}
+[2023-01-12 23:59:09]	[34mINFO[0m	bluebell/main.go:82	Shutdown Server...
+[2023-01-12 23:59:09]	[34mINFO[0m	logger/crontablogger.go:12	stop
+[2023-01-12 23:59:09]	[34mINFO[0m	bluebell/main.go:90	Server exiting...
+[2023-01-13 19:06:39]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-01-13 19:06:39]	[35mDEBUG[0m	crontab/taskExec.go:47	监视任务执行情况开启!
+[2023-01-13 19:06:39]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-01-13 19:06:39]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-13 19:06:39]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-13 19:07:44]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/login	{"status": 200, "Method": "POST", "query": "username=zhangsan&password=123456", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0026152}
+[2023-01-13 19:08:18]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/user/community	{"status": 503, "Method": "GET", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0008361}
+[2023-01-13 19:13:43]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/user/community	{"status": 503, "Method": "GET", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0019796}
+[2023-01-13 19:14:20]	[34mINFO[0m	logger/crontablogger.go:12	stop
+[2023-01-13 19:14:20]	[34mINFO[0m	bluebell/main.go:82	Shutdown Server...
+[2023-01-13 19:14:20]	[34mINFO[0m	bluebell/main.go:90	Server exiting...
+[2023-01-13 19:14:25]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-01-13 19:14:25]	[35mDEBUG[0m	crontab/taskExec.go:47	监视任务执行情况开启!
+[2023-01-13 19:14:25]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-01-13 19:14:25]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-13 19:14:25]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-13 19:15:15]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/user/community	{"status": 503, "Method": "GET", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 45.5804689}
+[2023-01-13 19:50:47]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-01-13 19:50:47]	[35mDEBUG[0m	crontab/taskExec.go:47	监视任务执行情况开启!
+[2023-01-13 19:50:47]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-01-13 19:50:47]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-13 19:50:47]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-13 19:50:52]	[31mERROR[0m	api/user.go:67	service CommunityList method err	{"error": "Error 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '?\n\t\t\t\torder by crete_time DESC' at line 3"}
+[2023-01-13 19:50:52]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/user/community	{"status": 503, "Method": "GET", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0013398}
+[2023-01-13 19:51:42]	[34mINFO[0m	logger/crontablogger.go:12	stop
+[2023-01-13 19:51:42]	[34mINFO[0m	bluebell/main.go:82	Shutdown Server...
+[2023-01-13 19:51:42]	[34mINFO[0m	bluebell/main.go:90	Server exiting...
+[2023-01-13 19:51:45]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-01-13 19:51:45]	[35mDEBUG[0m	crontab/taskExec.go:47	监视任务执行情况开启!
+[2023-01-13 19:51:45]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-01-13 19:51:45]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-13 19:51:45]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-13 19:51:49]	[31mERROR[0m	api/user.go:67	service CommunityList method err	{"error": "Error 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '?\n\t\t\t\torder by creat_time DESC' at line 3"}
+[2023-01-13 19:51:49]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/user/community	{"status": 503, "Method": "GET", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0016186}
+[2023-01-13 19:52:09]	[34mINFO[0m	logger/crontablogger.go:12	stop
+[2023-01-13 19:52:09]	[34mINFO[0m	bluebell/main.go:82	Shutdown Server...
+[2023-01-13 19:52:09]	[34mINFO[0m	bluebell/main.go:90	Server exiting...
+[2023-01-13 19:52:11]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-01-13 19:52:11]	[35mDEBUG[0m	crontab/taskExec.go:47	监视任务执行情况开启!
+[2023-01-13 19:52:11]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-01-13 19:52:11]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-13 19:52:11]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-13 19:52:14]	[31mERROR[0m	api/user.go:67	service CommunityList method err	{"error": "Error 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '?\n\t\t\t\torder by create_time DESC' at line 3"}
+[2023-01-13 19:52:14]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/user/community	{"status": 503, "Method": "GET", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0013142}
+[2023-01-13 19:54:10]	[34mINFO[0m	logger/crontablogger.go:12	stop
+[2023-01-13 19:54:10]	[34mINFO[0m	bluebell/main.go:82	Shutdown Server...
+[2023-01-13 19:54:10]	[34mINFO[0m	bluebell/main.go:90	Server exiting...
+[2023-01-13 19:54:13]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-01-13 19:54:13]	[35mDEBUG[0m	crontab/taskExec.go:47	监视任务执行情况开启!
+[2023-01-13 19:54:13]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-01-13 19:54:13]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-13 19:54:13]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-13 19:54:18]	[31mERROR[0m	api/user.go:67	service CommunityList method err	{"error": "Error 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '?\n\t\t\t\torder by create_time DESC' at line 3"}
+[2023-01-13 19:54:18]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/user/community	{"status": 503, "Method": "GET", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0015524}
+[2023-01-13 19:56:15]	[34mINFO[0m	bluebell/main.go:82	Shutdown Server...
+[2023-01-13 19:56:15]	[34mINFO[0m	logger/crontablogger.go:12	stop
+[2023-01-13 19:56:15]	[34mINFO[0m	bluebell/main.go:90	Server exiting...
+[2023-01-13 19:56:18]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-01-13 19:56:18]	[35mDEBUG[0m	crontab/taskExec.go:47	监视任务执行情况开启!
+[2023-01-13 19:56:18]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-01-13 19:56:18]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-13 19:56:18]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-13 19:56:20]	[31mERROR[0m	api/user.go:67	service CommunityList method err	{"error": "scannable dest type slice with >1 columns (4) in result"}
+[2023-01-13 19:56:20]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/user/community	{"status": 503, "Method": "GET", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0021944}
+[2023-01-13 19:56:36]	[34mINFO[0m	logger/crontablogger.go:12	stop
+[2023-01-13 19:56:36]	[34mINFO[0m	bluebell/main.go:82	Shutdown Server...
+[2023-01-13 19:56:36]	[34mINFO[0m	bluebell/main.go:90	Server exiting...
+[2023-01-13 19:56:38]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-01-13 19:56:38]	[35mDEBUG[0m	crontab/taskExec.go:47	监视任务执行情况开启!
+[2023-01-13 19:56:38]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-01-13 19:56:38]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-13 19:56:38]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-13 19:56:41]	[31mERROR[0m	api/user.go:67	service CommunityList method err	{"error": "missing destination name id in *[]*models.Community"}
+[2023-01-13 19:56:41]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/user/community	{"status": 503, "Method": "GET", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0017821}
+[2023-01-13 19:57:34]	[34mINFO[0m	logger/crontablogger.go:12	stop
+[2023-01-13 19:57:34]	[34mINFO[0m	bluebell/main.go:82	Shutdown Server...
+[2023-01-13 19:57:34]	[34mINFO[0m	bluebell/main.go:90	Server exiting...
+[2023-01-13 19:57:36]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-01-13 19:57:36]	[35mDEBUG[0m	crontab/taskExec.go:47	监视任务执行情况开启!
+[2023-01-13 19:57:36]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-01-13 19:57:36]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-13 19:57:36]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-13 19:57:39]	[31mERROR[0m	api/user.go:67	service CommunityList method err	{"error": "missing destination name community_name in *[]*models.Community"}
+[2023-01-13 19:57:39]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/user/community	{"status": 503, "Method": "GET", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0021332}
+[2023-01-13 19:58:35]	[34mINFO[0m	logger/crontablogger.go:12	stop
+[2023-01-13 19:58:35]	[34mINFO[0m	bluebell/main.go:82	Shutdown Server...
+[2023-01-13 19:58:35]	[34mINFO[0m	bluebell/main.go:90	Server exiting...
+[2023-01-13 19:58:38]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-01-13 19:58:38]	[35mDEBUG[0m	crontab/taskExec.go:47	监视任务执行情况开启!
+[2023-01-13 19:58:38]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-01-13 19:58:38]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-13 19:58:38]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-13 19:58:41]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/user/community	{"status": 200, "Method": "GET", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0016175}
+[2023-01-13 19:59:03]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/community/1	{"status": 200, "Method": "GET", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0013371}
+[2023-01-13 20:00:00]	[34mINFO[0m	logger/crontablogger.go:12	wake
+[2023-01-13 20:00:00]	[34mINFO[0m	logger/crontablogger.go:12	run
+[2023-01-13 20:00:00]	[34mINFO[0m	crontab/taskExec.go:36	定时任务日志:	{"[执行]:": "帖子投票时间过期任务", "[Id]:": 1, "[上次执行时间]:": "[2023-01-13 19:58:38]", "[下次执行时间]:": "[2023-01-14 02:00:00]"}
+[2023-01-13 20:00:00]	[34mINFO[0m	crontab/taskExec.go:36	定时任务日志:	{"[执行]:": "监视任务执行情况", "[Id]:": 2, "[上次执行时间]:": "[2023-01-13 19:58:38]", "[下次执行时间]:": "[2023-01-13 22:00:00]"}
+[2023-01-13 20:00:05]	[31mERROR[0m	api/community.go:54	CommunityList select data is failed	{"error": "sql: expected 0 arguments, got 1"}
+[2023-01-13 20:00:05]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/community	{"status": 503, "Method": "GET", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0042617}
+[2023-01-13 20:02:02]	[34mINFO[0m	logger/crontablogger.go:12	stop
+[2023-01-13 20:02:02]	[34mINFO[0m	bluebell/main.go:82	Shutdown Server...
+[2023-01-13 20:02:02]	[34mINFO[0m	bluebell/main.go:90	Server exiting...
+[2023-01-13 20:18:24]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-01-13 20:18:24]	[35mDEBUG[0m	crontab/taskExec.go:47	监视任务执行情况开启!
+[2023-01-13 20:18:24]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-01-13 20:18:24]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-13 20:18:24]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-13 20:18:29]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/community	{"status": 200, "Method": "GET", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0014755}
+[2023-01-13 20:19:28]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/post	{"status": 503, "Method": "POST", "query": "community_id=3&title=%E5%BF%AB%E6%9D%A5%E6%B5%8B%E8%AF%95%E4%B8%80%E4%B8%8B%E5%95%A6&content=%E6%B5%8B%E8%AF%95%E5%8F%91%E5%B8%83%E5%B8%96%E5%AD%90", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.000444}
+[2023-01-13 20:19:51]	[31mERROR[0m	service/post.go:44	mysql CreatePost method is failed	{"error": "Error 1364 (HY000): Field 'author_name' doesn't have a default value"}
+[2023-01-13 20:19:51]	[31mERROR[0m	api/post.go:42	publish post is failed	{"error": "Error 1364 (HY000): Field 'author_name' doesn't have a default value"}
+[2023-01-13 20:19:51]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/post	{"status": 503, "Method": "POST", "query": "community_id=3&title=%E5%BF%AB%E6%9D%A5%E6%B5%8B%E8%AF%95%E4%B8%80%E4%B8%8B%E5%95%A6&content=%E6%B5%8B%E8%AF%95%E5%8F%91%E5%B8%83%E5%B8%96%E5%AD%90", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0030418}
+[2023-01-13 20:21:15]	[34mINFO[0m	bluebell/main.go:82	Shutdown Server...
+[2023-01-13 20:21:15]	[34mINFO[0m	logger/crontablogger.go:12	stop
+[2023-01-13 20:21:15]	[34mINFO[0m	bluebell/main.go:90	Server exiting...
+[2023-01-13 20:21:18]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-01-13 20:21:18]	[35mDEBUG[0m	crontab/taskExec.go:47	监视任务执行情况开启!
+[2023-01-13 20:21:18]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-01-13 20:21:18]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-13 20:21:18]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-13 20:21:21]	[31mERROR[0m	service/post.go:44	mysql CreatePost method is failed	{"error": "Error 1136 (21S01): Column count doesn't match value count at row 1"}
+[2023-01-13 20:21:21]	[31mERROR[0m	api/post.go:42	publish post is failed	{"error": "Error 1136 (21S01): Column count doesn't match value count at row 1"}
+[2023-01-13 20:21:21]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/post	{"status": 503, "Method": "POST", "query": "community_id=3&title=%E5%BF%AB%E6%9D%A5%E6%B5%8B%E8%AF%95%E4%B8%80%E4%B8%8B%E5%95%A6&content=%E6%B5%8B%E8%AF%95%E5%8F%91%E5%B8%83%E5%B8%96%E5%AD%90", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0009607}
+[2023-01-13 20:22:38]	[34mINFO[0m	logger/crontablogger.go:12	stop
+[2023-01-13 20:22:38]	[34mINFO[0m	bluebell/main.go:82	Shutdown Server...
+[2023-01-13 20:22:38]	[34mINFO[0m	bluebell/main.go:90	Server exiting...
+[2023-01-13 20:24:48]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-01-13 20:24:48]	[35mDEBUG[0m	crontab/taskExec.go:47	监视任务执行情况开启!
+[2023-01-13 20:24:48]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-01-13 20:24:48]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-13 20:24:48]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-13 20:24:57]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/post	{"status": 200, "Method": "POST", "query": "community_id=3&title=%E5%BF%AB%E6%9D%A5%E6%B5%8B%E8%AF%95%E4%B8%80%E4%B8%8B%E5%95%A6&content=%E6%B5%8B%E8%AF%95%E5%8F%91%E5%B8%83%E5%B8%96%E5%AD%90", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0096983}
+[2023-01-13 20:25:55]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/post	{"status": 200, "Method": "POST", "query": "community_id=1&title=%E6%88%91%E6%98%AF%E4%B8%80%E4%B8%AA%E5%BC%80%E5%BF%83%E7%9A%84%E5%85%94%E5%AD%90%E4%BE%A0&content=%E5%85%94%E5%AD%90%E4%BE%A0%E5%BE%88%E5%BC%80%E5%BF%83%E5%95%8A", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0108021}
+[2023-01-13 20:28:17]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/community/1/posts	{"status": 200, "Method": "GET", "query": "page=1&size=2&order=time", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0038102}
+[2023-01-13 20:32:56]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/postsOrder	{"status": 404, "Method": "GET", "query": "page=1&size=2&order=score", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0009742}
+[2023-01-13 20:33:36]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/posts	{"status": 200, "Method": "GET", "query": "page=1&size=2&order=score", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0049509}
+[2023-01-13 20:36:57]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/votes	{"status": 200, "Method": "POST", "query": "post_id=4898515524259840&direction=1", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0017458}
+[2023-01-13 20:37:14]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/post/4898515524259840	{"status": 200, "Method": "GET", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0018467}
+[2023-01-13 20:38:08]	[31mERROR[0m	api/comment.go:20	comment publish params is not illegal	{"error": "Key: 'CommentDetail.Comment.type' Error:Field validation for 'type' failed on the 'required' tag"}
+[2023-01-13 20:38:08]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment	{"status": 503, "Method": "POST", "query": "post_id=4898515524259840&type=0&content=%E6%B5%8B%E8%AF%95%E8%AF%84%E8%AE%BA", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0011646}
+[2023-01-13 20:38:56]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment	{"status": 503, "Method": "POST", "query": "post_id=4898515524259840&type=0&content=%E6%B5%8B%E8%AF%95%E8%AF%84%E8%AE%BA", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.000506}
+[2023-01-13 20:40:39]	[31mERROR[0m	api/comment.go:20	comment publish params is not illegal	{"error": "Key: 'CommentDetail.Comment.type' Error:Field validation for 'type' failed on the 'required' tag"}
+[2023-01-13 20:40:39]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment	{"status": 400, "Method": "POST", "query": "post_id=4898515524259840&type=0&content=%E6%B5%8B%E8%AF%95%E8%AF%84%E8%AE%BA", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0016764}
+[2023-01-13 20:41:32]	[31mERROR[0m	api/comment.go:20	comment publish params is not illegal	{"error": "Key: 'CommentDetail.Comment.type' Error:Field validation for 'type' failed on the 'required' tag"}
+[2023-01-13 20:41:32]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment	{"status": 400, "Method": "POST", "query": "post_id=4898515524259840&comment.type=0&content=%E6%B5%8B%E8%AF%95%E8%AF%84%E8%AE%BA", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.001178}
+[2023-01-13 20:41:54]	[31mERROR[0m	api/comment.go:20	comment publish params is not illegal	{"error": "Key: 'CommentDetail.Comment.type' Error:Field validation for 'type' failed on the 'required' tag"}
+[2023-01-13 20:41:54]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment	{"status": 400, "Method": "POST", "query": "type=0&post_id=4898515524259840&content=%E6%B5%8B%E8%AF%95%E8%AF%84%E8%AE%BA", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0009971}
+[2023-01-13 20:42:53]	[31mERROR[0m	api/comment.go:20	comment publish params is not illegal	{"error": "Key: 'CommentDetail.Comment.type' Error:Field validation for 'type' failed on the 'required' tag"}
+[2023-01-13 20:42:53]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment	{"status": 400, "Method": "POST", "query": "Comment.type=0&post_id=4898515524259840&content=%E6%B5%8B%E8%AF%95%E8%AF%84%E8%AE%BA", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0018394}
+[2023-01-13 20:47:08]	[34mINFO[0m	logger/crontablogger.go:12	stop
+[2023-01-13 20:47:08]	[34mINFO[0m	bluebell/main.go:82	Shutdown Server...
+[2023-01-13 20:47:08]	[34mINFO[0m	bluebell/main.go:90	Server exiting...
+[2023-01-13 20:47:11]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-01-13 20:47:11]	[35mDEBUG[0m	crontab/taskExec.go:47	监视任务执行情况开启!
+[2023-01-13 20:47:11]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-01-13 20:47:11]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-13 20:47:11]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-13 20:47:15]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment	{"status": 200, "Method": "POST", "query": "type=0&post_id=4898515524259840&content=%E6%B5%8B%E8%AF%95%E8%AF%84%E8%AE%BA", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0149378}
+[2023-01-13 20:47:51]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment	{"status": 200, "Method": "POST", "query": "type=0&post_id=4898515524259840&content=%E8%BF%99%E6%9D%A1%E8%AF%84%E8%AE%BA%E6%B2%A1%E6%9C%89%E6%84%8F%E4%B9%89", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0096591}
+[2023-01-13 20:48:58]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/login	{"status": 200, "Method": "POST", "query": "username=cczj&password=123456", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0019908}
+[2023-01-13 20:49:19]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment	{"status": 200, "Method": "POST", "query": "father_id=1&post_id=4898515524259840&type=1&to_author_id=-4495712263860224&to_author_name=zhangsan&content=%E6%B5%8B%E8%AF%95%E8%AF%84%E8%AE%BA%E6%98%AF%E5%90%A6%E6%88%90%E5%8A%9F%E6%8F%92%E5%85%A5", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0091299}
+[2023-01-13 20:51:03]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment	{"status": 200, "Method": "POST", "query": "father_id=3&post_id=4898515524259840&type=1&to_author_id=4559528024608768&to_author_name=cczj&content=%E6%B5%8B%E8%AF%95%E7%9A%84%E4%B8%8D%E9%94%99", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0115842}
+[2023-01-13 20:51:24]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment	{"status": 200, "Method": "POST", "query": "father_id=3&post_id=4898515524259840&type=1&to_author_id=4559528024608768&to_author_name=cczj&content=%E6%9C%89%E7%A9%BA%E6%9D%A5%E5%96%9D%E6%9D%AF%E8%8C%B6%E5%91%80", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0077416}
+[2023-01-13 20:54:57]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment/favorite	{"status": 503, "Method": "POST", "query": "agree=true&id=4&post_id=4898515524259840&to_author_id=-4495712263860224", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0008032}
+[2023-01-13 20:55:35]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment/favorite	{"status": 200, "Method": "POST", "query": "agree=true&id=4&post_id=4898515524259840&to_author_id=-4495712263860224", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0017674}
+[2023-01-13 20:55:41]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment/favorite	{"status": 200, "Method": "POST", "query": "agree=true&id=4&post_id=4898515524259840&to_author_id=-4495712263860224", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.001403}
+[2023-01-13 20:56:03]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment/4898515524259840	{"status": 200, "Method": "GET", "query": "order=time", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0044361}
+[2023-01-13 21:07:09]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment/4898515524259840	{"status": 200, "Method": "GET", "query": "order=time", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.002845}
+[2023-01-13 21:08:23]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment/favorite	{"status": 200, "Method": "POST", "query": "agree=true&id=2&post_id=4898515524259840&to_author_id=-4495712263860224", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0012098}
+[2023-01-13 21:08:32]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment/4898515524259840	{"status": 200, "Method": "GET", "query": "order=score", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0031848}
+[2023-01-13 21:09:13]	[31mERROR[0m	api/comment.go:54	Comment Favorite params is not illegal	{"error": "Key: 'Favorite.agree' Error:Field validation for 'agree' failed on the 'required' tag"}
+[2023-01-13 21:09:13]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment/favorite	{"status": 400, "Method": "POST", "query": "agree=false&id=2&post_id=4898515524259840&to_author_id=-4495712263860224", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0006721}
+[2023-01-13 21:14:36]	[34mINFO[0m	bluebell/main.go:82	Shutdown Server...
+[2023-01-13 21:14:36]	[34mINFO[0m	logger/crontablogger.go:12	stop
+[2023-01-13 21:14:36]	[34mINFO[0m	bluebell/main.go:90	Server exiting...
+[2023-01-13 21:14:39]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-01-13 21:14:39]	[35mDEBUG[0m	crontab/taskExec.go:47	监视任务执行情况开启!
+[2023-01-13 21:14:39]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-01-13 21:14:39]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-13 21:14:39]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-13 21:14:48]	[31mERROR[0m	logger/ginlogger.go:65	[Recovery from panic]	{"error": "Bad field type bool", "request": ["POST /api/v1/comment/favorite?agree=false&id=2&post_id=4898515524259840&to_author_id=-4495712263860224 HTTP/1.1", "Host: localhost:4399", "Accept: */*", "Accept-Encoding: gzip, deflate, br", "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo0NTU5NTI4MDI0NjA4NzY4LCJ1c2VybmFtZSI6ImNjemoiLCJpc3MiOiJibHVlYmVsbCIsImV4cCI6MTY3MzcwMDUzOCwibmJmIjoxNjczNjE0MDc4LCJpYXQiOjE2NzM2MTQxMzh9.mZ8-fEKvEfirdwHGlQcn1w0K7Aap-5dYFc7YQM7JbHE", "Cache-Control: no-cache", "Connection: keep-alive", "Content-Length: 0", "Postman-Token: 20b16008-4d0f-412b-8039-e9e71d351aba", "User-Agent: PostmanRuntime/7.29.0", "", ""], "stack": ["goroutine 22 [running]:\nruntime/debug.Stack()", "C:/Environment/Go/src/runtime/debug/stack.go:24 +0x65\nbluebell/logger.GinRecovery.func1.1()", "C:/Users/18446/GolandProjects/project/bluebell/logger/ginlogger.go:68 +0x34f\npanic({0x1452ce0, 0xc00005f050})", "C:/Environment/Go/src/runtime/panic.go:884 +0x212\ngithub.com/go-playground/validator/v10.isOneOf({0x16051e8, 0xc0003f1320})", "C:/Environment/Go/go_work/pkg/mod/github.com/go-playground/validator/v10@v10.11.1/baked_in.go:267 +0x1dc\ngithub.com/go-playground/validator/v10.wrapFunc.func1({0xc0003f1320?, 0x144de20?}, {0x16051e8?, 0xc0003f1320?})", "C:/Environment/Go/go_work/pkg/mod/github.com/go-playground/validator/v10@v10.11.1/baked_in.go:40 +0x2d\ngithub.com/go-playground/validator/v10.(*validate).traverseField(0xc0003f1320, {0x1602330, 0xc0000221d0}, {0x14bac00?, 0xc0003de0e0?, 0xc000442c00?}, {0x144de20?, 0xc0003de0e0?, 0x1b1603a0a28?}, {0xc000303480, ...}, ...)", "C:/Environment/Go/go_work/pkg/mod/github.com/go-playground/validator/v10@v10.11.1/validator.go:454 +0x1767\ngithub.com/go-playground/validator/v10.(*validate).validateStruct(0xc0003f1320, {0x1602330, 0xc0000221d0}, {0x14bac00?, 0xc0003de0e0?, 0x14bac00?}, {0x14bac00?, 0xc0003de0e0?, 0x15ff280?}, {0x160a080, ...}, ...)", "C:/Environment/Go/go_work/pkg/mod/github.com/go-playground/validator/v10@v10.11.1/validator.go:77 +0x725\ngithub.com/go-playground/validator/v10.(*Validate).StructCtx(0xc0000a00e0, {0x1602330, 0xc0000221d0}, {0x14bac00, 0xc0003de0e0?})", "C:/Environment/Go/go_work/pkg/mod/github.com/go-playground/validator/v10@v10.11.1/validator_instance.go:385 +0x46c\ngithub.com/go-playground/validator/v10.(*Validate).Struct(...)", "C:/Environment/Go/go_work/pkg/mod/github.com/go-playground/validator/v10@v10.11.1/validator_instance.go:358\ngithub.com/gin-gonic/gin/binding.(*defaultValidator).validateStruct(0x1932900, {0x14bac00, 0xc0003de0e0})", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/binding/default_validator.go:80 +0x4e\ngithub.com/gin-gonic/gin/binding.(*defaultValidator).ValidateStruct(0x14bac00?, {0x14bac00?, 0xc0003de0e0?})", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/binding/default_validator.go:59 +0x189\ngithub.com/gin-gonic/gin/binding.(*defaultValidator).ValidateStruct(0x143b140?, {0x143b140?, 0xc0003de0a0?})", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/binding/default_validator.go:57 +0x105\ngithub.com/gin-gonic/gin/binding.validate(...)", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/binding/binding.go:121\ngithub.com/gin-gonic/gin/binding.formBinding.Bind({}, 0xc0004cc000, {0x143b140, 0xc0003de0a0})", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/binding/form.go:32 +0xc2\ngithub.com/gin-gonic/gin.(*Context).ShouldBindWith(...)", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/context.go:725\ngithub.com/gin-gonic/gin.(*Context).ShouldBind(0xc000448000, {0x143b140, 0xc0003de0a0})", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/context.go:680 +0x263\nbluebell/api.CommentFavoriteHandler(0xc000448000?)", "C:/Users/18446/GolandProjects/project/bluebell/api/comment.go:53 +0x53\ngithub.com/gin-gonic/gin.(*Context).Next(...)", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/context.go:173\nbluebell/middleware.JWTAuthMiddleware.func1(0xc000448000)", "C:/Users/18446/GolandProjects/project/bluebell/middleware/auth.go:63 +0x4cb\ngithub.com/gin-gonic/gin.(*Context).Next(...)", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/context.go:173\nbluebell/middleware.RateLimitMiddleware.func1(0xc000448000)", "C:/Users/18446/GolandProjects/project/bluebell/middleware/ratelimit.go:24 +0xb4\ngithub.com/gin-gonic/gin.(*Context).Next(...)", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/context.go:173\nbluebell/logger.GinRecovery.func1(0xc000448000)", "C:/Users/18446/GolandProjects/project/bluebell/logger/ginlogger.go:79 +0x76\ngithub.com/gin-gonic/gin.(*Context).Next(...)", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/context.go:173\nbluebell/logger.GinLogger.func1(0xc000448000)", "C:/Users/18446/GolandProjects/project/bluebell/logger/ginlogger.go:22 +0x97\ngithub.com/gin-gonic/gin.(*Context).Next(...)", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/context.go:173\ngithub.com/gin-gonic/gin.(*Engine).handleHTTPRequest(0xc000505860, 0xc000448000)", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/gin.go:616 +0x671\ngithub.com/gin-gonic/gin.(*Engine).ServeHTTP(0xc000505860, {0x1601ae8?, 0xc000440000}, 0xc0004cc000)", "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/gin.go:572 +0x1dd\nnet/http.serverHandler.ServeHTTP({0xc000111860?}, {0x1601ae8, 0xc000440000}, 0xc0004cc000)", "C:/Environment/Go/src/net/http/server.go:2947 +0x30c\nnet/http.(*conn).serve(0xc0002641e0, {0x16023a0, 0xc0001116b0})", "C:/Environment/Go/src/net/http/server.go:1991 +0x607\ncreated by net/http.(*Server).Serve", "C:/Environment/Go/src/net/http/server.go:3102 +0x4db\n"]}
+[2023-01-13 21:14:48]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment/favorite	{"status": 500, "Method": "POST", "query": "agree=false&id=2&post_id=4898515524259840&to_author_id=-4495712263860224", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0142121}
+[2023-01-13 21:16:08]	[34mINFO[0m	logger/crontablogger.go:12	stop
+[2023-01-13 21:16:08]	[34mINFO[0m	bluebell/main.go:82	Shutdown Server...
+[2023-01-13 21:16:08]	[34mINFO[0m	bluebell/main.go:90	Server exiting...
+[2023-01-13 21:16:11]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-01-13 21:16:11]	[35mDEBUG[0m	crontab/taskExec.go:47	监视任务执行情况开启!
+[2023-01-13 21:16:11]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-01-13 21:16:11]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-13 21:16:11]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-13 21:16:13]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment/favorite	{"status": 200, "Method": "POST", "query": "agree=false&id=2&post_id=4898515524259840&to_author_id=-4495712263860224", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0008506}
+[2023-01-13 21:16:17]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment/4898515524259840	{"status": 200, "Method": "GET", "query": "order=score", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0032933}
+[2023-01-13 21:17:03]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment	{"status": 503, "Method": "DELETE", "query": "type=0&id=2&post_id=4898515524259840", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0014211}
+[2023-01-13 21:17:36]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/comment	{"status": 200, "Method": "DELETE", "query": "type=0&id=2&post_id=4898515524259840", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0121394}
+[2023-01-13 21:19:59]	[31mERROR[0m	api/community.go:19	Community Create params is not illegal	{"error": "Key: 'CommunityDetail.Community.author_id' Error:Field validation for 'author_id' failed on the 'required' tag\nKey: 'CommunityDetail.Community.author_name' Error:Field validation for 'author_name' failed on the 'required' tag"}
+[2023-01-13 21:19:59]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/community	{"status": 400, "Method": "POST", "query": "community_name=%E8%A1%A8%E7%99%BD%E5%A2%99&introduction=%E6%AC%A2%E8%BF%8E%E5%9C%A8%E8%BF%99%E9%87%8C%E5%8F%91%E8%A1%A8%E4%B8%80%E4%BA%9B%E4%BF%A1%E6%81%AF", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0015284}
+[2023-01-13 21:22:17]	[34mINFO[0m	logger/crontablogger.go:12	stop
+[2023-01-13 21:22:17]	[34mINFO[0m	bluebell/main.go:82	Shutdown Server...
+[2023-01-13 21:22:17]	[34mINFO[0m	bluebell/main.go:90	Server exiting...
+[2023-01-13 21:22:20]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-01-13 21:22:20]	[35mDEBUG[0m	crontab/taskExec.go:47	监视任务执行情况开启!
+[2023-01-13 21:22:20]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-01-13 21:22:20]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-13 21:22:20]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-13 21:22:25]	[31mERROR[0m	service/community.go:15	mysql CreateCommunity method err	{"error": "Error 1136 (21S01): Column count doesn't match value count at row 1"}
+[2023-01-13 21:22:25]	[31mERROR[0m	api/community.go:42	CommunityCreate method err	{"error": "Error 1136 (21S01): Column count doesn't match value count at row 1"}
+[2023-01-13 21:22:25]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/community	{"status": 503, "Method": "POST", "query": "name=%E8%A1%A8%E7%99%BD%E5%A2%99&introduction=%E6%AC%A2%E8%BF%8E%E5%9C%A8%E8%BF%99%E9%87%8C%E5%8F%91%E8%A1%A8%E4%B8%80%E4%BA%9B%E4%BF%A1%E6%81%AF", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0020331}
+[2023-01-13 21:23:13]	[34mINFO[0m	logger/crontablogger.go:12	stop
+[2023-01-13 21:23:13]	[34mINFO[0m	bluebell/main.go:82	Shutdown Server...
+[2023-01-13 21:23:13]	[34mINFO[0m	bluebell/main.go:90	Server exiting...
+[2023-01-13 21:23:15]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-01-13 21:23:15]	[35mDEBUG[0m	crontab/taskExec.go:47	监视任务执行情况开启!
+[2023-01-13 21:23:15]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-01-13 21:23:15]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-13 21:23:15]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-13 21:23:19]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/community	{"status": 200, "Method": "POST", "query": "name=%E8%A1%A8%E7%99%BD%E5%A2%99&introduction=%E6%AC%A2%E8%BF%8E%E5%9C%A8%E8%BF%99%E9%87%8C%E5%8F%91%E8%A1%A8%E4%B8%80%E4%BA%9B%E4%BF%A1%E6%81%AF", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0084975}
+[2023-01-13 21:23:49]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/community/5	{"status": 200, "Method": "GET", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0011581}
+[2023-01-13 21:25:39]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/user/community	{"status": 503, "Method": "GET", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0007979}
+[2023-01-13 21:25:52]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/user/community	{"status": 200, "Method": "GET", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0016053}
+[2023-01-13 21:26:12]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/community	{"status": 200, "Method": "GET", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0029532}
+[2023-01-13 21:26:42]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/post/4898515524259840	{"status": 200, "Method": "GET", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0018707}
+[2023-01-13 21:27:35]	[31mERROR[0m	service/post.go:61	mysql CheckPostStatus method is failed	{"error": "sql: no rows in result set"}
+[2023-01-13 21:27:35]	[31mERROR[0m	api/post.go:88	PostPut is failed	{"error": "sql: no rows in result set"}
+[2023-01-13 21:27:35]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/post/-1243992029130752	{"status": 503, "Method": "PUT", "query": "community_id=3&title=%E5%AD%A6%E4%B9%A0%E7%9C%9F%E7%97%9B%E8%8B%A6&content=%E5%88%B7%E9%A2%98%E6%98%AF%E4%B8%80%E4%B8%AA%E6%88%90%E9%95%BF%E7%9A%84%E8%BF%87%E7%A8%8B%EF%BC%8C%E6%88%91%E4%B8%80%E5%AE%9A%E4%BC%9A%E8%B6%8A%E6%9D%A5%E8%B6%8A%E5%BC%BA%EF%BC%81", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0017887}
+[2023-01-13 21:28:43]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/post/4898515524259840	{"status": 200, "Method": "PUT", "query": "community_id=3&title=%E5%AD%A6%E4%B9%A0%E7%9C%9F%E7%97%9B%E8%8B%A6&content=%E5%88%B7%E9%A2%98%E6%98%AF%E4%B8%80%E4%B8%AA%E6%88%90%E9%95%BF%E7%9A%84%E8%BF%87%E7%A8%8B%EF%BC%8C%E6%88%91%E4%B8%80%E5%AE%9A%E4%BC%9A%E8%B6%8A%E6%9D%A5%E8%B6%8A%E5%BC%BA%EF%BC%81", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0085524}
+[2023-01-13 21:28:52]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/post/4898515524259840	{"status": 200, "Method": "GET", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.0016684}
+[2023-01-13 21:30:06]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/post	{"status": 200, "Method": "POST", "query": "community_id=2&title=%E8%A2%AB%E5%88%A0%E9%99%A4&content=%E8%A2%AB%E5%88%A0%E9%99%A4%E5%92%AF", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.009566}
+[2023-01-13 21:30:24]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/post/4914912274944000	{"status": 200, "Method": "DELETE", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "cost": 0.016026}
+[2023-01-13 21:36:56]	[34mINFO[0m	logger/crontablogger.go:12	stop
+[2023-01-13 21:36:56]	[34mINFO[0m	bluebell/main.go:82	Shutdown Server...
+[2023-01-13 21:36:56]	[34mINFO[0m	bluebell/main.go:90	Server exiting...

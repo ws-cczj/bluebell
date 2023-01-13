@@ -29,18 +29,25 @@ func Setup(cfg *settings.AppConfig) *gin.Engine {
 	v1.POST("/login", api.UserLogin)
 	// community 社区
 	v1.GET("/community", api.CommunityHandler)
-	v1.GET("/community/:id", api.CommunityDetailHandler)
-	v1.GET("/community/:id/posts", api.CommunityPostHandler)
+	v1.GET("/community/:cid", api.CommunityDetailHandler)
+	v1.GET("/community/:cid/posts", api.CommunityPostHandler)
 	// post 帖子
 	v1.GET("/posts", api.PostListHandler)
-	v1.GET("/post/:id", api.PostDetailHandler)
+	v1.GET("/post/:pid", api.PostDetailHandler)
+	// comment 评论
+	v1.GET("/comment/:pid", api.CommentListHandler)
 	// jwt auth 用户认证
 	v1.Use(middleware.JWTAuthMiddleware())
 	{
+		v1.GET("/user/community", api.UserCommunityHandler)
+		v1.POST("/community", api.CommunityCreateHandler)
 		v1.POST("/post", api.PostPublishHandler)
-		v1.PUT("/post/:id", api.PostPutHandler)
-		v1.DELETE("/post/:id", api.PostDeleteHandler)
+		v1.PUT("/post/:pid", api.PostPutHandler)
+		v1.DELETE("/post/:pid", api.PostDeleteHandler)
 		v1.POST("/votes", api.PostVotesHandler)
+		v1.POST("/comment", api.CommentPublishHandler)
+		v1.DELETE("/comment", api.CommentDeleteHandler)
+		v1.POST("/comment/favorite", api.CommentFavoriteHandler)
 	}
 
 	r.NoRoute(func(c *gin.Context) {

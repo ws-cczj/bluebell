@@ -21,13 +21,13 @@ func PostVotesHandler(c *gin.Context) {
 		ResponseErrorWithMsg(c, e.CodeInvalidParams, errs.Translate(trans))
 		return
 	}
-	userID, err := getCurrentUser(c)
+	userID, err := getCurrentUserId(c)
 	if err != nil {
 		zap.L().Error("getCurrentUser method Error", zap.Error(err))
 		ResponseError(c, e.TokenInvalidAuth)
 		return
 	}
-	res, err := v.VoteBuild(userID)
+	res, err := v.Build(userID)
 	if err != nil {
 		zap.L().Error("voteBuild method Error", zap.Error(err))
 		ResponseErrorWithRes(c, res)

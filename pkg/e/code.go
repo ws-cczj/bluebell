@@ -11,6 +11,7 @@ const (
 	CodeNotComparePassword
 	CodeRepeatLogin
 	CodePostVoteExpired
+	CodePostDelete
 	// -- Token错误
 	TokenFailGenerate
 	TokenFailVerify

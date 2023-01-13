@@ -47,7 +47,9 @@ func InsertUser(user *models.User) (err error) {
 func CheckLoginInfo(user *models.User) error {
 	// 1. 通过username找到password
 	var oPassword = user.Password
-	qStr := `select user_id,username,password from user where username = ?`
+	qStr := `select user_id,username,password 
+				from user 
+				where username = ?`
 	err := db.Get(user, qStr, user.Username)
 	if err == ErrNoRows {
 		zap.L().Error("LoginInfo is not compared", zap.Error(err))
@@ -75,7 +77,9 @@ func encryptPassword(password string) string {
 // GetUserById 根据用户ID查找到用户信息
 func GetUserById(uid int64) (user *models.User, err error) {
 	user = new(models.User)
-	qStr := `select user_id,username,password,email,gender from user where user_id = ?`
+	qStr := `select user_id,username,password,email,gender
+				from user 
+				where user_id = ?`
 	err = db.Get(user, qStr, uid)
 	return
 }

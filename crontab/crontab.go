@@ -34,10 +34,7 @@ func NewCrontabInstance() *Crontab {
 
 // GetKeysAndVals 获取当前任务列表中所有的任务信息
 func (c Crontab) GetKeysAndVals() (keys []Task, vals []cron.EntryID) {
-	if c.Cron != ctab.Cron {
-		return
-	}
-	if !ctab.Enable {
+	if c.Cron != ctab.Cron || !ctab.Enable {
 		return
 	}
 	cnt := 0
@@ -54,10 +51,7 @@ func (c Crontab) GetKeysAndVals() (keys []Task, vals []cron.EntryID) {
 
 // RunAll 开始执行所有任务
 func (c Crontab) RunAll() {
-	if c.Cron != ctab.Cron {
-		return
-	}
-	if ctab.Enable {
+	if c.Cron != ctab.Cron || ctab.Enable {
 		return
 	}
 	ctab.Enable = true
@@ -66,24 +60,22 @@ func (c Crontab) RunAll() {
 
 // StopAll 停止所有任务的执行
 func (c Crontab) StopAll() {
-	if c.Cron != ctab.Cron {
+	if c.Cron != ctab.Cron || !ctab.Enable {
 		return
 	}
-	if ctab.Enable {
-		ctab.Cron.Stop()
-		ctab.Enable = false
-	}
+	ctab.Cron.Stop()
+	ctab.Enable = false
 }
 
 // RemoveTask 移除任务
 func (c Crontab) RemoveTask(t Task) {
-	if c.Cron != ctab.Cron {
+	if c.Cron != ctab.Cron || !ctab.Enable {
 		return
 	}
-	if ctab.Enable {
-		entryIds := ctab.EntryIds
-		ctab.Cron.Remove(entryIds[t])
+	entryIds := ctab.EntryIds
+	if id, ok := entryIds[t]; ok {
+		ctab.Cron.Remove(id)
 		delete(entryIds, t)
-		delete(ctab.PreTime, entryIds[t])
+		delete(ctab.PreTime, id)
 	}
 }

@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	ATokenExpiredDuration  = 600
+	ATokenExpiredDuration  = 24 * 3600
 	RTokenExpiredDuration  = 30 * 24 * 3600
 	TokenIssuedAtDuration  = 0
 	TokenNotBeforeDuration = -60

@@ -31,14 +31,12 @@ func MysqlTask() {
 // MonitorTask 监视执行任务
 func MonitorTask() {
 	id, _ := ctab.Cron.AddFunc(ExecSecondHour, func() {
-		keys, vals := ctab.GetKeysAndVals()
-		n := len(ctab.EntryIds)
-		for i := 0; i < n; i++ {
-			entry := ctab.Entry(vals[i])
+		for task, id := range ctab.EntryIds {
+			entry := ctab.Entry(id)
 			zap.L().Info(TaskLogger,
-				zap.String("[执行]:", string(keys[i])),
-				zap.Int("[Id]:", int(vals[i])),
-				zap.Time("[上次执行时间]:", ctab.PreTime[vals[i]]),
+				zap.String("[执行]:", string(task)),
+				zap.Int("[Id]:", int(id)),
+				zap.Time("[上次执行时间]:", ctab.PreTime[id]),
 				zap.Time("[下次执行时间]:", entry.Next),
 			)
 		}
@@ -46,5 +44,5 @@ func MonitorTask() {
 	})
 	ctab.PreTime[id] = time.Now()
 	ctab.EntryIds[TaskMonitor] = id
-	zap.L().Debug(TaskMonitor + "开启")
+	zap.L().Debug(TaskMonitor + "开启!")
 }

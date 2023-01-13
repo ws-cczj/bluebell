@@ -53,3 +53,20 @@ func UserLogin(c *gin.Context) {
 	}
 	ResponseSuccess(c, res.Data)
 }
+
+// UserCommunityHandler 获取该用户管理的社区列表
+func UserCommunityHandler(c *gin.Context) {
+	uid, err := getCurrentUserId(c)
+	if err != nil {
+		ResponseError(c, e.TokenInvalidAuth)
+		return
+	}
+	// 根据用户id去查询社区
+	data, err := service.CommunityList(uid)
+	if err != nil {
+		zap.L().Error("service CommunityList method err", zap.Error(err))
+		ResponseError(c, e.CodeServerBusy)
+		return
+	}
+	ResponseSuccess(c, data)
+}

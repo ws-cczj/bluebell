@@ -25,10 +25,10 @@ type LoginService struct {
 }
 
 // Register 用户注册
-func (service *RegisterService) Register() (silr.Response, error) {
+func (r RegisterService) Register() (silr.Response, error) {
 	code := e.CodeSUCCESS
 	// 1. 校验用户名
-	if err := mysql.CheckUsername(service.Username); err != nil {
+	if err := mysql.CheckUsername(r.Username); err != nil {
 		if errors.Is(err, mysql.ErrorUserExist) {
 			code = e.CodeExistUser
 			return silr.Response{Status: code, Msg: err.Error()}, err
@@ -41,10 +41,10 @@ func (service *RegisterService) Register() (silr.Response, error) {
 	// 3. 添加用户到数据库
 	u := &models.User{
 		UserID:   id,
-		Username: service.Username,
-		Password: service.Password,
-		Email:    service.Email,
-		Gender:   service.Gender,
+		Username: r.Username,
+		Password: r.Password,
+		Email:    r.Email,
+		Gender:   r.Gender,
 	}
 	if err := mysql.InsertUser(u); err != nil {
 		code = e.CodeServerBusy
@@ -54,11 +54,11 @@ func (service *RegisterService) Register() (silr.Response, error) {
 }
 
 // Login 用户登录
-func (service *LoginService) Login() (silr.Response, error) {
+func (l LoginService) Login() (silr.Response, error) {
 	code := e.CodeSUCCESS
 	user := &models.User{
-		Username: service.Username,
-		Password: service.Password,
+		Username: l.Username,
+		Password: l.Password,
 	}
 	if err := mysql.CheckLoginInfo(user); err != nil {
 		if errors.Is(err, mysql.ErrorNotComparePwd) {

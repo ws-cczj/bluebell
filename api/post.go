@@ -12,9 +12,9 @@ import (
 
 // PostPublishHandler 帖子发布
 func PostPublishHandler(c *gin.Context) {
-	// 1. 获取创建帖子的数据
-	p := new(service.PublishService)
 	var err error
+	// 1. 获取创建帖子的数据
+	p := new(service.Publish)
 	if err = c.ShouldBind(p); err != nil {
 		zap.L().Error("post publish params is not illegal", zap.Error(err))
 		errs, ok := err.(validator.ValidationErrors)
@@ -25,14 +25,20 @@ func PostPublishHandler(c *gin.Context) {
 		ResponseErrorWithMsg(c, http.StatusBadRequest, removeTopStruct(errs.Translate(trans)))
 		return
 	}
-	// 2. 将数据插入数据库中
-	p.AuthorId, err = getCurrentUser(c)
+	// 2. 获取用户Id
+	uid, err := getCurrentUserId(c)
 	if err != nil {
 		ResponseError(c, e.TokenInvalidAuth)
 		return
 	}
-	if res, err := p.PublishPost(); err != nil {
-		ResponseErrorWithRes(c, res)
+	uname, err := getCurrentUsername(c)
+	if err != nil {
+		ResponseError(c, e.TokenInvalidAuth)
+		return
+	}
+	// 3. 将数据插入数据库中
+	if err = p.PublishPost(uid, uname); err != nil {
+		ResponseError(c, e.CodeServerBusy)
 		zap.L().Error("publish post is failed", zap.Error(err))
 		return
 	}
@@ -41,13 +47,13 @@ func PostPublishHandler(c *gin.Context) {
 
 // PostDetailHandler 根据帖子ID获取帖子详情
 func PostDetailHandler(c *gin.Context) {
-	pid, err := getPostId(c)
+	pid, err := getParamId(c, "pid")
 	if err != nil {
 		zap.L().Error("ParseInt data is invalid", zap.Error(err))
 		ResponseError(c, e.CodeInvalidParams)
 		return
 	}
-	p := &service.PostService{}
+	p := new(service.PostService)
 	if err = p.PostDetailById(pid); err != nil {
 		zap.L().Error("PostDetailById select data is failed", zap.Error(err))
 		ResponseError(c, e.CodeServerBusy)
@@ -59,7 +65,7 @@ func PostDetailHandler(c *gin.Context) {
 // PostPutHandler 修改帖子
 func PostPutHandler(c *gin.Context) {
 	// 1. 获取修改帖子的数据
-	p := new(service.PublishService)
+	p := new(service.Publish)
 	if err := c.ShouldBind(p); err != nil {
 		zap.L().Error("post put params is not illegal", zap.Error(err))
 		errs, ok := err.(validator.ValidationErrors)
@@ -71,7 +77,7 @@ func PostPutHandler(c *gin.Context) {
 		return
 	}
 	// 2. 获取帖子ID
-	pid, err := getPostId(c)
+	pid, err := getParamId(c, "pid")
 	if err != nil {
 		zap.L().Error("ParseInt data is invalid", zap.Error(err))
 		ResponseError(c, e.CodeInvalidParams)
@@ -87,7 +93,7 @@ func PostPutHandler(c *gin.Context) {
 
 // PostDeleteHandler 删除帖子
 func PostDeleteHandler(c *gin.Context) {
-	pid, err := getPostId(c)
+	pid, err := getParamId(c, "pid")
 	if err != nil {
 		zap.L().Error("ParseInt data is invalid", zap.Error(err))
 		ResponseError(c, e.CodeInvalidParams)
@@ -104,25 +110,9 @@ func PostDeleteHandler(c *gin.Context) {
 // PostListHandler 顺序获取所有帖子
 func PostListHandler(c *gin.Context) {
 	page, size, order := getPostListInfo(c)
-	p := &service.PostService{}
-	data, err := p.PostListInOrder(page, size, order)
+	data, err := service.PostListInOrder(page, size, order)
 	if err != nil {
 		zap.L().Error("PostListInOrder select data is failed", zap.Error(err))
-		ResponseError(c, e.CodeServerBusy)
-		return
-	}
-	ResponseSuccess(c, data)
-}
-
-// CommunityPostHandler 获取社区的帖子
-func CommunityPostHandler(c *gin.Context) {
-	page, size, order := getPostListInfo(c)
-	cid, err := getPostId(c)
-
-	p := &service.PostService{}
-	data, err := p.CommunityPostListInOrder(page, size, cid, order)
-	if err != nil {
-		zap.L().Error("CommunityPostListInOrder select data is failed", zap.Error(err))
 		ResponseError(c, e.CodeServerBusy)
 		return
 	}
