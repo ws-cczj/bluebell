@@ -2,11 +2,11 @@
 
 ## 项目大概流程
 ### main函数注册流程
-![init.png](models/bluebell_init.png)
-![user.png](models/bluebell_user.png)
-![community](models/bluebell_community.png)
-![post](models/bluebell_post.png)
-![comment.png](models/bluebell_comment.png)
+![init.png](http://cdn.cczjblog.top/cczjBlog-img/bluebell_init.png-cczjImage)
+![user.png](http://cdn.cczjblog.top/cczjBlog-img/bluebell_user.png-cczjImage)
+![community](http://cdn.cczjblog.top/cczjBlog-img/bluebell_community.png-cczjImage)
+![post](http://cdn.cczjblog.top/cczjBlog-img/bluebell_post.png-cczjImage)
+![comment.png](http://cdn.cczjblog.top/cczjBlog-img/bluebell_comment.png-cczjImage)
 初始化定时任务,开启过期帖子定期清除函数.
 开启web服务,监听请求,等待优雅关机.
 
