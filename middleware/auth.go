@@ -5,6 +5,7 @@ import (
 	"bluebell/dao/redis"
 	"bluebell/pkg/e"
 	"bluebell/pkg/jwt"
+	"bluebell/serializer"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -19,14 +20,14 @@ func JWTAuthMiddleware() func(c *gin.Context) {
 		rtoken := c.Request.Header.Get("Grant_type")
 		authHeader := c.Request.Header.Get("Authorization")
 		if authHeader == "" {
-			api.ResponseError(c, e.TokenNullNeedLogin)
+			serializer.ResponseError(c, e.TokenNullNeedLogin)
 			c.Abort()
 			return
 		}
 		// 按空格分割
 		parts := strings.SplitN(authHeader, " ", 2)
 		if !(len(parts) == 2 && parts[0] == "Bearer") {
-			api.ResponseError(c, e.TokenInvalidAuth)
+			serializer.ResponseError(c, e.TokenInvalidAuth)
 			c.Abort()
 			return
 		}
@@ -41,19 +42,19 @@ func JWTAuthMiddleware() func(c *gin.Context) {
 					c.Next()
 				}
 			}
-			api.ResponseError(c, e.TokenFailVerify)
+			serializer.ResponseError(c, e.TokenFailVerify)
 			c.Abort()
 			return
 		}
 		// 通过获取redis中的token来校验是否单用户登录
 		token, err := redis.GetSingleUserToken(mc.Username)
 		if err != nil {
-			api.ResponseError(c, e.CodeServerBusy)
+			serializer.ResponseError(c, e.CodeServerBusy)
 			c.Abort()
 			return
 		}
 		if token != parts[1] {
-			api.ResponseError(c, e.CodeRepeatLogin)
+			serializer.ResponseError(c, e.CodeRepeatLogin)
 			c.Abort()
 			return
 		}

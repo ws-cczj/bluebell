@@ -2,6 +2,7 @@ package api
 
 import (
 	"bluebell/pkg/e"
+	silr "bluebell/serializer"
 	"bluebell/service"
 
 	"go.uber.org/zap"
@@ -18,20 +19,20 @@ func PostVotesHandler(c *gin.Context) {
 		errs, ok := err.(validator.ValidationErrors)
 		if ok {
 		}
-		ResponseErrorWithMsg(c, e.CodeInvalidParams, errs.Translate(trans))
+		silr.ResponseErrorWithMsg(c, e.CodeInvalidParams, errs.Translate(trans))
 		return
 	}
 	userID, err := getCurrentUserId(c)
 	if err != nil {
 		zap.L().Error("getCurrentUser method Error", zap.Error(err))
-		ResponseError(c, e.TokenInvalidAuth)
+		silr.ResponseError(c, e.TokenInvalidAuth)
 		return
 	}
 	res, err := v.Build(userID)
 	if err != nil {
 		zap.L().Error("voteBuild method Error", zap.Error(err))
-		ResponseErrorWithRes(c, res)
+		silr.ResponseErrorWithRes(c, res)
 		return
 	}
-	ResponseSuccess(c, nil)
+	silr.ResponseSuccess(c, nil)
 }

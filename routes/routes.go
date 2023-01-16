@@ -4,6 +4,7 @@ import (
 	"bluebell/api"
 	"bluebell/logger"
 	"bluebell/middleware"
+	silr "bluebell/serializer"
 	"bluebell/settings"
 
 	"go.uber.org/zap"
@@ -56,7 +57,7 @@ func Setup(cfg *settings.AppConfig) *gin.Engine {
 	}
 
 	r.NoRoute(func(c *gin.Context) {
-		api.ResponseNotFound(c)
+		silr.ResponseNotFound(c)
 	})
 	return r
 }

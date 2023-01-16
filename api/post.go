@@ -2,6 +2,7 @@ package api
 
 import (
 	"bluebell/pkg/e"
+	silr "bluebell/serializer"
 	"bluebell/service"
 	"net/http"
 
@@ -19,30 +20,30 @@ func PostPublishHandler(c *gin.Context) {
 		zap.L().Error("post publish params is not illegal", zap.Error(err))
 		errs, ok := err.(validator.ValidationErrors)
 		if !ok {
-			ResponseError(c, e.CodeInvalidParams)
+			silr.ResponseError(c, e.CodeInvalidParams)
 			return
 		}
-		ResponseErrorWithMsg(c, http.StatusBadRequest, removeTopStruct(errs.Translate(trans)))
+		silr.ResponseErrorWithMsg(c, http.StatusBadRequest, removeTopStruct(errs.Translate(trans)))
 		return
 	}
 	// 2. 获取用户Id
 	uid, err := getCurrentUserId(c)
 	if err != nil {
-		ResponseError(c, e.TokenInvalidAuth)
+		silr.ResponseError(c, e.TokenInvalidAuth)
 		return
 	}
 	uname, err := getCurrentUsername(c)
 	if err != nil {
-		ResponseError(c, e.TokenInvalidAuth)
+		silr.ResponseError(c, e.TokenInvalidAuth)
 		return
 	}
 	// 3. 将数据插入数据库中
 	if err = p.PublishPost(uid, uname); err != nil {
-		ResponseError(c, e.CodeServerBusy)
+		silr.ResponseError(c, e.CodeServerBusy)
 		zap.L().Error("publish post is failed", zap.Error(err))
 		return
 	}
-	ResponseSuccess(c, nil)
+	silr.ResponseSuccess(c, nil)
 }
 
 // PostDetailHandler 根据帖子ID获取帖子详情
@@ -50,16 +51,16 @@ func PostDetailHandler(c *gin.Context) {
 	pid, err := getParamId(c, "pid")
 	if err != nil {
 		zap.L().Error("ParseInt data is invalid", zap.Error(err))
-		ResponseError(c, e.CodeInvalidParams)
+		silr.ResponseError(c, e.CodeInvalidParams)
 		return
 	}
 	p := new(service.PostService)
 	if err = p.PostDetailById(pid); err != nil {
 		zap.L().Error("PostDetailById select data is failed", zap.Error(err))
-		ResponseError(c, e.CodeServerBusy)
+		silr.ResponseError(c, e.CodeServerBusy)
 		return
 	}
-	ResponseSuccess(c, p)
+	silr.ResponseSuccess(c, p)
 }
 
 // PostPutHandler 修改帖子
@@ -70,25 +71,25 @@ func PostPutHandler(c *gin.Context) {
 		zap.L().Error("post put params is not illegal", zap.Error(err))
 		errs, ok := err.(validator.ValidationErrors)
 		if !ok {
-			ResponseError(c, e.CodeInvalidParams)
+			silr.ResponseError(c, e.CodeInvalidParams)
 			return
 		}
-		ResponseErrorWithMsg(c, http.StatusBadRequest, removeTopStruct(errs.Translate(trans)))
+		silr.ResponseErrorWithMsg(c, http.StatusBadRequest, removeTopStruct(errs.Translate(trans)))
 		return
 	}
 	// 2. 获取帖子ID
 	pid, err := getParamId(c, "pid")
 	if err != nil {
 		zap.L().Error("ParseInt data is invalid", zap.Error(err))
-		ResponseError(c, e.CodeInvalidParams)
+		silr.ResponseError(c, e.CodeInvalidParams)
 		return
 	}
 	if res, err := p.PostPut(pid); err != nil {
-		ResponseErrorWithRes(c, res)
+		silr.ResponseErrorWithRes(c, res)
 		zap.L().Error("PostPut is failed", zap.Error(err))
 		return
 	}
-	ResponseSuccess(c, nil)
+	silr.ResponseSuccess(c, nil)
 }
 
 // PostDeleteHandler 删除帖子
@@ -96,15 +97,15 @@ func PostDeleteHandler(c *gin.Context) {
 	pid, err := getParamId(c, "pid")
 	if err != nil {
 		zap.L().Error("ParseInt data is invalid", zap.Error(err))
-		ResponseError(c, e.CodeInvalidParams)
+		silr.ResponseError(c, e.CodeInvalidParams)
 		return
 	}
 	if err = service.DeletePost(pid); err != nil {
 		zap.L().Error("delete post failed", zap.Int64("pid", pid), zap.Error(err))
-		ResponseError(c, e.CodeServerBusy)
+		silr.ResponseError(c, e.CodeServerBusy)
 		return
 	}
-	ResponseSuccess(c, nil)
+	silr.ResponseSuccess(c, nil)
 }
 
 // PostListHandler 顺序获取所有帖子
@@ -113,8 +114,8 @@ func PostListHandler(c *gin.Context) {
 	data, err := service.PostListInOrder(page, size, order)
 	if err != nil {
 		zap.L().Error("PostListInOrder select data is failed", zap.Error(err))
-		ResponseError(c, e.CodeServerBusy)
+		silr.ResponseError(c, e.CodeServerBusy)
 		return
 	}
-	ResponseSuccess(c, data)
+	silr.ResponseSuccess(c, data)
 }
