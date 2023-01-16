@@ -83,3 +83,35 @@ func GetUserById(uid int64) (user *models.User, err error) {
 	err = db.Get(user, qStr, uid)
 	return
 }
+
+// GetUserCommunityList 获取用户管理的社区信息列表
+func GetUserCommunityList(uid, cidNums int64) (data []*models.Community, err error) {
+	data = make([]*models.Community, 0, cidNums)
+	qStr := `select id,author_id,author_name,community_name
+				from community
+				where author_id = ?
+				order by create_time DESC`
+	if err = db.Select(&data, qStr, uid); err != nil {
+		if err == ErrNoRows {
+			zap.L().Warn("getCommunityList is null data")
+			err = nil
+		}
+	}
+	return
+}
+
+// GetUserPostList 获取用户管理的帖子列表
+func GetUserPostList(uid, pidNums int64) (data []*models.Post, err error) {
+	data = make([]*models.Post, 0, pidNums)
+	qStr := `select author_name,title,content,status,create_time,update_time
+				from post
+				where author_id = ?
+				order by create_time DESC`
+	if err = db.Select(&data, qStr, uid); err != nil {
+		if err == ErrNoRows {
+			zap.L().Warn("getCommunityList is null data")
+			err = nil
+		}
+	}
+	return
+}

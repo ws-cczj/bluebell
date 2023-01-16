@@ -13,34 +13,29 @@ const (
 )
 
 // CreateCommunity 创建社区
-func CreateCommunity(cDetail *models.CommunityDetail) (err error) {
+func CreateCommunity(cDetail *models.CommunityDetail) (int64, error) {
 	iStr := `insert into 
     			community(author_id,author_name,community_name,introduction)
 				values(?,?,?,?) `
-	_, err = db.Exec(iStr,
+	res, err := db.Exec(iStr,
 		cDetail.AuthorId,
 		cDetail.AuthorName,
 		cDetail.Name,
 		cDetail.Introduction)
-	return
+	if err != nil {
+		zap.L().Error("Create Community method err", zap.Error(err))
+		return -1, err
+	}
+	return res.LastInsertId()
 }
 
-// GetCommunityList 获取社区信息列表
-func GetCommunityList(uid, pidNums int64) (data []*models.Community, err error) {
+// GetCommunityList 获取社区列表
+func GetCommunityList(pidNums int64) (data []*models.Community, err error) {
 	data = make([]*models.Community, 0, pidNums)
-	if uid != 0 {
-		qStr := `select id,author_id,author_name,community_name
-				from community
-				where author_id = ?
-				order by create_time DESC`
-		err = db.Select(&data, qStr, uid)
-	} else {
-		qStr := `select id,author_id,author_name,community_name
+	qStr := `select id,author_id,author_name,community_name
 				from community
 				order by create_time DESC`
-		err = db.Select(&data, qStr)
-	}
-	if err != nil {
+	if err = db.Select(&data, qStr); err != nil {
 		if err == ErrNoRows {
 			zap.L().Warn("getCommunityList is null data")
 			err = nil

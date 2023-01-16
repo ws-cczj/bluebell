@@ -25,8 +25,8 @@ func Setup(cfg *settings.AppConfig) *gin.Engine {
 	//pprof.Register(r)
 	// api/v1
 	v1 := r.Group("/api/v1")
-	v1.POST("/register", api.UserRegister)
-	v1.POST("/login", api.UserLogin)
+	v1.POST("/register", api.UserRegisterHandler)
+	v1.POST("/login", api.UserLoginHandler)
 	// community 社区
 	v1.GET("/community", api.CommunityHandler)
 	v1.GET("/community/:cid", api.CommunityDetailHandler)
@@ -39,12 +39,17 @@ func Setup(cfg *settings.AppConfig) *gin.Engine {
 	// jwt auth 用户认证
 	v1.Use(middleware.JWTAuthMiddleware())
 	{
-		v1.GET("/user/community", api.UserCommunityHandler)
+		// user 用户
+		v1.GET("/user/communitys", api.UserCommunityHandler)
+		v1.GET("/user/posts", api.UserPostsHandler)
+		// community 社区
 		v1.POST("/community", api.CommunityCreateHandler)
+		// post 帖子
 		v1.POST("/post", api.PostPublishHandler)
 		v1.PUT("/post/:pid", api.PostPutHandler)
 		v1.DELETE("/post/:pid", api.PostDeleteHandler)
 		v1.POST("/votes", api.PostVotesHandler)
+		// comment 评论
 		v1.POST("/comment", api.CommentPublishHandler)
 		v1.DELETE("/comment", api.CommentDeleteHandler)
 		v1.POST("/comment/favorite", api.CommentFavoriteHandler)

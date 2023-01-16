@@ -83,3 +83,15 @@ func (l LoginService) Login() (silr.Response, error) {
 	}
 	return silr.Response{Data: []string{token, rtoken}}, nil
 }
+
+// UserCommunityList 获取用户管理的所有社区
+func UserCommunityList(uid int64) ([]*models.Community, error) {
+	cidNums := redis.GetUserCommunitys(uid)
+	return mysql.GetUserCommunityList(uid, cidNums)
+}
+
+// UserPostList 获取用户发布的所有帖子列表
+func UserPostList(uid int64) ([]*models.Post, error) {
+	pidNums := redis.GetUserPostNums(uid)
+	return mysql.GetUserPostList(uid, pidNums)
+}

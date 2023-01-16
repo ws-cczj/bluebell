@@ -44,10 +44,9 @@ func (p Publish) PublishPost(uid int64, uname string) (err error) {
 			zap.Error(err))
 		return
 	}
-	if err = redis.CreatePost(post.PostId, post.CommunityId); err != nil {
+	if err = redis.CreatePost(post.AuthorId, post.PostId, post.CommunityId); err != nil {
 		zap.L().Error("redis CreatePost method is failed",
 			zap.Error(err))
-		return
 	}
 	return
 }

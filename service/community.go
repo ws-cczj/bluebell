@@ -4,41 +4,44 @@ import (
 	"bluebell/dao/mysql"
 	"bluebell/dao/redis"
 	"bluebell/models"
+	"strconv"
 
 	"go.uber.org/zap"
 )
 
 // CommunityCreate 创建社区
-func CommunityCreate(cDetail *models.CommunityDetail) (err error) {
+func CommunityCreate(cDetail *models.CommunityDetail) error {
 	cDetail.Status = mysql.CommunityPublish
-	if err = mysql.CreateCommunity(cDetail); err != nil {
+	cNums, err := mysql.CreateCommunity(cDetail)
+	if err != nil {
 		zap.L().Error("mysql CreateCommunity method err",
 			zap.Error(err))
-		return
+		return err
 	}
-	if err = redis.SetUserCommunity(cDetail.AuthorId, cDetail.ID); err != nil {
+	// 设置社区数目缓存和用户社区信息
+	if err = redis.SetUserCommunity(cNums, cDetail.AuthorId, cDetail.ID); err != nil {
 		zap.L().Error("redis SetUserCommunity method err",
 			zap.Error(err))
 	}
-	return
+	return err
 }
 
-// CommunityList 获取所有社区
-func CommunityList(uid int64) ([]*models.Community, error) {
-	if uid != 0 {
-		pidNums, err := redis.GetUserCommunitys(uid)
-		if err != nil {
-			zap.L().Error("redis getUserCommunitys method err", zap.Error(err))
-			return nil, err
-		}
-		return mysql.GetCommunityList(uid, pidNums)
+// CommunityList 获取社区列表
+func CommunityList() ([]*models.Community, error) {
+	// 如果缓存有效，直接通过缓存数量进行查询
+	if cidNum, err := redis.GetCommunitys(); err == nil {
+		Num, _ := strconv.Atoi(cidNum)
+		return mysql.GetCommunityList(int64(Num))
 	}
+	// 如果缓存无效或者方法错误，就通过mysql查询
 	cidNum, err := mysql.GetCommunitys()
 	if err != nil {
 		zap.L().Error("mysql GetCommunitys method err", zap.Error(err))
 		return nil, err
 	}
-	return mysql.GetCommunityList(uid, cidNum)
+	// 更新缓存，错误也不影响
+	_ = redis.SetCommunityNums(cidNum)
+	return mysql.GetCommunityList(cidNum)
 }
 
 // CommunityDetailById 指定获取某个社区详细信息

@@ -3,13 +3,12 @@ package redis
 import (
 	"time"
 
-	"go.uber.org/zap"
-
 	"github.com/go-redis/redis"
 )
 
 const (
-	KeyZInterExpired = time.Minute // ZinterStore 联合查询的生成临时缓存的过期时间
+	KeyZInterExpired = time.Minute     // ZinterStore 联合查询的生成临时缓存的过期时间
+	KeyPostNumsCache = 5 * time.Minute // post_nums 缓存存在时间
 	AggregateSUM     = "SUM"
 	AggregateMAX     = "MAX"
 	AggregateMIN     = "MIN"
@@ -18,11 +17,12 @@ const (
 )
 
 // CreatePost 创建帖子的时间和初始分数
-func CreatePost(pid, cid int64) (err error) {
+func CreatePost(uid, pid, cid int64) (err error) {
 	pipeline := rdb.TxPipeline()
 	pipeline.ZAdd(addKeyPrefix(KeyPostTimeZSet), redisZ(time.Now().Unix(), pid))
 	pipeline.ZAdd(addKeyPrefix(KeyPostScoreZSet), redisZ(time.Now().Unix(), pid))
 	pipeline.SAdd(addKeyPrefix(KeyCommunitySetPF, stvI64toa(cid)), pid)
+	pipeline.SAdd(addKeyPrefix(KeyUserPostNums, stvI64toa(uid)), pid)
 	_, err = pipeline.Exec()
 	return
 }
@@ -66,30 +66,6 @@ func GetPostVotes(pids []string) (tickets []uint32, err error) {
 		tickets = append(tickets, uint32(ticket))
 	}
 	return
-}
-
-// GetCommunityPosts 获取该社区下的帖子数
-func GetCommunityPosts(cid int64) (pidNums int64, err error) {
-	return rdb.SCard(addKeyPrefix(KeyCommunitySetPF, stvI64toa(cid))).Result()
-}
-
-// GetCommunityPostIds 获取社区的帖子ids
-func GetCommunityPostIds(page, size, cid int64, orderkey string) (pids []string, err error) {
-	key := addKeyPrefix(orderkey, stvI64toa(cid))
-	ckey := addKeyPrefix(KeyCommunitySetPF, stvI64toa(cid))
-	// -- 设置key缓存，减少 ZinterStore的消耗, 也避免了资源的浪费
-	if rdb.Exists(key).Val() < 1 {
-		pipe := rdb.TxPipeline()
-		pipe.ZInterStore(key, redisZS(AggregateMAX), ckey, addKeyPrefix(orderkey))
-		pipe.Expire(key, KeyZInterExpired)
-		_, err = pipe.Exec()
-		if err != nil {
-			zap.L().Error("pipe ZInterStore or Expire exec is failed",
-				zap.Error(err))
-			return
-		}
-	}
-	return GetPostIds(page, size, orderkey+stvI64toa(cid))
 }
 
 // GetPostExpired 获取已经过期的帖子集合

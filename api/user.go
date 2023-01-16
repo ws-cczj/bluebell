@@ -12,8 +12,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// UserRegister 响应用户注册
-func UserRegister(c *gin.Context) {
+// UserRegisterHandler 响应用户注册
+func UserRegisterHandler(c *gin.Context) {
 	var svc service.RegisterService
 	if err := c.ShouldBind(&svc); err != nil {
 		zap.L().Error("register params is not illegal", zap.Error(err))
@@ -33,8 +33,8 @@ func UserRegister(c *gin.Context) {
 	ResponseSuccess(c, nil)
 }
 
-// UserLogin 响应用户登录
-func UserLogin(c *gin.Context) {
+// UserLoginHandler 响应用户登录
+func UserLoginHandler(c *gin.Context) {
 	var svc service.LoginService
 	if err := c.ShouldBind(&svc); err != nil {
 		zap.L().Error("register params is not illegal", zap.Error(err))
@@ -62,9 +62,26 @@ func UserCommunityHandler(c *gin.Context) {
 		return
 	}
 	// 根据用户id去查询社区
-	data, err := service.CommunityList(uid)
+	data, err := service.UserCommunityList(uid)
 	if err != nil {
 		zap.L().Error("service CommunityList method err", zap.Error(err))
+		ResponseError(c, e.CodeServerBusy)
+		return
+	}
+	ResponseSuccess(c, data)
+}
+
+// UserPostsHandler 获取该用户发布的帖子
+func UserPostsHandler(c *gin.Context) {
+	uid, err := getCurrentUserId(c)
+	if err != nil {
+		zap.L().Error("getCurrentUserId method err", zap.Error(err))
+		ResponseError(c, e.TokenInvalidAuth)
+		return
+	}
+	data, err := service.UserPostList(uid)
+	if err != nil {
+		zap.L().Error("service UserPostList method err", zap.Error(err))
 		ResponseError(c, e.CodeServerBusy)
 		return
 	}

@@ -49,7 +49,7 @@ func CommunityCreateHandler(c *gin.Context) {
 
 // CommunityHandler 返回社区的列表信息
 func CommunityHandler(c *gin.Context) {
-	data, err := service.CommunityList(0)
+	data, err := service.CommunityList()
 	if err != nil {
 		zap.L().Error("CommunityList select data is failed", zap.Error(err))
 		ResponseError(c, e.CodeServerBusy)

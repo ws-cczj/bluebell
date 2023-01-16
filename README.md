@@ -1,7 +1,14 @@
 # 项目名称: bluebell
 
 ## 项目大概流程
-![img.png](img.png)
+### main函数注册流程
+![init.png](models/bluebell_init.png)
+![user.png](models/bluebell_user.png)
+![community](models/bluebell_community.png)
+![post](models/bluebell_post.png)
+![comment.png](models/bluebell_comment.png)
+初始化定时任务,开启过期帖子定期清除函数.
+开启web服务,监听请求,等待优雅关机.
 
 ### 项目功能
 - 基于`redis`实现帖子的时间排序和投票分数排序。
