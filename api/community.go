@@ -5,9 +5,6 @@ import (
 	"bluebell/pkg/e"
 	silr "bluebell/serializer"
 	"bluebell/service"
-	"net/http"
-
-	"github.com/go-playground/validator/v10"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -18,12 +15,7 @@ func CommunityCreateHandler(c *gin.Context) {
 	community := new(models.CommunityDetail)
 	if err := c.ShouldBind(community); err != nil {
 		zap.L().Error("Community Create params is not illegal", zap.Error(err))
-		errs, ok := err.(validator.ValidationErrors)
-		if !ok {
-			silr.ResponseError(c, e.CodeInvalidParams)
-			return
-		}
-		silr.ResponseErrorWithMsg(c, http.StatusBadRequest, removeTopStruct(errs.Translate(trans)))
+		silr.ResponseValidatorError(c, err)
 		return
 	}
 	// 2. 查找当前请求用户的uid和uname
@@ -80,7 +72,11 @@ func CommunityDetailHandler(c *gin.Context) {
 func CommunityPostHandler(c *gin.Context) {
 	page, size, order := getPostListInfo(c)
 	cid, err := getParamId(c, "cid")
-
+	if err != nil {
+		zap.L().Error("Param is illgal", zap.Error(err))
+		silr.ResponseError(c, e.CodeInvalidParams)
+		return
+	}
 	data, err := service.CommunityPostListInOrder(page, size, cid, order)
 	if err != nil {
 		zap.L().Error("CommunityPostListInOrder select data is failed", zap.Error(err))

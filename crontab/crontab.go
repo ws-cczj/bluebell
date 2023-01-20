@@ -28,20 +28,21 @@ func NewCrontabInstance() *Crontab {
 		ctab.Cron = cron.New(cron.WithLogger(logger.Log{Logger: zap.L()}), cron.WithSeconds())
 		ctab.EntryIds = make(map[Task]cron.EntryID, Caps)
 		ctab.PreTime = make(map[cron.EntryID]time.Time, Caps)
+		Exec(ctab)
 	})
 	return ctab
 }
 
 // GetKeysAndVals 获取当前任务列表中所有的任务信息
-func (c Crontab) GetKeysAndVals() (keys []Task, vals []cron.EntryID) {
-	if c.Cron != ctab.Cron || !ctab.Enable {
+func (c *Crontab) GetKeysAndVals() (keys []Task, vals []cron.EntryID) {
+	if !c.Enable {
 		return
 	}
 	cnt := 0
-	n := len(ctab.EntryIds)
+	n := len(c.EntryIds)
 	keys = make([]Task, n, n)
 	vals = make([]cron.EntryID, n, n)
-	for s, id := range ctab.EntryIds {
+	for s, id := range c.EntryIds {
 		keys[cnt] = s
 		vals[cnt] = id
 		cnt++
@@ -50,32 +51,32 @@ func (c Crontab) GetKeysAndVals() (keys []Task, vals []cron.EntryID) {
 }
 
 // RunAll 开始执行所有任务
-func (c Crontab) RunAll() {
-	if c.Cron != ctab.Cron || ctab.Enable {
+func (c *Crontab) RunAll() {
+	if c.Enable {
 		return
 	}
-	ctab.Enable = true
-	ctab.Cron.Start()
+	c.Enable = true
+	c.Cron.Start()
 }
 
 // StopAll 停止所有任务的执行
-func (c Crontab) StopAll() {
-	if c.Cron != ctab.Cron || !ctab.Enable {
+func (c *Crontab) StopAll() {
+	if !c.Enable {
 		return
 	}
-	ctab.Cron.Stop()
-	ctab.Enable = false
+	c.Cron.Stop()
+	c.Enable = false
 }
 
 // RemoveTask 移除任务
-func (c Crontab) RemoveTask(t Task) {
-	if c.Cron != ctab.Cron || !ctab.Enable {
+func (c *Crontab) RemoveTask(t Task) {
+	if !c.Enable {
 		return
 	}
-	entryIds := ctab.EntryIds
+	entryIds := c.EntryIds
 	if id, ok := entryIds[t]; ok {
-		ctab.Cron.Remove(id)
+		c.Cron.Remove(id)
 		delete(entryIds, t)
-		delete(ctab.PreTime, id)
+		delete(c.PreTime, id)
 	}
 }

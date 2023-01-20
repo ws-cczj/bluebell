@@ -7,7 +7,7 @@
 ![community](http://cdn.cczjblog.top/cczjBlog-img/bluebell_community.png-cczjImage)
 ![post](http://cdn.cczjblog.top/cczjBlog-img/bluebell_post.png-cczjImage)
 ![comment.png](http://cdn.cczjblog.top/cczjBlog-img/bluebell_comment.png-cczjImage)
-初始化定时任务,开启过期帖子定期清除函数.
+初始化定时任务,开启过期帖子定期清除函数.<br>
 开启web服务,监听请求,等待优雅关机.
 
 ### 项目功能

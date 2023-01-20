@@ -7,33 +7,69 @@ import (
 )
 
 const (
-	KeyZInterExpired = time.Minute     // ZinterStore 联合查询的生成临时缓存的过期时间
-	KeyPostNumsCache = 5 * time.Minute // post_nums 缓存存在时间
-	AggregateSUM     = "SUM"
+	KeyZInterExpired = time.Minute // ZinterStore 联合查询的生成临时缓存的过期时间
 	AggregateMAX     = "MAX"
-	AggregateMIN     = "MIN"
+	ZRangeMinINF     = "-INF"
+	ZRangeMaxINF     = "INF"
 	ZCountMIN        = "1"
 	ZCountMAX        = "1"
 )
 
-// CreatePost 创建帖子的时间和初始分数
-func CreatePost(uid, pid, cid int64) (err error) {
-	pipeline := rdb.TxPipeline()
-	pipeline.ZAdd(addKeyPrefix(KeyPostTimeZSet), redisZ(time.Now().Unix(), pid))
-	pipeline.ZAdd(addKeyPrefix(KeyPostScoreZSet), redisZ(time.Now().Unix(), pid))
-	pipeline.SAdd(addKeyPrefix(KeyCommunitySetPF, stvI64toa(cid)), pid)
-	pipeline.SAdd(addKeyPrefix(KeyUserPostNums, stvI64toa(uid)), pid)
-	_, err = pipeline.Exec()
+// PostCreate 创建帖子的时间和初始分数
+func PostCreate(uid, pid, cid int64) (err error) {
+	pipe := rdb.TxPipeline()
+	pipe.ZAdd(addKeyPrefix(KeyPostTimeZSet), redisZ(time.Now().Unix(), pid))
+	pipe.ZAdd(addKeyPrefix(KeyPostScoreZSet), redisZ(time.Now().Unix(), pid))
+	pipe.SAdd(addKeyPrefix(KeyCommunitySetPF, stvI64toa(cid)), pid)
+	pipe.LPush(addKeyPrefix(KeyUserPost, stvI64toa(uid)), pid)
+	_, err = pipe.Exec()
 	return
 }
 
-// DeletePost 删除帖子信息
-func DeletePost(pid, cid int64) (err error) {
-	pipeline := rdb.Pipeline()
-	pipeline.ZRem(addKeyPrefix(KeyPostTimeZSet), pid)
-	pipeline.ZRem(addKeyPrefix(KeyPostScoreZSet), pid)
-	pipeline.SRem(addKeyPrefix(KeyCommunitySetPF, stvI64toa(cid)), pid)
-	_, err = pipeline.Exec()
+// PostDelete 删除帖子的所有信息 状态为 4
+func PostDelete(uid, pid, cid int64) (err error) {
+	pipe := rdb.Pipeline()
+	pipe.ZRem(addKeyPrefix(KeyPostTimeZSet), pid)
+	pipe.ZRem(addKeyPrefix(KeyPostScoreZSet), pid)
+	// 删除帖子投票记录
+	pipe.ZRemRangeByScore(addKeyPrefix(KeyPostVotedZSetPF, stvI64toa(pid)), ZRangeMinINF, ZRangeMaxINF)
+	// 删除社区集合中的帖子
+	pipe.SRem(addKeyPrefix(KeyCommunitySetPF, stvI64toa(cid)), pid)
+	// 删除用户列表中的帖子
+	pipe.LRem(addKeyPrefix(KeyUserPost, stvI64toa(uid)), 0, pid)
+	_, err = pipe.Exec()
+	return
+}
+
+// PostExpire 处理过期帖子信息 状态为 3
+func PostExpire(pids []string) (err error) {
+	keyT := addKeyPrefix(KeyPostTimeZSet)
+	keyS := addKeyPrefix(KeyPostScoreZSet)
+	pipe := rdb.Pipeline()
+	for _, pid := range pids {
+		pipe.ZRem(keyT, pid)
+		pipe.ZRem(keyS, pid)
+		pipe.ZRemRangeByScore(addKeyPrefix(KeyPostVotedZSetPF, pid), ZRangeMinINF, ZRangeMaxINF)
+	}
+	_, err = pipe.Exec()
+	return
+}
+
+// PostCommentDelete 删除帖子的所有评论信息
+func PostCommentDelete(pid int64) (err error) {
+	// hash 删除过于麻烦，暂时不删除
+	keyT := addKeyPrefix(KeyCommentTimeZSet, stvI64toa(pid))
+	keyS := addKeyPrefix(KeyCommentScoreZSet, stvI64toa(pid))
+	fids := rdb.ZRevRange(keyT, 0, -1).Val()
+	pipe := rdb.Pipeline()
+	// 删除所有父评论中的子评论
+	for _, fid := range fids {
+		pipe.LTrim(addKeyPrefix(KeyCommentFather, fid), 1, 0)
+	}
+	// 删除帖子的评论排序数据
+	pipe.ZRemRangeByScore(keyT, ZRangeMinINF, ZRangeMaxINF)
+	pipe.ZRemRangeByScore(keyS, ZRangeMinINF, ZRangeMaxINF)
+	_, err = pipe.Exec()
 	return
 }
 

@@ -1,13 +1,12 @@
 package api
 
 import (
+	"bluebell/models"
 	"bluebell/pkg/e"
 	silr "bluebell/serializer"
 	"bluebell/service"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/go-playground/validator/v10"
 	"go.uber.org/zap"
 )
 
@@ -18,12 +17,7 @@ func PostPublishHandler(c *gin.Context) {
 	p := new(service.Publish)
 	if err = c.ShouldBind(p); err != nil {
 		zap.L().Error("post publish params is not illegal", zap.Error(err))
-		errs, ok := err.(validator.ValidationErrors)
-		if !ok {
-			silr.ResponseError(c, e.CodeInvalidParams)
-			return
-		}
-		silr.ResponseErrorWithMsg(c, http.StatusBadRequest, removeTopStruct(errs.Translate(trans)))
+		silr.ResponseValidatorError(c, err)
 		return
 	}
 	// 2. 获取用户Id
@@ -66,15 +60,10 @@ func PostDetailHandler(c *gin.Context) {
 // PostPutHandler 修改帖子
 func PostPutHandler(c *gin.Context) {
 	// 1. 获取修改帖子的数据
-	p := new(service.Publish)
+	p := new(models.PostPut)
 	if err := c.ShouldBind(p); err != nil {
 		zap.L().Error("post put params is not illegal", zap.Error(err))
-		errs, ok := err.(validator.ValidationErrors)
-		if !ok {
-			silr.ResponseError(c, e.CodeInvalidParams)
-			return
-		}
-		silr.ResponseErrorWithMsg(c, http.StatusBadRequest, removeTopStruct(errs.Translate(trans)))
+		silr.ResponseValidatorError(c, err)
 		return
 	}
 	// 2. 获取帖子ID
@@ -84,7 +73,7 @@ func PostPutHandler(c *gin.Context) {
 		silr.ResponseError(c, e.CodeInvalidParams)
 		return
 	}
-	if res, err := p.PostPut(pid); err != nil {
+	if res, err := service.PostPut(pid, p); err != nil {
 		silr.ResponseErrorWithRes(c, res)
 		zap.L().Error("PostPut is failed", zap.Error(err))
 		return
@@ -94,14 +83,20 @@ func PostPutHandler(c *gin.Context) {
 
 // PostDeleteHandler 删除帖子
 func PostDeleteHandler(c *gin.Context) {
-	pid, err := getParamId(c, "pid")
-	if err != nil {
-		zap.L().Error("ParseInt data is invalid", zap.Error(err))
-		silr.ResponseError(c, e.CodeInvalidParams)
+	p := new(models.PostDelete)
+	if err := c.ShouldBind(p); err != nil {
+		zap.L().Error("post delete params is not illegal", zap.Error(err))
+		silr.ResponseValidatorError(c, err)
 		return
 	}
-	if err = service.DeletePost(pid); err != nil {
-		zap.L().Error("delete post failed", zap.Int64("pid", pid), zap.Error(err))
+	uid, err := getCurrentUserId(c)
+	if err != nil {
+		zap.L().Error("user token Verify fail", zap.Error(err))
+		silr.ResponseError(c, e.TokenInvalidAuth)
+		return
+	}
+	if err = service.DeletePost(uid, p); err != nil {
+		zap.L().Error("delete post failed", zap.Int64("pid", p.PostId), zap.Error(err))
 		silr.ResponseError(c, e.CodeServerBusy)
 		return
 	}

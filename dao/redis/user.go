@@ -9,6 +9,7 @@ const (
 	TestRTExpiredDuration = 24 * 3600 * time.Second
 )
 
+// ------Token
 // SetSingleUserToken 设置redis单用户token
 func SetSingleUserToken(username string, token string) (err error) {
 	err = rdb.Set(addKeyPrefix(KeyUserToken, username), token, TestRTExpiredDuration).Err()
@@ -20,21 +21,57 @@ func GetSingleUserToken(username string) (string, error) {
 	return rdb.Get(addKeyPrefix(KeyUserToken, username)).Result()
 }
 
+// ------User Community
 // SetUserCommunity 设置user对应的社区集合
 func SetUserCommunity(cNums, uid, cid int64) (err error) {
 	pipe := rdb.Pipeline()
 	pipe.Set(addKeyPrefix(KeyCommunityNums), cNums, CommunityNumsCache)
-	pipe.SAdd(addKeyPrefix(KeyUserCommunity, stvI64toa(uid)), cid)
+	pipe.LPush(addKeyPrefix(KeyUserCommunity, stvI64toa(uid)), cid)
 	_, err = pipe.Exec()
 	return
 }
 
 // GetUserCommunitys 获取该用户管理的社区数
 func GetUserCommunitys(uid int64) int64 {
-	return rdb.SCard(addKeyPrefix(KeyUserCommunity, stvI64toa(uid))).Val()
+	return rdb.LLen(addKeyPrefix(KeyUserCommunity, stvI64toa(uid))).Val()
+}
+
+// -----------User Post
+// UserDeletePost 用户删除帖子
+func UserDeletePost(uid, pid int64) error {
+	return rdb.LRem(addKeyPrefix(KeyUserPost, stvI64toa(uid)), 0, pid).Err()
 }
 
 // GetUserPostNums 获取该用户管理的帖子的数目
 func GetUserPostNums(uid int64) int64 {
-	return rdb.SCard(addKeyPrefix(KeyUserPostNums, stvI64toa(uid))).Val()
+	return rdb.LLen(addKeyPrefix(KeyUserPost, stvI64toa(uid))).Val()
+}
+
+// -------------------------------------User Following
+// SetUserToFollow 建立用户关注表 to_follow 去跟随 也就是关注. follow 粉丝表
+func SetUserToFollow(uid, to_uid int64) (err error) {
+	pipe := rdb.TxPipeline()
+	pipe.LPush(addKeyPrefix(KeyUserToFollow, stvI64toa(uid)), to_uid)
+	pipe.LPush(addKeyPrefix(KeyUserFollow, stvI64toa(to_uid)), uid)
+	_, err = pipe.Exec()
+	return
+}
+
+// CancelUserToFollow 用户取消关注
+func CancelUserToFollow(uid, to_uid int64) (err error) {
+	pipe := rdb.TxPipeline()
+	pipe.LRem(addKeyPrefix(KeyUserToFollow, stvI64toa(uid)), 0, to_uid)
+	pipe.LRem(addKeyPrefix(KeyUserFollow, stvI64toa(to_uid)), 0, uid)
+	_, err = pipe.Exec()
+	return
+}
+
+// GetUserToFollows 获取用户的关注表 range 根据时间倒序
+func GetUserToFollows(uid int64) ([]string, error) {
+	return rdb.LRange(addKeyPrefix(KeyUserToFollow, stvI64toa(uid)), 0, -1).Result()
+}
+
+// GetUserFollows 获取用户的粉丝表 range 根据时间倒序
+func GetUserFollows(uid int64) ([]string, error) {
+	return rdb.LRange(addKeyPrefix(KeyUserFollow, stvI64toa(uid)), 0, -1).Result()
 }

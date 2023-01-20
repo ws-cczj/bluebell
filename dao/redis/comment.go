@@ -6,6 +6,7 @@ import (
 	"github.com/go-redis/redis"
 )
 
+// ---------------------------Comment Info
 // CreatePostComment 创建帖子评论的相关信息
 func CreatePostComment(pid, commentId int64) (err error) {
 	pidStr := stvI64toa(pid)
@@ -16,18 +17,25 @@ func CreatePostComment(pid, commentId int64) (err error) {
 	return
 }
 
+// DeleteFatherComment 删除一条父评论与其所有的子评论
+func DeleteFatherComment(pid, commentId int64) (err error) {
+	pidStr := stvI64toa(pid)
+	pipe := rdb.Pipeline()
+	pipe.ZRem(addKeyPrefix(KeyCommentTimeZSet, pidStr), commentId)
+	pipe.ZRem(addKeyPrefix(KeyCommentScoreZSet, pidStr), commentId)
+	pipe.LTrim(addKeyPrefix(KeyCommentFather, stvI64toa(commentId)), 1, 0)
+	_, err = pipe.Exec()
+	return
+}
+
 // CreateChildComment 创建子评论信息
 func CreateChildComment(fCommentId, cCommentId int64) (err error) {
 	return rdb.LPush(addKeyPrefix(KeyCommentFather, stvI64toa(fCommentId)), cCommentId).Err()
 }
 
-// CreateFavorite 创建点赞
-func CreateFavorite(pid, uid, to_uid, commentId int64) (err error) {
-	pipe := rdb.TxPipeline()
-	pipe.HSet(addKeyPrefix(KeyCommentFavorite, stvI64toa(commentId)), stvI64toa(uid), to_uid)
-	pipe.ZIncrBy(addKeyPrefix(KeyCommentScoreZSet, stvI64toa(pid)), OneFavoriteScore, stvI64toa(commentId))
-	_, err = pipe.Exec()
-	return
+// DeleteChildComment 删除子评论
+func DeleteChildComment(fCommentId, cCommentId int64) (err error) {
+	return rdb.LRem(addKeyPrefix(KeyCommentFather, stvI64toa(fCommentId)), 0, cCommentId).Err()
 }
 
 // GetFatherCommentId 获取该帖子的所有父评论id
@@ -59,6 +67,35 @@ func GetAllCommentId(fList []string) (cList [][]string, err error) {
 	return
 }
 
+// -------------------------Comment Favorite
+// CreateFFavorite 创建父评论点赞
+func CreateFFavorite(pid, uid, to_uid, commentId int64) (err error) {
+	pipe := rdb.TxPipeline()
+	pipe.HSet(addKeyPrefix(KeyCommentFavorite, stvI64toa(commentId)), stvI64toa(uid), to_uid)
+	pipe.ZIncrBy(addKeyPrefix(KeyCommentScoreZSet, stvI64toa(pid)), OneFavoriteScore, stvI64toa(commentId))
+	_, err = pipe.Exec()
+	return
+}
+
+// DeleteFFavorite 移除父评论点赞
+func DeleteFFavorite(pid, uid, commentId int64) (err error) {
+	pipe := rdb.Pipeline()
+	pipe.HDel(addKeyPrefix(KeyCommentFavorite, stvI64toa(commentId)), stvI64toa(uid))
+	pipe.ZIncrBy(addKeyPrefix(KeyCommentScoreZSet, stvI64toa(pid)), -OneFavoriteScore, stvI64toa(commentId))
+	_, err = pipe.Exec()
+	return
+}
+
+// CreateCFavorite 创建子评论点赞
+func CreateCFavorite(uid, to_uid, commentId int64) error {
+	return rdb.HSet(addKeyPrefix(KeyCommentFavorite, stvI64toa(commentId)), stvI64toa(uid), to_uid).Err()
+}
+
+// DeleteCFavorite 移除子评论点赞
+func DeleteCFavorite(uid, commentId int64) error {
+	return rdb.HDel(addKeyPrefix(KeyCommentFavorite, stvI64toa(commentId)), stvI64toa(uid)).Err()
+}
+
 // GetFavorites 获取点赞数
 func GetFavorites(commentId int64) int64 {
 	return rdb.HLen(addKeyPrefix(KeyCommentFavorite, stvI64toa(commentId))).Val()
@@ -79,24 +116,5 @@ func GetFavoriteList(commentId []string) (favorites []int64, err error) {
 		favorite := cmder.(*redis.IntCmd).Val()
 		favorites = append(favorites, favorite)
 	}
-	return
-}
-
-// DeleteFavorite 移除点赞
-func DeleteFavorite(pid, uid, commentId int64) (err error) {
-	pipe := rdb.Pipeline()
-	pipe.HDel(addKeyPrefix(KeyCommentFavorite, stvI64toa(commentId)), stvI64toa(uid))
-	pipe.ZIncrBy(addKeyPrefix(KeyCommentScoreZSet, stvI64toa(pid)), -OneFavoriteScore, stvI64toa(commentId))
-	_, err = pipe.Exec()
-	return
-}
-
-// DeleteComment 删除一条父评论
-func DeleteComment(pid, commentId int64) (err error) {
-	pidStr := stvI64toa(pid)
-	pipe := rdb.Pipeline()
-	pipe.ZRem(addKeyPrefix(KeyCommentTimeZSet, pidStr), commentId)
-	pipe.ZRem(addKeyPrefix(KeyCommentScoreZSet, pidStr), commentId)
-	_, err = pipe.Exec()
 	return
 }

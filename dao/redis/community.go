@@ -23,6 +23,11 @@ func GetCommunityPosts(cid int64) (pidNums int64, err error) {
 	return rdb.SCard(addKeyPrefix(KeyCommunitySetPF, stvI64toa(cid))).Result()
 }
 
+// CommunityDeletePost 删除社区集合中的帖子
+func CommunityDeletePost(cid, pid int64) error {
+	return rdb.SRem(addKeyPrefix(KeyCommunitySetPF, stvI64toa(cid)), pid).Err()
+}
+
 // GetCommunityPostIds 获取社区的帖子ids
 func GetCommunityPostIds(page, size, cid int64, orderkey string) (pids []string, err error) {
 	key := addKeyPrefix(orderkey, stvI64toa(cid))

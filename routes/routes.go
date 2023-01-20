@@ -16,7 +16,7 @@ func Setup(cfg *settings.AppConfig) *gin.Engine {
 	if cfg.Mode == gin.ReleaseMode {
 		gin.SetMode(cfg.Mode)
 	}
-	if err := api.InitTrans("zh"); err != nil {
+	if err := silr.InitTrans("zh"); err != nil {
 		zap.L().Error("init translation fail!", zap.Error(err))
 	}
 	r := gin.New()
@@ -43,6 +43,9 @@ func Setup(cfg *settings.AppConfig) *gin.Engine {
 		// user 用户
 		v1.GET("/user/communitys", api.UserCommunityHandler)
 		v1.GET("/user/posts", api.UserPostsHandler)
+		v1.POST("user/follow", api.UserFollowHandler)
+		v1.GET("user/:uid/to_follow", api.UserToFollowListHandler)
+		v1.GET("user/:uid/follow", api.UserFollowListHandler)
 		// community 社区
 		v1.POST("/community", api.CommunityCreateHandler)
 		// post 帖子

@@ -1,7 +1,7 @@
-package api
+package serializer
 
 import (
-	"bluebell/service"
+	"bluebell/models"
 	"fmt"
 	"reflect"
 	"strings"
@@ -33,7 +33,7 @@ func InitTrans(locale string) (err error) {
 		})
 
 		// 为Register注册自定义校验方法
-		v.RegisterStructValidation(UserServiceStructLevelValidation, service.RegisterService{})
+		v.RegisterStructValidation(UserServiceStructLevelValidation, models.UserRegister{})
 
 		zhT := zh.New() // 中文翻译器
 		enT := en.New() // 英文翻译器
@@ -76,7 +76,7 @@ func removeTopStruct(fields map[string]string) map[string]string {
 
 // UserServiceStructLevelValidation 自定义UserService结构体校验函数
 func UserServiceStructLevelValidation(sl validator.StructLevel) {
-	su := sl.Current().Interface().(service.RegisterService)
+	su := sl.Current().Interface().(models.UserRegister)
 
 	if su.Password != su.RePassword {
 		// 输出错误提示信息，最后一个参数就是传递的param

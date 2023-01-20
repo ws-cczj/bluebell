@@ -80,3 +80,5 @@ CREATE TABLE `comment`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT ='评论表';
+
+DROP TABLE IF EXISTS `user_follow`

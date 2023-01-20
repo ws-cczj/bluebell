@@ -2,13 +2,12 @@ package mysql
 
 import (
 	"bluebell/models"
-	"crypto/md5"
-	"encoding/hex"
+	silr "bluebell/serializer"
+
+	"github.com/jmoiron/sqlx"
 
 	"go.uber.org/zap"
 )
-
-const secret = "cczjblog.top"
 
 // CheckUsername 检查用户名是否重复
 func CheckUsername(username string) (err error) {
@@ -27,12 +26,14 @@ func CheckUsername(username string) (err error) {
 }
 
 // InsertUser 登记用户信息到数据库
-func InsertUser(user *models.User) (err error) {
-	iStr := `insert into user(user_id,username,password,email,gender) values(?,?,?,?,?)`
+func InsertUser(user *models.UserRegister) (err error) {
+	iStr := `insert into 
+    			user(user_id,username,password,email,gender)
+				values(?,?,?,?,?)`
 	_, err = db.Exec(iStr,
-		user.UserID,
+		user.UserId,
 		user.Username,
-		encryptPassword(user.Password),
+		user.Password,
 		user.Email,
 		user.Gender,
 	)
@@ -44,43 +45,41 @@ func InsertUser(user *models.User) (err error) {
 }
 
 // CheckLoginInfo 验证用户登录信息
-func CheckLoginInfo(user *models.User) error {
-	// 1. 通过username找到password
-	var oPassword = user.Password
-	qStr := `select user_id,username,password 
+func CheckLoginInfo(user *models.UserLogin) (err error) {
+	qStr := `select user_id,password
 				from user 
 				where username = ?`
-	err := db.Get(user, qStr, user.Username)
-	if err == ErrNoRows {
-		zap.L().Error("LoginInfo is not compared", zap.Error(err))
-		return err
-	}
-	if err != nil {
-		zap.L().Error("CheckLoginInfo db get failed", zap.Error(err))
-		return err
-	}
-	// 2. 验证password
-	if encryptPassword(oPassword) != user.Password {
-		zap.L().Error("LoginInfo is not compared", zap.String("用户名: ", user.Username), zap.Error(ErrorNotComparePwd))
-		return ErrorNotComparePwd
-	}
-	return nil
-}
-
-// encryptPassword 对password进行md5加密处理
-func encryptPassword(password string) string {
-	h := md5.New()
-	h.Write([]byte(secret))
-	return hex.EncodeToString(h.Sum([]byte(password)))
+	err = db.Get(user, qStr, user.Username)
+	return
 }
 
 // GetUserById 根据用户ID查找到用户信息
-func GetUserById(uid int64) (user *models.User, err error) {
-	user = new(models.User)
+func GetUserById(uid int64) (user *models.UserRegister, err error) {
+	user = new(models.UserRegister)
 	qStr := `select user_id,username,password,email,gender
 				from user 
 				where user_id = ?`
 	err = db.Get(user, qStr, uid)
+	return
+}
+
+// GetUserFollows 获取用户的关注|粉丝列表
+func GetUserFollows(uids []string) (data []*silr.ResponseUserFollow, err error) {
+	if len(uids) == 0 {
+		return
+	}
+	data = make([]*silr.ResponseUserFollow, 0, len(uids))
+	qStr := `select user_id, username 
+				from user
+				where user_id in (?)`
+	// TODO 无法按照关注|粉丝顺序返回，find_in_set 不走索引效率太低
+	query, args, err := sqlx.In(qStr, uids)
+	if err != nil {
+		zap.L().Error("sqlx in method err", zap.Error(err))
+		return nil, err
+	}
+	qey := db.Rebind(query)
+	err = db.Select(&data, qey, args...)
 	return
 }
 
@@ -103,11 +102,11 @@ func GetUserCommunityList(uid, cidNums int64) (data []*models.Community, err err
 // GetUserPostList 获取用户管理的帖子列表
 func GetUserPostList(uid, pidNums int64) (data []*models.Post, err error) {
 	data = make([]*models.Post, 0, pidNums)
-	qStr := `select author_name,title,content,status,create_time,update_time
+	qStr := `select post_id,author_name,title,content,status,create_time,update_time
 				from post
-				where author_id = ?
+				where author_id = ? AND status <> ?
 				order by create_time DESC`
-	if err = db.Select(&data, qStr, uid); err != nil {
+	if err = db.Select(&data, qStr, uid, PostDelete); err != nil {
 		if err == ErrNoRows {
 			zap.L().Warn("getCommunityList is null data")
 			err = nil

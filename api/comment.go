@@ -5,9 +5,6 @@ import (
 	"bluebell/pkg/e"
 	silr "bluebell/serializer"
 	"bluebell/service"
-	"net/http"
-
-	"github.com/go-playground/validator/v10"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -19,12 +16,7 @@ func CommentPublishHandler(c *gin.Context) {
 	comment := new(models.CommentDetail)
 	if err := c.ShouldBind(comment); err != nil {
 		zap.L().Error("comment publish params is not illegal", zap.Error(err))
-		errs, ok := err.(validator.ValidationErrors)
-		if !ok {
-			silr.ResponseError(c, e.CodeInvalidParams)
-			return
-		}
-		silr.ResponseErrorWithMsg(c, http.StatusBadRequest, removeTopStruct(errs.Translate(trans)))
+		silr.ResponseValidatorError(c, err)
 		return
 	}
 	// 2. 查找当前请求用户的uid和uname
@@ -53,12 +45,7 @@ func CommentFavoriteHandler(c *gin.Context) {
 	favorite := new(models.Favorite)
 	if err := c.ShouldBind(favorite); err != nil {
 		zap.L().Error("Comment Favorite params is not illegal", zap.Error(err))
-		errs, ok := err.(validator.ValidationErrors)
-		if !ok {
-			silr.ResponseError(c, e.CodeInvalidParams)
-			return
-		}
-		silr.ResponseErrorWithMsg(c, http.StatusBadRequest, removeTopStruct(errs.Translate(trans)))
+		silr.ResponseValidatorError(c, err)
 		return
 	}
 	userID, err := getCurrentUserId(c)
@@ -79,12 +66,7 @@ func CommentDeleteHandler(c *gin.Context) {
 	commentD := new(models.CommentDelete)
 	if err := c.ShouldBind(commentD); err != nil {
 		zap.L().Error("CommentDeleteHandler ShouldBind method err", zap.Error(err))
-		errs, ok := err.(validator.ValidationErrors)
-		if !ok {
-			silr.ResponseError(c, e.CodeInvalidParams)
-			return
-		}
-		silr.ResponseErrorWithMsg(c, http.StatusBadRequest, removeTopStruct(errs.Translate(trans)))
+		silr.ResponseValidatorError(c, err)
 		return
 	}
 	if err := service.DeleteComment(commentD); err != nil {

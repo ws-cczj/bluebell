@@ -7,9 +7,9 @@ import (
 	"go.uber.org/zap"
 )
 
-// MysqlTask mysql任务
-func MysqlTask() {
-	id, _ := ctab.Cron.AddFunc(ExecOnceDay, func() {
+// PostTask  post任务
+func PostTask(ctab *Crontab) {
+	id, _ := ctab.Cron.AddFunc(ExecTwiceDay, func() {
 		id := ctab.EntryIds[TaskVoteExpired]
 		preT := ctab.PreTime[id]
 		now := time.Now()
@@ -28,8 +28,29 @@ func MysqlTask() {
 	zap.L().Debug(TaskVoteExpired + "开启!")
 }
 
+// CommentTask comment任务
+func CommentTask(ctab *Crontab) {
+	id, _ := ctab.Cron.AddFunc(ExecOnceDay, func() {
+		id := ctab.EntryIds[TaskPostDelete]
+		preT := ctab.PreTime[id]
+		now := time.Now()
+		err := service.CrontabDeleteComment(preT, now)
+		if err != nil {
+			zap.L().Error("crontab service CrontabDeleteComment method err",
+				zap.Int("crontab ID", int(id)),
+				zap.Error(err))
+			ctab.PreTime[id] = preT
+			return
+		}
+		ctab.PreTime[id] = now
+	})
+	ctab.PreTime[id] = time.Now()
+	ctab.EntryIds[TaskPostDelete] = id
+	zap.L().Debug(TaskPostDelete + "开启!")
+}
+
 // MonitorTask 监视执行任务
-func MonitorTask() {
+func MonitorTask(ctab *Crontab) {
 	id, _ := ctab.Cron.AddFunc(ExecSecondHour, func() {
 		for task, id := range ctab.EntryIds {
 			entry := ctab.Entry(id)
@@ -45,4 +66,12 @@ func MonitorTask() {
 	ctab.PreTime[id] = time.Now()
 	ctab.EntryIds[TaskMonitor] = id
 	zap.L().Debug(TaskMonitor + "开启!")
+}
+
+// Exec 启动初始定时任务
+func Exec(ctab *Crontab) {
+	PostTask(ctab)
+	CommentTask(ctab)
+	MonitorTask(ctab)
+	ctab.RunAll()
 }

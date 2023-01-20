@@ -50,13 +50,10 @@ func main() {
 		zap.L().Error("init snowflake fail!", zap.Error(err))
 		return
 	}
-	// 6. 初始化路由
+	// 5. 初始化路由
 	r := routes.Setup(settings.Conf.AppConfig)
-	// 5. 开启定时任务
+	// 6. 初始化定时任务
 	ctab := crontab.NewCrontabInstance()
-	crontab.MysqlTask()
-	crontab.MonitorTask()
-	ctab.RunAll()
 	// 7. 开启web监听服务,设置优雅关机
 	srv := &http.Server{
 		Addr:    settings.Conf.AppConfig.Port,

@@ -55,6 +55,18 @@ func DeleteComment(commentId int64) (err error) {
 	return
 }
 
+// CrontabCheckComment 检查不合格的子评论 指的是子评论的父评论是否还在
+func CrontabDeleteComment() (err error) {
+	dStr := `delete
+			from comment
+			where id in (select id
+						 from comment
+						 where father_id not in (select id
+												 from comment))`
+	_, err = db.Exec(dStr)
+	return
+}
+
 // GetCommentById 通过fid查找一条父评论
 func GetCommentById(id string) (Fcomment *models.Comment, err error) {
 	qStr := `select id,post_id,type,author_id,author_name,content,create_time,update_time
@@ -62,6 +74,22 @@ func GetCommentById(id string) (Fcomment *models.Comment, err error) {
 				where id = ?`
 	Fcomment = new(models.Comment)
 	err = db.Get(Fcomment, qStr, id)
+	return
+}
+
+// GetCommentByIds 通过fids查找多条父评论
+func GetCommentByIds(fids []string) (Fcomments []*models.Comment, err error) {
+	qStr := `select id,post_id,type,author_id,author_name,content,create_time,update_time
+				from comment
+				where id in (?)
+				order by FIND_IN_SET(id,?)`
+	Fcomments = make([]*models.Comment, 0, len(fids))
+	query, args, err := sqlx.In(qStr, fids, strings.Join(fids, ","))
+	if err != nil {
+		return
+	}
+	qey := db.Rebind(query)
+	err = db.Select(&Fcomments, qey, args...)
 	return
 }
 

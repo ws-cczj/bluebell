@@ -7,6 +7,7 @@ import (
 	"bluebell/pkg/e"
 	"bluebell/pkg/snowflake"
 	silr "bluebell/serializer"
+	"errors"
 
 	"go.uber.org/zap"
 )
@@ -17,10 +18,12 @@ const (
 	NULLData     = 0
 )
 
+var ErrPostDelete = errors.New("post already delete, please dont repeat to click")
+
 type Publish struct {
-	CommunityId int64  `json:"community_id" form:"community_id" bidding:"required"`
-	Title       string `json:"title" form:"title" bidding:"required"`
-	Content     string `json:"content" form:"content" bidding:"required"`
+	CommunityId int64  `form:"community_id" bidding:"required"`
+	Title       string `form:"title" bidding:"required"`
+	Content     string `form:"content" bidding:"required"`
 }
 
 type PostService struct {
@@ -44,20 +47,20 @@ func (p Publish) PublishPost(uid int64, uname string) (err error) {
 			zap.Error(err))
 		return
 	}
-	if err = redis.CreatePost(post.AuthorId, post.PostId, post.CommunityId); err != nil {
-		zap.L().Error("redis CreatePost method is failed",
+	if err = redis.PostCreate(post.AuthorId, post.PostId, post.CommunityId); err != nil {
+		zap.L().Error("redis PostCreate method is failed",
 			zap.Error(err))
 	}
 	return
 }
 
 // PostPut 修改帖子数据
-func (p Publish) PostPut(pid int64) (silr.Response, error) {
+func PostPut(pid int64, p *models.PostPut) (silr.Response, error) {
 	code := e.CodeSUCCESS
 	status, err := mysql.GetPostStatus(pid)
 	if err != nil {
 		code = e.CodeServerBusy
-		zap.L().Error("mysql CheckPostStatus method is failed",
+		zap.L().Error("mysql GetPostStatus method is failed",
 			zap.Error(err))
 		return silr.Response{Status: code, Msg: code.Msg()}, err
 	}
@@ -92,19 +95,11 @@ func (p *PostService) PostDetailById(pid int64) (err error) {
 			zap.Error(err))
 		return
 	}
-	user, err := mysql.GetUserById(p.Post.AuthorId)
-	if err != nil {
-		zap.L().Error("GetUserById method is failed",
-			zap.Int64("author_id", p.Post.AuthorId),
-			zap.Error(err))
-		return
-	}
 	// 如果帖子还没有过期，就可以去redis中去查当前帖子的票数
 	if p.Post.Status != mysql.PostExpired {
 		p.Post.VoteNum = uint32(redis.GetPostVote(pid))
 	}
-	p.AuthorName = user.Username
-	return nil
+	return
 }
 
 // PostListInOrder 根据排序方法获取所有帖子列表
@@ -126,35 +121,44 @@ func PostListInOrder(page, size int64, order string) (postList []*PostService, e
 }
 
 // DeletePost 删除帖子
-func DeletePost(pid int64) (err error) {
-	var cid int64
-	if cid, err = mysql.FindCidByPid(pid); err == nil {
-		if status, _ := mysql.GetPostStatus(pid); status != mysql.PostDelete {
-			if status == mysql.PostExpired {
-				// 如果帖子已经过期了，只需要对他的状态从已过期更新为已删除即可
-				if err = mysql.DeletePost(pid); err != nil {
-					zap.L().Error("mysql DeletePost method is err",
-						zap.Error(err))
-				}
-				// 这里可以不修改redis，因为一旦帖子id找不到也就说明该帖子下的所有评论都会找不到
-				return
-			}
-			// 如果帖子没有过期,在进行软删除之前需要将帖子的vote_num数据从redis中取出进行更新
-			ticket := redis.GetPostVote(pid)
-			if err = mysql.UpdateCtbPost(pid, uint32(ticket)); err != nil {
-				zap.L().Error("mysql UpdateCtbPost method is err",
-					zap.Error(err))
-				return
-			}
-			if err = mysql.DeletePost(pid); err != nil {
-				zap.L().Error("mysql DeletePost method is err",
-					zap.Error(err))
-				return
-			}
-			if err = redis.DeletePost(pid, cid); err != nil {
-				zap.L().Error("redis DeletePost method is err",
-					zap.Error(err))
-			}
+func DeletePost(uid int64, post *models.PostDelete) (err error) {
+	if post.Status == mysql.PostDelete {
+		zap.L().Error("delete data is null", zap.Error(ErrPostDelete))
+		return ErrPostDelete
+	} else if post.Status == mysql.PostExpired {
+		// 如果帖子已经过期了，只需要对他的状态从已过期更新为已删除即可
+		if err = mysql.DeletePost(post.PostId); err != nil {
+			zap.L().Error("mysql DeletePost method err",
+				zap.Error(err))
+			return
+		}
+		// 修改redis中user管理的帖子结构
+		if err = redis.UserDeletePost(uid, post.PostId); err != nil {
+			zap.L().Error("redis UserDeletePost method err",
+				zap.Error(err))
+			return
+		}
+		// 修改redis中community管理的帖子结构
+		if err = redis.CommunityDeletePost(post.CommunityId, post.PostId); err != nil {
+			zap.L().Error("redis CommunityDeletePost method err",
+				zap.Error(err))
+		}
+	} else {
+		// 如果帖子没有过期,在进行软删除之前需要将帖子的vote_num数据从redis中取出进行更新
+		ticket := redis.GetPostVote(post.PostId)
+		if err = mysql.UpdateCtbPost(post.PostId, uint32(ticket)); err != nil {
+			zap.L().Error("mysql UpdateCtbPost method is err",
+				zap.Error(err))
+			return
+		}
+		if err = mysql.DeletePost(post.PostId); err != nil {
+			zap.L().Error("mysql DeletePost method is err",
+				zap.Error(err))
+			return
+		}
+		if err = redis.PostDelete(uid, post.PostId, post.CommunityId); err != nil {
+			zap.L().Error("redis DeletePost method is err",
+				zap.Error(err))
 		}
 	}
 	return

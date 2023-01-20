@@ -4,84 +4,83 @@ import (
 	"bluebell/dao/mysql"
 	"bluebell/dao/redis"
 	"bluebell/models"
-	"bluebell/pkg/e"
 	"bluebell/pkg/jwt"
 	"bluebell/pkg/snowflake"
 	silr "bluebell/serializer"
-	"errors"
+	"crypto/md5"
+	"encoding/hex"
+
+	"go.uber.org/zap"
 )
 
-type RegisterService struct {
-	Username   string `json:"username" form:"username" binding:"required"`
-	Password   string `json:"password"  form:"password" binding:"required"`
-	RePassword string `json:"re_password" form:"re_password" binding:"required,eqfield=Password"`
-	Email      string `json:"email" form:"email" binding:"required"`
-	Gender     uint8  `json:"gender" form:"gender" binding:"required"`
-}
+const secret = "cczjblog.top"
 
-type LoginService struct {
-	Username string `json:"username" form:"username" binding:"required"`
-	Password string `json:"password" form:"password" binding:"required"`
-}
-
-// Register 用户注册
-func (r RegisterService) Register() (silr.Response, error) {
-	code := e.CodeSUCCESS
+// UserRegister 用户注册
+func UserRegister(user *models.UserRegister) (err error) {
 	// 1. 校验用户名
-	if err := mysql.CheckUsername(r.Username); err != nil {
-		if errors.Is(err, mysql.ErrorUserExist) {
-			code = e.CodeExistUser
-			return silr.Response{Status: code, Msg: err.Error()}, err
-		}
-		code = e.CodeServerBusy
-		return silr.Response{Status: code, Msg: code.Msg()}, err
+	if err = mysql.CheckUsername(user.Username); err != nil {
+		zap.L().Error("mysql checkUsername method err", zap.Error(err))
+		return
 	}
 	// 2. 生成UserID
-	id := snowflake.GenID()
+	user.UserId = snowflake.GenID()
+	user.Password = encryptPassword(user.Password)
 	// 3. 添加用户到数据库
-	u := &models.User{
-		UserID:   id,
-		Username: r.Username,
-		Password: r.Password,
-		Email:    r.Email,
-		Gender:   r.Gender,
+	if err = mysql.InsertUser(user); err != nil {
+		zap.L().Error("mysql User Insert method err", zap.Error(err))
 	}
-	if err := mysql.InsertUser(u); err != nil {
-		code = e.CodeServerBusy
-		return silr.Response{Status: code, Msg: code}, err
-	}
-	return silr.Response{Status: code, Data: nil, Msg: code.Msg()}, nil
+	return
 }
 
-// Login 用户登录
-func (l LoginService) Login() (silr.Response, error) {
-	code := e.CodeSUCCESS
-	user := &models.User{
-		Username: l.Username,
-		Password: l.Password,
+// UserLogin 用户登录
+func UserLogin(user *models.UserLogin) (atoken, rtoken string, err error) {
+	pwdParam := encryptPassword(user.Password)
+	if err = mysql.CheckLoginInfo(user); err != nil {
+		zap.L().Error("mysql checkLoginInfo method err", zap.Error(err))
+		return
 	}
-	if err := mysql.CheckLoginInfo(user); err != nil {
-		if errors.Is(err, mysql.ErrorNotComparePwd) {
-			code = e.CodeNotComparePassword
-		} else if err == mysql.ErrNoRows {
-			code = e.CodeNotExistUser
-		} else {
-			code = e.CodeServerBusy
-		}
-		return silr.Response{Status: code, Msg: code.Msg()}, err
+	if pwdParam != user.Password {
+		zap.L().Error("user login password Compared", zap.Error(mysql.ErrorNotComparePwd))
+		return
 	}
 	// 颁发token
-	token, rtoken, err := jwt.GenToken(user.UserID, user.Username)
+	atoken, rtoken, err = jwt.GenToken(user.UserId, user.Username)
 	if err != nil {
-		code = e.TokenFailGenerate
-		return silr.Response{Status: code, Msg: code.Msg()}, err
+		return
 	}
 	// 将token存入redis中一份
-	if err = redis.SetSingleUserToken(user.Username, token); err != nil {
-		code = e.CodeServerBusy
-		return silr.Response{Status: code, Msg: code.Msg()}, err
+	if err = redis.SetSingleUserToken(user.Username, atoken); err != nil {
+		zap.L().Error("redis set userlogin token err", zap.Error(err))
 	}
-	return silr.Response{Data: []string{token, rtoken}}, nil
+	return
+}
+
+// UserFollowBuild 用户关注表的构建
+func UserFollowBuild(uid int64, follow *models.UserFollow) error {
+	if follow.Agree {
+		return redis.SetUserToFollow(uid, follow.ToUserId)
+	}
+	return redis.CancelUserToFollow(uid, follow.ToUserId)
+}
+
+// UserToFollowList 获取用户的关注列表
+func UserToFollowList(uid int64) ([]*silr.ResponseUserFollow, error) {
+	toFollows, err := redis.GetUserToFollows(uid)
+	if err != nil {
+		zap.L().Error("redis getUserToFollows method err", zap.Error(err))
+		return []*silr.ResponseUserFollow{}, err
+	}
+	return mysql.GetUserFollows(toFollows)
+}
+
+// UserFollowList 获取用户的关注列表
+func UserFollowList(uid int64) ([]*silr.ResponseUserFollow, error) {
+	Follows, err := redis.GetUserFollows(uid)
+	if err != nil {
+		zap.L().Error("redis GetUserFollows method err", zap.Error(err))
+		return []*silr.ResponseUserFollow{}, err
+	}
+	return mysql.GetUserFollows(Follows)
 }
 
 // UserCommunityList 获取用户管理的所有社区
@@ -94,4 +93,11 @@ func UserCommunityList(uid int64) ([]*models.Community, error) {
 func UserPostList(uid int64) ([]*models.Post, error) {
 	pidNums := redis.GetUserPostNums(uid)
 	return mysql.GetUserPostList(uid, pidNums)
+}
+
+// encryptPassword 对password进行md5加密处理
+func encryptPassword(password string) string {
+	h := md5.New()
+	h.Write([]byte(secret))
+	return hex.EncodeToString(h.Sum([]byte(password)))
 }

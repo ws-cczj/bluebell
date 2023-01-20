@@ -22,14 +22,15 @@ type CommentDetail struct {
 }
 
 type Favorite struct {
-	Agree      bool  `json:"agree" form:"agree"` // true 表示点赞，false表示取消点赞
-	Id         int64 `json:"id" form:"id" binding:"required"`
-	PostId     int64 `json:"post_id,string" form:"post_id" binding:"required"`
-	ToAuthorId int64 `json:"to_author_id,string" form:"to_author_id" binding:"required"`
+	Agree      bool  `form:"agree"`                    // true 表示点赞，false表示取消点赞
+	Type       int8  `form:"type" binding:"oneof=0 1"` // 表示对人或者对帖子点赞
+	Id         int64 `form:"id" binding:"required"`
+	PostId     int64 `form:"post_id"` // 对于子评论点赞无需帖子Id
+	ToAuthorId int64 `form:"to_author_id" binding:"required"`
 }
 
 type CommentDelete struct {
-	Type   int8  `json:"type" form:"type" binding:"oneof=0 1"`
-	Id     int64 `json:"id" form:"id" binding:"required"`
-	PostId int64 `json:"post_id,string" form:"post_id" binding:"required"`
+	Type   int8  `form:"type" binding:"oneof=0 1"`
+	Id     int64 `form:"id" binding:"required"`
+	TypeId int64 `form:"type_id" binding:"required"` // 如果type是对人则id为fId，否则id为post_id
 }

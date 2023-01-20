@@ -3,6 +3,7 @@ package mysql
 import (
 	"bluebell/models"
 	"strings"
+	"time"
 
 	"go.uber.org/zap"
 
@@ -64,19 +65,10 @@ func UpdateCtbPost(pid int64, vote_num uint32) (err error) {
 func GetPostDetailById(id int64) (data *models.Post, err error) {
 	data = new(models.Post)
 	qStr := `select 
-				post_id,community_id,author_id,title,content,vote_num,status,create_time
+				post_id,community_id,author_id,author_name,title,content,vote_num,status,create_time
 				from post
 				where post_id = ? and status <> ?`
 	err = db.Get(data, qStr, id, PostDelete)
-	return
-}
-
-// FindCidByPid 通过帖子id查找社区id
-func FindCidByPid(pid int64) (cid int64, err error) {
-	qStr := `select community_id 
-				from post
-				where post_id = ?`
-	err = db.Get(&cid, qStr, pid)
 	return
 }
 
@@ -103,6 +95,20 @@ func GetPostListInOrder(ids []string) (posts []*models.Post, err error) {
 	if err == ErrNoRows {
 		zap.L().Warn("GetPostList method data is null")
 		err = nil
+	}
+	return
+}
+
+// CrontabPostDelete 定实获取这段时间被删除的帖子
+func CrontabPostDelete(preT, nowT time.Time) (pids []int64, err error) {
+	qStr := `select post_id
+				from post
+				where status = ?
+				AND update_time >= ?
+				AND update_time <= ?`
+	err = db.Select(&pids, qStr, PostDelete, preT, nowT)
+	if err != nil {
+		zap.L().Error("db query method err", zap.Error(err))
 	}
 	return
 }
