@@ -13,7 +13,7 @@ func PostTask(ctab *Crontab) {
 		id := ctab.EntryIds[TaskVoteExpired]
 		preT := ctab.PreTime[id]
 		now := time.Now()
-		err := service.CrontabPostExpired(preT.Unix()-1, now.Unix())
+		err := service.NewCrontabPostInstance().ExpiredHandle(preT.Unix()-1, now.Unix())
 		if err != nil {
 			zap.L().Error("crontab service CrontabPostExpired method err",
 				zap.Int("crontab ID", int(id)),
@@ -34,7 +34,7 @@ func CommentTask(ctab *Crontab) {
 		id := ctab.EntryIds[TaskPostDelete]
 		preT := ctab.PreTime[id]
 		now := time.Now()
-		err := service.CrontabDeleteComment(preT, now)
+		err := service.NewCrontabCommentInstance().Clear(preT, now)
 		if err != nil {
 			zap.L().Error("crontab service CrontabDeleteComment method err",
 				zap.Int("crontab ID", int(id)),

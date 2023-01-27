@@ -8,6 +8,7 @@ import (
 	"bluebell/pkg/snowflake"
 	silr "bluebell/serializer"
 	"errors"
+	"strconv"
 
 	"go.uber.org/zap"
 )
@@ -17,44 +18,17 @@ const (
 	OrderByScore = "score"
 )
 
+type Post struct {
+}
+
+func NewPostInstance() *Post {
+	return &Post{}
+}
+
 var ErrPostDelete = errors.New("post already delete, please dont repeat to click")
 
-type Publish struct {
-	CommunityId int64  `form:"community_id" bidding:"required"`
-	Title       string `form:"title" bidding:"required"`
-	Content     string `form:"content" bidding:"required"`
-}
-
-type PostService struct {
-	*models.Post
-	*models.CommunityDetail `json:"community_detail"`
-}
-
-// PublishPost 发布帖子
-func (p Publish) PublishPost(uid int64, uname string) (err error) {
-	post := &models.Post{
-		PostId:      snowflake.GenID(),
-		AuthorId:    uid,
-		AuthorName:  uname,
-		CommunityId: p.CommunityId,
-		Title:       p.Title,
-		Content:     p.Content,
-		Status:      mysql.PostPublish,
-	}
-	if err = mysql.CreatePost(post); err != nil {
-		zap.L().Error("mysql CreatePost method is failed",
-			zap.Error(err))
-		return
-	}
-	if err = redis.PostCreate(post.AuthorId, post.PostId, post.CommunityId); err != nil {
-		zap.L().Error("redis PostCreate method is failed",
-			zap.Error(err))
-	}
-	return
-}
-
-// PostPut 修改帖子数据
-func PostPut(pid int64, p *models.PostPut) (silr.Response, error) {
+// Put 修改帖子数据
+func (Post) Put(pid string, p *models.PostPut) (silr.Response, error) {
 	code := e.CodeSUCCESS
 	status, err := mysql.GetPostStatus(pid)
 	if err != nil {
@@ -80,29 +54,8 @@ func PostPut(pid int64, p *models.PostPut) (silr.Response, error) {
 	return silr.Response{Status: code, Msg: code.Msg()}, nil
 }
 
-// PostDetailById 根据帖子ID查询到帖子的详情
-func (p *PostService) PostDetailById(pid int64) (err error) {
-	if p.Post, err = mysql.GetPostDetailById(pid); err != nil {
-		zap.L().Error("GetPostDetailById method is failed",
-			zap.Int64("postid", pid),
-			zap.Error(err))
-		return
-	}
-	if p.CommunityDetail, err = mysql.GetCommunityDetail(p.Post.CommunityId); err != nil {
-		zap.L().Error("GetCommunityDetail method is failed",
-			zap.Int64("community_id", p.Post.CommunityId),
-			zap.Error(err))
-		return
-	}
-	// 如果帖子还没有过期，就可以去redis中去查当前帖子的票数
-	if p.Post.Status != mysql.PostExpired {
-		p.Post.VoteNum = uint32(redis.GetPostVote(pid))
-	}
-	return
-}
-
-// PostListInOrder 根据排序方法获取所有帖子列表
-func PostListInOrder(page, size int64, order string) (postList []*PostService, err error) {
+// ListInOrder 根据排序方法获取所有帖子列表
+func (p Post) ListInOrder(page, size int64, order string) (postList []*PostAll, err error) {
 	key := redis.KeyPostTimeZSet
 	if order == OrderByScore {
 		key = redis.KeyPostScoreZSet
@@ -116,11 +69,11 @@ func PostListInOrder(page, size int64, order string) (postList []*PostService, e
 			zap.Error(err))
 		return
 	}
-	return getPostListByIds(ids)
+	return p.getPostListByIds(ids)
 }
 
-// DeletePost 删除帖子
-func DeletePost(uid int64, post *models.PostDelete) (err error) {
+// Delete 删除帖子
+func (Post) Delete(uid string, post *models.PostDelete) (err error) {
 	if post.Status == mysql.PostDelete {
 		zap.L().Error("delete data is null", zap.Error(ErrPostDelete))
 		return ErrPostDelete
@@ -132,19 +85,19 @@ func DeletePost(uid int64, post *models.PostDelete) (err error) {
 			return
 		}
 		// 修改redis中post结构
-		if err = redis.PostExpiredDelete(uid, post.PostId, post.CommunityId); err != nil {
+		if err = redis.PostExpiredDelete(uid, post.PostId, strconv.Itoa(post.CommunityId)); err != nil {
 			zap.L().Error("redis PostExpiredDelete method is err",
 				zap.Error(err))
 		}
 	} else {
 		// 如果帖子没有过期,在进行软删除之前需要将帖子的vote_num数据从redis中取出进行更新
 		ticket := redis.GetPostVote(post.PostId)
-		if err = mysql.UpdateAndDeletePost(post.PostId, uint32(ticket)); err != nil {
+		if err = mysql.UpdateAndDeletePost(post.PostId, int(ticket)); err != nil {
 			zap.L().Error("mysql UpdateAndDeletePost method is err",
 				zap.Error(err))
 			return
 		}
-		if err = redis.PostDelete(uid, post.PostId, post.CommunityId); err != nil {
+		if err = redis.PostDelete(uid, post.PostId, strconv.Itoa(post.CommunityId)); err != nil {
 			zap.L().Error("redis DeletePost method is err",
 				zap.Error(err))
 		}
@@ -153,7 +106,7 @@ func DeletePost(uid int64, post *models.PostDelete) (err error) {
 }
 
 // getPostListByIds 获取帖子列表根据ids
-func getPostListByIds(ids []string) (postList []*PostService, err error) {
+func (Post) getPostListByIds(ids []string) (postList []*PostAll, err error) {
 	if len(ids) <= 0 {
 		zap.L().Warn("redis post data is null")
 		return
@@ -166,13 +119,12 @@ func getPostListByIds(ids []string) (postList []*PostService, err error) {
 			zap.Error(err))
 		return
 	}
-	var community *models.CommunityDetail
-	postList = make([]*PostService, 0, len(posts))
+	postList = make([]*PostAll, 0, len(posts))
 	for i, post := range posts {
-		community, err = mysql.GetCommunityDetail(post.CommunityId)
+		community, err := mysql.GetCommunityDetail(post.CommunityId)
 		if err != nil {
 			zap.L().Error("GetCommunityDetail method is err",
-				zap.Int64("community_id", post.CommunityId),
+				zap.Int("community_id", post.CommunityId),
 				zap.Error(err))
 			continue
 		}
@@ -180,11 +132,66 @@ func getPostListByIds(ids []string) (postList []*PostService, err error) {
 		if post.Status == mysql.PostPublish {
 			post.VoteNum = tickets[i]
 		}
-		plist := &PostService{
+		plist := &PostAll{
 			Post:            post,
 			CommunityDetail: community,
 		}
 		postList = append(postList, plist)
+	}
+	return
+}
+
+type Publish struct {
+	CommunityId int    `form:"community_id" bidding:"required"`
+	Title       string `form:"title" bidding:"required"`
+	Content     string `form:"content" bidding:"required"`
+}
+
+// Publish 发布帖子
+func (p Publish) Publish(uid, uname string) (err error) {
+	post := &models.Post{
+		PostId:      snowflake.GenID(),
+		AuthorId:    uid,
+		AuthorName:  uname,
+		CommunityId: p.CommunityId,
+		Title:       p.Title,
+		Content:     p.Content,
+		Status:      mysql.PostPublish,
+	}
+	if err = mysql.CreatePost(post); err != nil {
+		zap.L().Error("mysql CreatePost method is failed",
+			zap.Error(err))
+		return
+	}
+	if err = redis.PostCreate(post.AuthorId, post.PostId, strconv.Itoa(post.CommunityId)); err != nil {
+		zap.L().Error("redis PostCreate method is failed",
+			zap.Error(err))
+	}
+	return
+}
+
+type PostAll struct {
+	*models.Post
+	*models.CommunityDetail `json:"community_detail"`
+}
+
+// DetailById 根据帖子ID查询到帖子的详情
+func (p *PostAll) DetailById(pid string) (err error) {
+	if p.Post, err = mysql.GetPostDetailById(pid); err != nil {
+		zap.L().Error("GetPostDetailById method is failed",
+			zap.String("postid", pid),
+			zap.Error(err))
+		return
+	}
+	if p.CommunityDetail, err = mysql.GetCommunityDetail(p.Post.CommunityId); err != nil {
+		zap.L().Error("GetCommunityDetail method is failed",
+			zap.Int("community_id", p.Post.CommunityId),
+			zap.Error(err))
+		return
+	}
+	// 如果帖子还没有过期，就可以去redis中去查当前帖子的票数
+	if p.Post.Status != mysql.PostExpired {
+		p.Post.VoteNum = int(redis.GetPostVote(pid))
 	}
 	return
 }

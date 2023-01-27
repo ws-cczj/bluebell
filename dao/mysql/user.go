@@ -13,16 +13,15 @@ import (
 func CheckUsername(username string) (err error) {
 	var count int
 	qStr := `select count(id) from user where username = ?`
-	err = db.Get(&count, qStr, username)
-	if err != nil {
+	if err = db.Get(&count, qStr, username); err != nil {
 		zap.L().Error("CheckUsername db get failed", zap.Error(err))
-		return err
+		return
 	}
 	if count > 0 {
 		zap.L().Debug("username is exist", zap.Error(ErrorUserExist))
 		return ErrorUserExist
 	}
-	return nil
+	return
 }
 
 // InsertUser 登记用户信息到数据库
@@ -39,9 +38,8 @@ func InsertUser(user *models.UserRegister) (err error) {
 	)
 	if err != nil {
 		zap.L().Error("create user method is failed", zap.Error(err))
-		return err
 	}
-	return nil
+	return
 }
 
 // CheckLoginInfo 验证用户登录信息
@@ -54,7 +52,7 @@ func CheckLoginInfo(user *models.UserLogin) (err error) {
 }
 
 // GetUserById 根据用户ID查找到用户信息
-func GetUserById(uid int64) (user *models.UserRegister, err error) {
+func GetUserById(uid string) (user *models.UserRegister, err error) {
 	user = new(models.UserRegister)
 	qStr := `select user_id,username,password,email,gender
 				from user 
@@ -84,7 +82,7 @@ func GetUserFollows(uids []string) (data []*silr.ResponseUserFollow, err error) 
 }
 
 // GetUserCommunityList 获取用户管理的社区信息列表
-func GetUserCommunityList(uid, cidNums int64) (data []*models.Community, err error) {
+func GetUserCommunityList(uid string, cidNums int64) (data []*models.Community, err error) {
 	data = make([]*models.Community, 0, cidNums)
 	qStr := `select id,author_id,author_name,community_name
 				from community
@@ -100,7 +98,7 @@ func GetUserCommunityList(uid, cidNums int64) (data []*models.Community, err err
 }
 
 // GetUserPostList 获取用户管理的帖子列表
-func GetUserPostList(uid, pidNums int64) (data []*models.Post, err error) {
+func GetUserPostList(uid string, pidNums int64) (data []*models.Post, err error) {
 	data = make([]*models.Post, 0, pidNums)
 	qStr := `select post_id,author_name,title,content,status,create_time,update_time
 				from post

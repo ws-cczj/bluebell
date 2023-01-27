@@ -16,38 +16,38 @@ const (
 )
 
 // PostCreate 创建帖子的时间和初始分数
-func PostCreate(uid, pid, cid int64) (err error) {
+func PostCreate(uid, pid, cid string) (err error) {
 	pipe := rdb.TxPipeline()
 	pipe.ZAdd(addKeyPrefix(KeyPostTimeZSet), redisZ(time.Now().Unix(), pid))
 	pipe.ZAdd(addKeyPrefix(KeyPostScoreZSet), redisZ(time.Now().Unix(), pid))
-	pipe.SAdd(addKeyPrefix(KeyCommunitySetPF, stvI64toa(cid)), pid)
-	pipe.LPush(addKeyPrefix(KeyUserPost, stvI64toa(uid)), pid)
+	pipe.SAdd(addKeyPrefix(KeyCommunitySetPF, cid), pid)
+	pipe.LPush(addKeyPrefix(KeyUserPost, uid), pid)
 	_, err = pipe.Exec()
 	return
 }
 
 // PostDelete 对于还未过期帖子的删除 状态为 4
-func PostDelete(uid, pid, cid int64) (err error) {
+func PostDelete(uid, pid, cid string) (err error) {
 	pipe := rdb.Pipeline()
 	// 删除社区集合中的帖子
-	pipe.SRem(addKeyPrefix(KeyCommunitySetPF, stvI64toa(cid)), pid)
+	pipe.SRem(addKeyPrefix(KeyCommunitySetPF, cid), pid)
 	// 删除帖子投票记录以及帖子信息
 	pipe.ZRem(addKeyPrefix(KeyPostTimeZSet), pid)
 	pipe.ZRem(addKeyPrefix(KeyPostScoreZSet), pid)
-	pipe.ZRemRangeByScore(addKeyPrefix(KeyPostVotedZSetPF, stvI64toa(pid)), ZRangeMinINF, ZRangeMaxINF)
+	pipe.ZRemRangeByScore(addKeyPrefix(KeyPostVotedZSetPF, pid), ZRangeMinINF, ZRangeMaxINF)
 	// 删除用户列表中的帖子
-	pipe.LRem(addKeyPrefix(KeyUserPost, stvI64toa(uid)), 0, pid)
+	pipe.LRem(addKeyPrefix(KeyUserPost, uid), 0, pid)
 	_, err = pipe.Exec()
 	return
 }
 
 // PostExpiredDelete 对于已经过期帖子的删除
-func PostExpiredDelete(uid, pid, cid int64) (err error) {
+func PostExpiredDelete(uid, pid, cid string) (err error) {
 	pipe := rdb.TxPipeline()
-	pipe.SRem(addKeyPrefix(KeyCommunitySetPF, stvI64toa(cid)), pid)
+	pipe.SRem(addKeyPrefix(KeyCommunitySetPF, cid), pid)
 	pipe.ZRem(addKeyPrefix(KeyPostTimeZSet), pid)
 	pipe.ZRem(addKeyPrefix(KeyPostScoreZSet), pid)
-	pipe.LRem(addKeyPrefix(KeyUserPost, stvI64toa(uid)), 0, pid)
+	pipe.LRem(addKeyPrefix(KeyUserPost, uid), 0, pid)
 	_, err = pipe.Exec()
 	return
 }
@@ -63,10 +63,10 @@ func PostExpire(pids []string) (err error) {
 }
 
 // PostCommentDelete 删除帖子的所有评论信息
-func PostCommentDelete(pid int64) (err error) {
+func PostCommentDelete(pid string) (err error) {
 	// hash 删除过于麻烦，暂时不删除
-	keyT := addKeyPrefix(KeyCommentTimeZSet, stvI64toa(pid))
-	keyS := addKeyPrefix(KeyCommentScoreZSet, stvI64toa(pid))
+	keyT := addKeyPrefix(KeyCommentTimeZSet, pid)
+	keyS := addKeyPrefix(KeyCommentScoreZSet, pid)
 	fids := rdb.ZRevRange(keyT, 0, -1).Val()
 	pipe := rdb.Pipeline()
 	// 删除所有父评论中的子评论
@@ -81,8 +81,8 @@ func PostCommentDelete(pid int64) (err error) {
 }
 
 // GetPostVote 获取帖子的票数
-func GetPostVote(pid int64) int64 {
-	return rdb.ZCount(addKeyPrefix(KeyPostVotedZSetPF, stvI64toa(pid)), ZCountMAX, ZCountMIN).Val()
+func GetPostVote(pid string) int64 {
+	return rdb.ZCount(addKeyPrefix(KeyPostVotedZSetPF, pid), ZCountMAX, ZCountMIN).Val()
 }
 
 // GetPostIds 根据顺序查询帖子列表
@@ -93,9 +93,9 @@ func GetPostIds(page, size int64, key string) (ids []string, err error) {
 }
 
 // GetPostVotes 获取帖子的票数
-func GetPostVotes(pids []string) (tickets []uint32, err error) {
+func GetPostVotes(pids []string) (tickets []int, err error) {
 	pipe := rdb.TxPipeline()
-	tickets = make([]uint32, 0, len(pids))
+	tickets = make([]int, 0, len(pids))
 	for _, pid := range pids {
 		key := addKeyPrefix(KeyPostVotedZSetPF, pid)
 		pipe.ZCount(key, ZCountMAX, ZCountMIN)
@@ -106,7 +106,7 @@ func GetPostVotes(pids []string) (tickets []uint32, err error) {
 	}
 	for _, cmder := range cmders {
 		ticket := cmder.(*redis.IntCmd).Val()
-		tickets = append(tickets, uint32(ticket))
+		tickets = append(tickets, int(ticket))
 	}
 	return
 }

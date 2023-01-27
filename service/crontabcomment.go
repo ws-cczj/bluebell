@@ -8,8 +8,15 @@ import (
 	"go.uber.org/zap"
 )
 
-// CrontabDeleteComment 定实清除剩余redis评论信息
-func CrontabDeleteComment(preT, now time.Time) error {
+type CrontabComment struct {
+}
+
+func NewCrontabCommentInstance() *CrontabComment {
+	return &CrontabComment{}
+}
+
+// Clear 定实清除剩余redis评论信息
+func (CrontabComment) Clear(preT, now time.Time) error {
 	// TODO 比对这段时间中的post状态为4的帖子,如果redis中这种帖子还存在
 	pids, err := mysql.CrontabPostDelete(preT, now)
 	if err != nil {

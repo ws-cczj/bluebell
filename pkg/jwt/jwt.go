@@ -16,13 +16,13 @@ var (
 )
 
 type MyClaim struct {
-	UserID   int64  `json:"user_id"`
+	UserID   string `json:"user_id"`
 	Username string `json:"username"`
 	jwt.RegisteredClaims
 }
 
 // GenToken 颁发token access token 和 refresh token
-func GenToken(UserID int64, Username string) (atoken, rtoken string, err error) {
+func GenToken(UserID, Username string) (atoken, rtoken string, err error) {
 	rc := jwt.RegisteredClaims{
 		ExpiresAt: getJWTTime(settings.Conf.AppConfig.AtokenAt),
 		Issuer:    bluebell,

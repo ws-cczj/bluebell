@@ -20,7 +20,7 @@ func UserRegisterHandler(c *gin.Context) {
 		silr.ResponseValidatorError(c, err)
 		return
 	}
-	if err := service.UserRegister(u); err != nil {
+	if err := service.NewUserInstance().Register(u); err != nil {
 		zap.L().Error("service UserRegister method err", zap.Error(err))
 		if err == mysql.ErrorUserExist {
 			silr.ResponseError(c, e.CodeExistUser)
@@ -40,7 +40,7 @@ func UserLoginHandler(c *gin.Context) {
 		silr.ResponseValidatorError(c, err)
 		return
 	}
-	atoken, rtoken, err := service.UserLogin(u)
+	atoken, rtoken, err := service.NewUserInstance().Login(u)
 	if err != nil {
 		zap.L().Error("user login method err", zap.Error(err))
 		if err == mysql.ErrNoRows {
@@ -70,7 +70,7 @@ func UserFollowHandler(c *gin.Context) {
 		silr.ResponseError(c, e.TokenInvalidAuth)
 		return
 	}
-	if err = service.UserFollowBuild(uid, u); err != nil {
+	if err = service.NewUserInstance().FollowBuild(uid, u); err != nil {
 		zap.L().Error("service userFollowBuild method err", zap.Error(err))
 		silr.ResponseError(c, e.CodeServerBusy)
 		return
@@ -80,13 +80,8 @@ func UserFollowHandler(c *gin.Context) {
 
 // UserToFollowListHandler 用户关注列表
 func UserToFollowListHandler(c *gin.Context) {
-	uid, err := getParamId(c, "uid")
-	if err != nil {
-		zap.L().Error("UserToFollowListHandler getCurrentUserId method err", zap.Error(err))
-		silr.ResponseError(c, e.TokenInvalidAuth)
-		return
-	}
-	data, err := service.UserToFollowList(uid)
+	uid := c.Param("uid")
+	data, err := service.NewUserInstance().ToFollowList(uid)
 	if err != nil {
 		zap.L().Error("service userToFollowList method err", zap.Error(err))
 		silr.ResponseError(c, e.CodeServerBusy)
@@ -97,13 +92,8 @@ func UserToFollowListHandler(c *gin.Context) {
 
 // UserFollowListHandler 用户粉丝列表
 func UserFollowListHandler(c *gin.Context) {
-	uid, err := getParamId(c, "uid")
-	if err != nil {
-		zap.L().Error("UserToFollowListHandler getCurrentUserId method err", zap.Error(err))
-		silr.ResponseError(c, e.TokenInvalidAuth)
-		return
-	}
-	data, err := service.UserFollowList(uid)
+	uid := c.Param("uid")
+	data, err := service.NewUserInstance().FollowList(uid)
 	if err != nil {
 		zap.L().Error("service userToFollowList method err", zap.Error(err))
 		silr.ResponseError(c, e.CodeServerBusy)
@@ -121,7 +111,7 @@ func UserCommunityHandler(c *gin.Context) {
 		return
 	}
 	// 根据用户id去查询社区
-	data, err := service.UserCommunityList(uid)
+	data, err := service.NewUserInstance().CommunityList(uid)
 	if err != nil {
 		zap.L().Error("service CommunityList method err", zap.Error(err))
 		silr.ResponseError(c, e.CodeServerBusy)
@@ -138,7 +128,7 @@ func UserPostsHandler(c *gin.Context) {
 		silr.ResponseError(c, e.TokenInvalidAuth)
 		return
 	}
-	data, err := service.UserPostList(uid)
+	data, err := service.NewUserInstance().PostList(uid)
 	if err != nil {
 		zap.L().Error("service UserPostList method err", zap.Error(err))
 		silr.ResponseError(c, e.CodeServerBusy)

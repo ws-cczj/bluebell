@@ -9,7 +9,7 @@ import (
 const CommunityNumsCache = 5 * time.Minute
 
 // SetCommunityNums 设置社区总数缓存
-func SetCommunityNums(cNums int64) error {
+func SetCommunityNums(cNums int) error {
 	return rdb.Set(addKeyPrefix(KeyCommunityNums), cNums, CommunityNumsCache).Err()
 }
 
@@ -19,19 +19,19 @@ func GetCommunitys() (string, error) {
 }
 
 // GetCommunityPosts 获取该社区下的帖子数
-func GetCommunityPosts(cid int64) (pidNums int64, err error) {
-	return rdb.SCard(addKeyPrefix(KeyCommunitySetPF, stvI64toa(cid))).Result()
+func GetCommunityPosts(cid string) (pidNums int64, err error) {
+	return rdb.SCard(addKeyPrefix(KeyCommunitySetPF, cid)).Result()
 }
 
 // CommunityDeletePost 删除社区集合中的帖子
-func CommunityDeletePost(cid, pid int64) error {
-	return rdb.SRem(addKeyPrefix(KeyCommunitySetPF, stvI64toa(cid)), pid).Err()
+func CommunityDeletePost(cid, pid string) error {
+	return rdb.SRem(addKeyPrefix(KeyCommunitySetPF, cid), pid).Err()
 }
 
 // GetCommunityPostIds 获取社区的帖子ids
-func GetCommunityPostIds(page, size, cid int64, orderkey string) (pids []string, err error) {
-	key := addKeyPrefix(orderkey, stvI64toa(cid))
-	ckey := addKeyPrefix(KeyCommunitySetPF, stvI64toa(cid))
+func GetCommunityPostIds(page, size int64, cid, orderkey string) (pids []string, err error) {
+	key := addKeyPrefix(orderkey, cid)
+	ckey := addKeyPrefix(KeyCommunitySetPF, cid)
 	// -- 设置key缓存，减少 ZinterStore的消耗, 也避免了资源的浪费
 	if rdb.Exists(key).Val() < 1 {
 		pipe := rdb.TxPipeline()
@@ -44,5 +44,5 @@ func GetCommunityPostIds(page, size, cid int64, orderkey string) (pids []string,
 			return
 		}
 	}
-	return GetPostIds(page, size, orderkey+stvI64toa(cid))
+	return GetPostIds(page, size, orderkey+cid)
 }

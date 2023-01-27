@@ -46,6 +46,10 @@ func stvI64toa(id int64) string {
 	return strconv.FormatInt(id, 10)
 }
 
+func stvItoa(id int) string {
+	return strconv.Itoa(id)
+}
+
 // redisZ 对redisZ进行封装
 func redisZ(score, member any) redis.Z {
 	switch score.(type) {

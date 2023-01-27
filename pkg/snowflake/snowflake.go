@@ -19,6 +19,6 @@ func InitSnowID(startTime string, machineID int64) (err error) {
 	node, err = sf.NewNode(machineID)
 	return
 }
-func GenID() int64 {
-	return node.Generate().Int64()
+func GenID() string {
+	return node.Generate().String()
 }

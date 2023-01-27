@@ -12,10 +12,9 @@ import (
 
 // PostPublishHandler 帖子发布
 func PostPublishHandler(c *gin.Context) {
-	var err error
 	// 1. 获取创建帖子的数据
 	p := new(service.Publish)
-	if err = c.ShouldBind(p); err != nil {
+	if err := c.ShouldBind(p); err != nil {
 		zap.L().Error("post publish params is not illegal", zap.Error(err))
 		silr.ResponseValidatorError(c, err)
 		return
@@ -32,7 +31,7 @@ func PostPublishHandler(c *gin.Context) {
 		return
 	}
 	// 3. 将数据插入数据库中
-	if err = p.PublishPost(uid, uname); err != nil {
+	if err = p.Publish(uid, uname); err != nil {
 		silr.ResponseError(c, e.CodeServerBusy)
 		zap.L().Error("publish post is failed", zap.Error(err))
 		return
@@ -42,14 +41,9 @@ func PostPublishHandler(c *gin.Context) {
 
 // PostDetailHandler 根据帖子ID获取帖子详情
 func PostDetailHandler(c *gin.Context) {
-	pid, err := getParamId(c, "pid")
-	if err != nil {
-		zap.L().Error("ParseInt data is invalid", zap.Error(err))
-		silr.ResponseError(c, e.CodeInvalidParams)
-		return
-	}
-	p := new(service.PostService)
-	if err = p.PostDetailById(pid); err != nil {
+	pid := c.Param("pid")
+	p := new(service.PostAll)
+	if err := p.DetailById(pid); err != nil {
 		zap.L().Error("PostDetailById select data is failed", zap.Error(err))
 		silr.ResponseError(c, e.CodeServerBusy)
 		return
@@ -67,13 +61,8 @@ func PostPutHandler(c *gin.Context) {
 		return
 	}
 	// 2. 获取帖子ID
-	pid, err := getParamId(c, "pid")
-	if err != nil {
-		zap.L().Error("ParseInt data is invalid", zap.Error(err))
-		silr.ResponseError(c, e.CodeInvalidParams)
-		return
-	}
-	if res, err := service.PostPut(pid, p); err != nil {
+	pid := c.Param("pid")
+	if res, err := service.NewPostInstance().Put(pid, p); err != nil {
 		silr.ResponseErrorWithRes(c, res)
 		zap.L().Error("PostPut is failed", zap.Error(err))
 		return
@@ -95,8 +84,8 @@ func PostDeleteHandler(c *gin.Context) {
 		silr.ResponseError(c, e.TokenInvalidAuth)
 		return
 	}
-	if err = service.DeletePost(uid, p); err != nil {
-		zap.L().Error("delete post failed", zap.Int64("pid", p.PostId), zap.Error(err))
+	if err = service.NewPostInstance().Delete(uid, p); err != nil {
+		zap.L().Error("delete post failed", zap.String("pid", p.PostId), zap.Error(err))
 		silr.ResponseError(c, e.CodeServerBusy)
 		return
 	}
@@ -106,7 +95,7 @@ func PostDeleteHandler(c *gin.Context) {
 // PostListHandler 顺序获取所有帖子
 func PostListHandler(c *gin.Context) {
 	page, size, order := getPostListInfo(c)
-	data, err := service.PostListInOrder(page, size, order)
+	data, err := service.NewPostInstance().ListInOrder(page, size, order)
 	if err != nil {
 		zap.L().Error("PostListInOrder select data is failed", zap.Error(err))
 		silr.ResponseError(c, e.CodeServerBusy)

@@ -5,6 +5,7 @@ import (
 	"bluebell/pkg/e"
 	silr "bluebell/serializer"
 	"bluebell/service"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -31,7 +32,7 @@ func CommunityCreateHandler(c *gin.Context) {
 	}
 	community.Community.AuthorId = uid
 	community.Community.AuthorName = uname
-	if err = service.CommunityCreate(community); err != nil {
+	if err = service.NewCommunityInstance().Create(community); err != nil {
 		zap.L().Error("CommunityCreate method err",
 			zap.Error(err))
 		silr.ResponseError(c, e.CodeServerBusy)
@@ -42,7 +43,7 @@ func CommunityCreateHandler(c *gin.Context) {
 
 // CommunityHandler 返回社区的列表信息
 func CommunityHandler(c *gin.Context) {
-	data, err := service.CommunityList()
+	data, err := service.NewCommunityInstance().List()
 	if err != nil {
 		zap.L().Error("CommunityList select data is failed", zap.Error(err))
 		silr.ResponseError(c, e.CodeServerBusy)
@@ -53,13 +54,14 @@ func CommunityHandler(c *gin.Context) {
 
 // CommunityDetailHandler 通过ID获取到详细的社区情况
 func CommunityDetailHandler(c *gin.Context) {
-	cid, err := getParamId(c, "cid")
+	cidStr := c.Param("cid")
+	cid, err := strconv.ParseInt(cidStr, 10, 32)
 	if err != nil {
 		zap.L().Error("ParseInt data is invalid", zap.Error(err))
 		silr.ResponseError(c, e.CodeInvalidParams)
 		return
 	}
-	data, err := service.CommunityDetailById(cid)
+	data, err := service.NewCommunityInstance().DetailById(int(cid))
 	if err != nil {
 		zap.L().Error("CommunityDetailById select data is failed", zap.Error(err))
 		silr.ResponseError(c, e.CodeServerBusy)
@@ -71,13 +73,8 @@ func CommunityDetailHandler(c *gin.Context) {
 // CommunityPostHandler 获取该社区的所有帖子
 func CommunityPostHandler(c *gin.Context) {
 	page, size, order := getPostListInfo(c)
-	cid, err := getParamId(c, "cid")
-	if err != nil {
-		zap.L().Error("Param is illgal", zap.Error(err))
-		silr.ResponseError(c, e.CodeInvalidParams)
-		return
-	}
-	data, err := service.CommunityPostListInOrder(page, size, cid, order)
+	cid := c.Param("cid")
+	data, err := service.NewCommunityInstance().PostListInOrder(page, size, cid, order)
 	if err != nil {
 		zap.L().Error("CommunityPostListInOrder select data is failed", zap.Error(err))
 		silr.ResponseError(c, e.CodeServerBusy)

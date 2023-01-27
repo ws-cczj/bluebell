@@ -35,7 +35,7 @@ func CreatePost(post *models.Post) (err error) {
 }
 
 // DeletePost 软删除帖子
-func DeletePost(pid int64) (err error) {
+func DeletePost(pid string) (err error) {
 	uStr := `update post 
 				set status = ?
 				where post_id = ?`
@@ -44,7 +44,7 @@ func DeletePost(pid int64) (err error) {
 }
 
 // UpdatePost 更新帖子数据
-func UpdatePost(pid int64, title, content string) (err error) {
+func UpdatePost(pid string, title, content string) (err error) {
 	uStr := `update post 
 				set title = ?, content = ? 
 				where post_id = ?`
@@ -53,7 +53,7 @@ func UpdatePost(pid int64, title, content string) (err error) {
 }
 
 // UpdateCtbPost 更新帖子的票数 -> 过期状态
-func UpdateCtbPost(pid int64, vote_num uint32) (err error) {
+func UpdateCtbPost(pid string, vote_num int) (err error) {
 	uStr := `update post 
 				set vote_num = ?, status = ? 
 				where post_id = ?`
@@ -62,7 +62,7 @@ func UpdateCtbPost(pid int64, vote_num uint32) (err error) {
 }
 
 // UpdateAndDeletePost 更新并且删除帖子 -> 软删除状态
-func UpdateAndDeletePost(pid int64, vote_num uint32) (err error) {
+func UpdateAndDeletePost(pid string, vote_num int) (err error) {
 	uStr := `update post 
 				set vote_num = ?, status = ? 
 				where post_id = ?`
@@ -71,7 +71,7 @@ func UpdateAndDeletePost(pid int64, vote_num uint32) (err error) {
 }
 
 // GetPostDetailById 根据ID获取帖子
-func GetPostDetailById(id int64) (data *models.Post, err error) {
+func GetPostDetailById(id string) (data *models.Post, err error) {
 	data = new(models.Post)
 	qStr := `select 
 				post_id,community_id,author_id,author_name,title,content,vote_num,status,create_time
@@ -82,7 +82,7 @@ func GetPostDetailById(id int64) (data *models.Post, err error) {
 }
 
 // GetPostStatus 根据Id获取帖子状态
-func GetPostStatus(pid int64) (status uint8, err error) {
+func GetPostStatus(pid string) (status uint8, err error) {
 	qStr := `select status 
 				from post 
 				where post_id = ?`
@@ -109,7 +109,7 @@ func GetPostListInOrder(ids []string) (posts []*models.Post, err error) {
 }
 
 // CrontabPostDelete 定实获取这段时间被删除的帖子
-func CrontabPostDelete(preT, nowT time.Time) (pids []int64, err error) {
+func CrontabPostDelete(preT, nowT time.Time) (pids []string, err error) {
 	qStr := `select post_id
 				from post
 				where status = ?

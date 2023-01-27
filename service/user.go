@@ -4,19 +4,23 @@ import (
 	"bluebell/dao/mysql"
 	"bluebell/dao/redis"
 	"bluebell/models"
+	"bluebell/pkg/encrypt"
 	"bluebell/pkg/jwt"
 	"bluebell/pkg/snowflake"
 	silr "bluebell/serializer"
-	"crypto/md5"
-	"encoding/hex"
 
 	"go.uber.org/zap"
 )
 
-const secret = "cczjblog.top"
+type User struct {
+}
 
-// UserRegister 用户注册
-func UserRegister(user *models.UserRegister) (err error) {
+func NewUserInstance() *User {
+	return &User{}
+}
+
+// Register 用户注册
+func (u User) Register(user *models.UserRegister) (err error) {
 	// 1. 校验用户名
 	if err = mysql.CheckUsername(user.Username); err != nil {
 		zap.L().Error("mysql checkUsername method err", zap.Error(err))
@@ -24,7 +28,7 @@ func UserRegister(user *models.UserRegister) (err error) {
 	}
 	// 2. 生成UserID
 	user.UserId = snowflake.GenID()
-	user.Password = encryptPassword(user.Password)
+	user.Password = encrypt.Md5Password(user.Password)
 	// 3. 添加用户到数据库
 	if err = mysql.InsertUser(user); err != nil {
 		zap.L().Error("mysql User Insert method err", zap.Error(err))
@@ -32,9 +36,9 @@ func UserRegister(user *models.UserRegister) (err error) {
 	return
 }
 
-// UserLogin 用户登录
-func UserLogin(user *models.UserLogin) (atoken, rtoken string, err error) {
-	pwdParam := encryptPassword(user.Password)
+// Login 用户登录
+func (User) Login(user *models.UserLogin) (atoken, rtoken string, err error) {
+	pwdParam := encrypt.Md5Password(user.Password)
 	if err = mysql.CheckLoginInfo(user); err != nil {
 		zap.L().Error("mysql checkLoginInfo method err", zap.Error(err))
 		return
@@ -55,16 +59,16 @@ func UserLogin(user *models.UserLogin) (atoken, rtoken string, err error) {
 	return
 }
 
-// UserFollowBuild 用户关注表的构建
-func UserFollowBuild(uid int64, follow *models.UserFollow) error {
+// FollowBuild 用户关注表的构建
+func (User) FollowBuild(uid string, follow *models.UserFollow) error {
 	if follow.Agree {
 		return redis.SetUserToFollow(uid, follow.ToUserId)
 	}
 	return redis.CancelUserToFollow(uid, follow.ToUserId)
 }
 
-// UserToFollowList 获取用户的关注列表
-func UserToFollowList(uid int64) ([]*silr.ResponseUserFollow, error) {
+// ToFollowList 获取用户的关注列表
+func (User) ToFollowList(uid string) ([]*silr.ResponseUserFollow, error) {
 	toFollows, err := redis.GetUserToFollows(uid)
 	if err != nil {
 		zap.L().Error("redis getUserToFollows method err", zap.Error(err))
@@ -73,8 +77,8 @@ func UserToFollowList(uid int64) ([]*silr.ResponseUserFollow, error) {
 	return mysql.GetUserFollows(toFollows)
 }
 
-// UserFollowList 获取用户的关注列表
-func UserFollowList(uid int64) ([]*silr.ResponseUserFollow, error) {
+// FollowList 获取用户的关注列表
+func (User) FollowList(uid string) ([]*silr.ResponseUserFollow, error) {
 	Follows, err := redis.GetUserFollows(uid)
 	if err != nil {
 		zap.L().Error("redis GetUserFollows method err", zap.Error(err))
@@ -83,21 +87,14 @@ func UserFollowList(uid int64) ([]*silr.ResponseUserFollow, error) {
 	return mysql.GetUserFollows(Follows)
 }
 
-// UserCommunityList 获取用户管理的所有社区
-func UserCommunityList(uid int64) ([]*models.Community, error) {
+// CommunityList 获取用户管理的所有社区
+func (User) CommunityList(uid string) ([]*models.Community, error) {
 	cidNums := redis.GetUserCommunitys(uid)
 	return mysql.GetUserCommunityList(uid, cidNums)
 }
 
-// UserPostList 获取用户发布的所有帖子列表
-func UserPostList(uid int64) ([]*models.Post, error) {
+// PostList 获取用户发布的所有帖子列表
+func (User) PostList(uid string) ([]*models.Post, error) {
 	pidNums := redis.GetUserPostNums(uid)
 	return mysql.GetUserPostList(uid, pidNums)
-}
-
-// encryptPassword 对password进行md5加密处理
-func encryptPassword(password string) string {
-	h := md5.New()
-	h.Write([]byte(secret))
-	return hex.EncodeToString(h.Sum([]byte(password)))
 }

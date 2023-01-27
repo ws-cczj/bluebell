@@ -9,8 +9,15 @@ import (
 	"go.uber.org/zap"
 )
 
-// CommunityCreate 创建社区
-func CommunityCreate(cDetail *models.CommunityDetail) error {
+type Community struct {
+}
+
+func NewCommunityInstance() *Community {
+	return &Community{}
+}
+
+// Create 创建社区
+func (Community) Create(cDetail *models.CommunityDetail) error {
 	cDetail.Status = mysql.CommunityPublish
 	cNums, err := mysql.CreateCommunity(cDetail)
 	if err != nil {
@@ -26,12 +33,12 @@ func CommunityCreate(cDetail *models.CommunityDetail) error {
 	return err
 }
 
-// CommunityList 获取社区列表
-func CommunityList() ([]*models.Community, error) {
+// List 获取社区列表
+func (Community) List() ([]*models.Community, error) {
 	// 如果缓存有效，直接通过缓存数量进行查询
 	if cidNum, err := redis.GetCommunitys(); err == nil {
 		Num, _ := strconv.Atoi(cidNum)
-		return mysql.GetCommunityList(int64(Num))
+		return mysql.GetCommunityList(Num)
 	}
 	// 如果缓存无效或者方法错误，就通过mysql查询
 	cidNum, err := mysql.GetCommunitys()
@@ -44,13 +51,13 @@ func CommunityList() ([]*models.Community, error) {
 	return mysql.GetCommunityList(cidNum)
 }
 
-// CommunityDetailById 指定获取某个社区详细信息
-func CommunityDetailById(cid int64) (*models.CommunityDetail, error) {
+// DetailById 指定获取某个社区详细信息
+func (Community) DetailById(cid int) (*models.CommunityDetail, error) {
 	return mysql.GetCommunityDetail(cid)
 }
 
-// CommunityPostListInOrder 根据顺序获取社区的帖子列表
-func CommunityPostListInOrder(page, size, cid int64, order string) (postList []*PostService, err error) {
+// PostListInOrder 根据顺序获取社区的帖子列表
+func (Community) PostListInOrder(page, size int64, cid, order string) (postList []*PostAll, err error) {
 	key := redis.KeyPostTimeZSet
 	if order == OrderByScore {
 		key = redis.KeyPostScoreZSet
@@ -64,5 +71,5 @@ func CommunityPostListInOrder(page, size, cid int64, order string) (postList []*
 			zap.Error(err))
 		return
 	}
-	return getPostListByIds(ids)
+	return NewPostInstance().getPostListByIds(ids)
 }

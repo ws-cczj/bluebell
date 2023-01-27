@@ -9,6 +9,7 @@ import (
 
 const (
 	CommentPost = iota
+	CommentFComment
 	CommentPeople
 )
 
@@ -48,7 +49,7 @@ func CreateComment(comment *models.CommentDetail) (int64, error) {
 }
 
 // DeleteComment 删除一条评论
-func DeleteComment(commentId int64) (err error) {
+func DeleteComment(commentId int) (err error) {
 	dStr := `delete from comment 
 				where id = ?`
 	_, err = db.Exec(dStr, commentId)
@@ -57,12 +58,16 @@ func DeleteComment(commentId int64) (err error) {
 
 // CrontabCheckComment 检查不合格的子评论 指的是子评论的父评论是否还在
 func CrontabDeleteComment() (err error) {
-	dStr := `delete
-			from comment
-			where id in (select id
-						 from comment
-						 where father_id not in (select id
-												 from comment))`
+	dStr := `delete 
+				from comment
+				where id in
+      			(select tb.id
+       			from (select id
+             			from comment
+             			where father_id not in (select id
+             				                        from comment
+             				                        )
+             				) as tb)`
 	_, err = db.Exec(dStr)
 	return
 }

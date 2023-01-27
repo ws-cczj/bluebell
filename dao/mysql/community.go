@@ -30,7 +30,7 @@ func CreateCommunity(cDetail *models.CommunityDetail) (int64, error) {
 }
 
 // GetCommunityList 获取社区列表
-func GetCommunityList(pidNums int64) (data []*models.Community, err error) {
+func GetCommunityList(pidNums int) (data []*models.Community, err error) {
 	data = make([]*models.Community, 0, pidNums)
 	qStr := `select id,author_id,author_name,community_name
 				from community
@@ -45,7 +45,7 @@ func GetCommunityList(pidNums int64) (data []*models.Community, err error) {
 }
 
 // GetCommunitys 获取社区数目
-func GetCommunitys() (cidNum int64, err error) {
+func GetCommunitys() (cidNum int, err error) {
 	qStr := `select COUNT(*)
 				from community`
 	err = db.Get(&cidNum, qStr)
@@ -53,7 +53,7 @@ func GetCommunitys() (cidNum int64, err error) {
 }
 
 // GetCommunityDetail 获取社区的详细信息
-func GetCommunityDetail(cid int64) (communityDeatil *models.CommunityDetail, err error) {
+func GetCommunityDetail(cid int) (communityDeatil *models.CommunityDetail, err error) {
 	communityDeatil = new(models.CommunityDetail)
 	qStr := `select id,author_id,author_name,community_name,introduction,status,create_time,update_time
 				from community

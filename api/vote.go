@@ -12,7 +12,7 @@ import (
 
 // PostVotesHandler 帖子投票
 func PostVotesHandler(c *gin.Context) {
-	v := new(service.PostVoteService)
+	v := new(service.PostVote)
 	if err := c.ShouldBind(v); err != nil {
 		zap.L().Error("postVote ShouldBind method failed", zap.Error(err))
 		silr.ResponseValidatorError(c, err)

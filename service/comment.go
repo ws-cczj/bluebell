@@ -8,13 +8,15 @@ import (
 	"go.uber.org/zap"
 )
 
-type CommentAll struct {
-	*models.Comment
-	Children []*models.CommentDetail `json:"children,omitempty"`
+type Comment struct {
 }
 
-// PublishComment 发布评论
-func PublishComment(comment *models.CommentDetail) (err error) {
+func NewCommentInstance() *Comment {
+	return &Comment{}
+}
+
+// Publish 发布评论
+func (Comment) Publish(comment *models.CommentDetail) (err error) {
 	// 1. 向数据库中增加一条评论
 	commentId, err := mysql.CreateComment(comment)
 	if err != nil {
@@ -23,11 +25,11 @@ func PublishComment(comment *models.CommentDetail) (err error) {
 	}
 	// 2. 根据评论类型向redis中创建评论信息
 	if comment.Type == mysql.CommentPost {
-		if err = redis.CreatePostComment(comment.PostId, commentId); err != nil {
+		if err = redis.CreatePostComment(comment.PostId, int(commentId)); err != nil {
 			zap.L().Error("redis CreateFComment method err", zap.Error(err))
 		}
-	} else if comment.Type == mysql.CommentPeople {
-		if err = redis.CreateChildComment(comment.FatherId, commentId); err != nil {
+	} else { // 如果不是对帖子，那么要么对评论，要么对父评论
+		if err = redis.CreateChildComment(comment.FatherId, int(commentId)); err != nil {
 			zap.L().Error("redis CreateCComment method err", zap.Error(err))
 		}
 	}
@@ -35,7 +37,7 @@ func PublishComment(comment *models.CommentDetail) (err error) {
 }
 
 // FavoriteBuild 点赞创建
-func FavoriteBuild(f *models.Favorite, uid int64) error {
+func (Comment) FavoriteBuild(f *models.Favorite, uid string) error {
 	// 对帖子评论需要计算分值，而对人评论不需要计算分值
 	if f.Type == mysql.CommentPost {
 		if !f.Agree {
@@ -49,15 +51,15 @@ func FavoriteBuild(f *models.Favorite, uid int64) error {
 	return redis.CreateCFavorite(uid, f.ToAuthorId, f.Id)
 }
 
-// DeleteComment 删除评论 如果是子评论仅仅删除数据库即可
-func DeleteComment(commentD *models.CommentDelete) (err error) {
+// Delete 删除评论 如果是子评论仅仅删除数据库即可
+func (Comment) Delete(commentD *models.CommentDelete) (err error) {
 	if err = mysql.DeleteComment(commentD.Id); err != nil {
 		zap.L().Error("mysql deleteComment method err", zap.Error(err))
 		return
 	}
 	// Type_id 如果删除的是对帖子的评论，则type_id为 post_id,否则为 fCommentId
 	// 如果是对帖子的评论还需要删除mysql中子评论 子评论用定时任务进行删除，因为没有帖子就不会因为子评论影响到业务
-	if commentD.Type != mysql.CommentPeople {
+	if commentD.Type == mysql.CommentPost {
 		if err = redis.DeleteFatherComment(commentD.TypeId, commentD.Id); err != nil {
 			zap.L().Error("redis deleteComment method err", zap.Error(err))
 		}
@@ -67,8 +69,13 @@ func DeleteComment(commentD *models.CommentDelete) (err error) {
 	return redis.DeleteChildComment(commentD.TypeId, commentD.Id)
 }
 
-// GetCommentList 根据排序获取评论
-func GetCommentList(pid int64, order string) (commentDatas []*CommentAll, err error) {
+type CommentAll struct {
+	*models.Comment
+	Children []*models.CommentDetail `json:"children,omitempty"`
+}
+
+// GetListAll 根据排序获取评论
+func (Comment) GetListAll(pid, order string) (commentDatas []*CommentAll, err error) {
 	// 1. 判断排序类别
 	key := redis.KeyCommentScoreZSet
 	if order == OrderByTime {
@@ -100,12 +107,10 @@ func GetCommentList(pid int64, order string) (commentDatas []*CommentAll, err er
 	}
 	commentDatas = make([]*CommentAll, 0, len(fList))
 	var cData []*models.CommentDetail
-	var favoriteList []int64
-	var fData *models.Comment
 	// 4. 遍历父id，查找mysql中的数据
 	for i, _ := range fList {
 		// 取出父评论点赞数
-		fData = fcomments[i]
+		fData := fcomments[i]
 		fData.FavoriteNum = favorites[i]
 		if len(cList[i]) > 0 {
 			// 取出该父评论的子评论列表
@@ -115,7 +120,7 @@ func GetCommentList(pid int64, order string) (commentDatas []*CommentAll, err er
 				err = nil
 			}
 			// 取出该付评论的子评论的点赞数列表
-			favoriteList, err = redis.GetFavoriteList(cList[i])
+			favoriteList, err := redis.GetFavoriteList(cList[i])
 			if err != nil {
 				zap.L().Error("redis GetFavoriteList method err", zap.Error(err))
 				err = nil

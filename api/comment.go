@@ -33,7 +33,7 @@ func CommentPublishHandler(c *gin.Context) {
 	comment.Comment.AuthorId = uid
 	comment.Comment.AuthorName = uname
 	// 3. 发布评论
-	if err = service.PublishComment(comment); err != nil {
+	if err = service.NewCommentInstance().Publish(comment); err != nil {
 		zap.L().Error("service publish method err", zap.Error(err))
 		silr.ResponseError(c, e.CodeServerBusy)
 	}
@@ -53,7 +53,7 @@ func CommentFavoriteHandler(c *gin.Context) {
 		silr.ResponseError(c, e.TokenInvalidAuth)
 		return
 	}
-	if err = service.FavoriteBuild(favorite, userID); err != nil {
+	if err = service.NewCommentInstance().FavoriteBuild(favorite, userID); err != nil {
 		zap.L().Error("service favoriteBuild method err", zap.Error(err))
 		silr.ResponseError(c, e.CodeServerBusy)
 		return
@@ -69,7 +69,7 @@ func CommentDeleteHandler(c *gin.Context) {
 		silr.ResponseValidatorError(c, err)
 		return
 	}
-	if err := service.DeleteComment(commentD); err != nil {
+	if err := service.NewCommentInstance().Delete(commentD); err != nil {
 		zap.L().Error("service DeleteComment method err", zap.Error(err))
 		silr.ResponseError(c, e.CodeServerBusy)
 		return
@@ -79,13 +79,9 @@ func CommentDeleteHandler(c *gin.Context) {
 
 // CommentListHandler 获取所有评论信息
 func CommentListHandler(c *gin.Context) {
-	pid, err := getParamId(c, "pid")
-	if err != nil {
-		silr.ResponseError(c, e.CodeInvalidParams)
-		return
-	}
+	pid := c.Param("pid")
 	order := c.Query("order")
-	data, err := service.GetCommentList(pid, order)
+	data, err := service.NewCommentInstance().GetListAll(pid, order)
 	if err != nil {
 		zap.L().Error("service favoriteBuild method err", zap.Error(err))
 		silr.ResponseError(c, e.CodeServerBusy)

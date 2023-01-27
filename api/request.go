@@ -13,13 +13,13 @@ const ContextUsernameKey = "username"
 var ErrorUserNotLogin = errors.New("用户还未登录")
 
 // getCurrentUserId 获取当前的userId
-func getCurrentUserId(c *gin.Context) (userID int64, err error) {
+func getCurrentUserId(c *gin.Context) (userID string, err error) {
 	uid, ok := c.Get(ContextUserIDKey)
 	if !ok {
 		err = ErrorUserNotLogin
 		return
 	}
-	userID, ok = uid.(int64)
+	userID, ok = uid.(string)
 	if !ok {
 		err = ErrorUserNotLogin
 	}
@@ -55,10 +55,4 @@ func getPostListInfo(c *gin.Context) (page, size int64, order string) {
 		size = 10
 	}
 	return
-}
-
-// getParamId 获取参数 ID
-func getParamId(c *gin.Context, param string) (int64, error) {
-	idStr := c.Param(param)
-	return strconv.ParseInt(idStr, 10, 64)
 }
