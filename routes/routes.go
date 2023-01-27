@@ -21,7 +21,7 @@ func Setup(cfg *settings.AppConfig) *gin.Engine {
 	}
 	r := gin.New()
 	r.Use(logger.GinLogger(), logger.GinRecovery(true),
-		middleware.RateLimitMiddleware(cfg.RateLimit.GenInterval, cfg.RateLimit.MaxCaps))
+		middleware.RateLimitMiddleware(cfg.GenInterval, cfg.MaxCaps))
 
 	//pprof.Register(r)
 	// api/v1

@@ -1,26 +1,18 @@
 package jwt
 
 import (
+	"bluebell/settings"
 	"errors"
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"
 )
 
-const (
-	ATokenExpiredDuration  = 24 * 3600
-	RTokenExpiredDuration  = 30 * 24 * 3600
-	TokenIssuedAtDuration  = 0
-	TokenNotBeforeDuration = -60
-	TokenIssuer            = "bluebell"
-	TokenSecret            = "cczj"
-	ErrToken               = "verify Token Failed"
-)
+const bluebell = "bluebell"
 
 var (
-	Now             time.Time
-	mySecret        = []byte(TokenSecret)
-	ErrInvalidToken = errors.New(ErrToken)
+	mySecret        = []byte("cczj")
+	ErrInvalidToken = errors.New("verify Token Failed")
 )
 
 type MyClaim struct {
@@ -31,12 +23,11 @@ type MyClaim struct {
 
 // GenToken 颁发token access token 和 refresh token
 func GenToken(UserID int64, Username string) (atoken, rtoken string, err error) {
-	Now = time.Now()
 	rc := jwt.RegisteredClaims{
-		ExpiresAt: getJWTTime(ATokenExpiredDuration),
-		Issuer:    TokenIssuer,
-		IssuedAt:  getJWTTime(TokenIssuedAtDuration),
-		NotBefore: getJWTTime(TokenNotBeforeDuration),
+		ExpiresAt: getJWTTime(settings.Conf.AppConfig.AtokenAt),
+		Issuer:    bluebell,
+		IssuedAt:  getJWTTime(0),
+		NotBefore: getJWTTime(-60),
 	}
 	at := MyClaim{
 		UserID,
@@ -47,7 +38,7 @@ func GenToken(UserID int64, Username string) (atoken, rtoken string, err error) 
 
 	// refresh token 不需要保存任何用户信息
 	rt := rc
-	rt.ExpiresAt = getJWTTime(RTokenExpiredDuration)
+	rt.ExpiresAt = getJWTTime(settings.Conf.AppConfig.RtokenAt)
 	rtoken, err = jwt.NewWithClaims(jwt.SigningMethodHS256, rt).SignedString(mySecret)
 	return
 }
@@ -92,6 +83,6 @@ func keyFunc(token *jwt.Token) (interface{}, error) {
 	return mySecret, nil
 }
 
-func getJWTTime(t time.Duration) *jwt.NumericDate {
-	return jwt.NewNumericDate(Now.Add(t * time.Second))
+func getJWTTime(t int64) *jwt.NumericDate {
+	return jwt.NewNumericDate(time.Now().Add(time.Duration(t) * time.Second))
 }

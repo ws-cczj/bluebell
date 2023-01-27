@@ -26,29 +26,36 @@ func PostCreate(uid, pid, cid int64) (err error) {
 	return
 }
 
-// PostDelete 删除帖子的所有信息 状态为 4
+// PostDelete 对于还未过期帖子的删除 状态为 4
 func PostDelete(uid, pid, cid int64) (err error) {
 	pipe := rdb.Pipeline()
-	pipe.ZRem(addKeyPrefix(KeyPostTimeZSet), pid)
-	pipe.ZRem(addKeyPrefix(KeyPostScoreZSet), pid)
-	// 删除帖子投票记录
-	pipe.ZRemRangeByScore(addKeyPrefix(KeyPostVotedZSetPF, stvI64toa(pid)), ZRangeMinINF, ZRangeMaxINF)
 	// 删除社区集合中的帖子
 	pipe.SRem(addKeyPrefix(KeyCommunitySetPF, stvI64toa(cid)), pid)
+	// 删除帖子投票记录以及帖子信息
+	pipe.ZRem(addKeyPrefix(KeyPostTimeZSet), pid)
+	pipe.ZRem(addKeyPrefix(KeyPostScoreZSet), pid)
+	pipe.ZRemRangeByScore(addKeyPrefix(KeyPostVotedZSetPF, stvI64toa(pid)), ZRangeMinINF, ZRangeMaxINF)
 	// 删除用户列表中的帖子
 	pipe.LRem(addKeyPrefix(KeyUserPost, stvI64toa(uid)), 0, pid)
 	_, err = pipe.Exec()
 	return
 }
 
-// PostExpire 处理过期帖子信息 状态为 3
+// PostExpiredDelete 对于已经过期帖子的删除
+func PostExpiredDelete(uid, pid, cid int64) (err error) {
+	pipe := rdb.TxPipeline()
+	pipe.SRem(addKeyPrefix(KeyCommunitySetPF, stvI64toa(cid)), pid)
+	pipe.ZRem(addKeyPrefix(KeyPostTimeZSet), pid)
+	pipe.ZRem(addKeyPrefix(KeyPostScoreZSet), pid)
+	pipe.LRem(addKeyPrefix(KeyUserPost, stvI64toa(uid)), 0, pid)
+	_, err = pipe.Exec()
+	return
+}
+
+// PostExpire 处理过期帖子信息 状态为 3,只清除对应的票数
 func PostExpire(pids []string) (err error) {
-	keyT := addKeyPrefix(KeyPostTimeZSet)
-	keyS := addKeyPrefix(KeyPostScoreZSet)
 	pipe := rdb.Pipeline()
 	for _, pid := range pids {
-		pipe.ZRem(keyT, pid)
-		pipe.ZRem(keyS, pid)
 		pipe.ZRemRangeByScore(addKeyPrefix(KeyPostVotedZSetPF, pid), ZRangeMinINF, ZRangeMaxINF)
 	}
 	_, err = pipe.Exec()

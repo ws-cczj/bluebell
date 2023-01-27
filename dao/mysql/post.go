@@ -52,12 +52,21 @@ func UpdatePost(pid int64, title, content string) (err error) {
 	return
 }
 
-// UpdateCtbPost 更新帖子的票数
+// UpdateCtbPost 更新帖子的票数 -> 过期状态
 func UpdateCtbPost(pid int64, vote_num uint32) (err error) {
 	uStr := `update post 
 				set vote_num = ?, status = ? 
 				where post_id = ?`
 	_, err = db.Exec(uStr, vote_num, PostExpired, pid)
+	return
+}
+
+// UpdateAndDeletePost 更新并且删除帖子 -> 软删除状态
+func UpdateAndDeletePost(pid int64, vote_num uint32) (err error) {
+	uStr := `update post 
+				set vote_num = ?, status = ? 
+				where post_id = ?`
+	_, err = db.Exec(uStr, vote_num, PostDelete, pid)
 	return
 }
 
@@ -84,7 +93,7 @@ func GetPostStatus(pid int64) (status uint8, err error) {
 // GetPostListInOrder 根据指定顺序查询帖子
 func GetPostListInOrder(ids []string) (posts []*models.Post, err error) {
 	qStr := `select 
-				post_id,community_id,author_id,author_name,title,content,status,create_time,update_time
+				post_id,community_id,author_id,author_name,vote_num,title,content,status,create_time,update_time
 				from post
 				where post_id in (?)
 				order by FIND_IN_SET(post_id, ?)`

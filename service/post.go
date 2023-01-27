@@ -15,7 +15,6 @@ import (
 const (
 	OrderByTime  = "time"
 	OrderByScore = "score"
-	NULLData     = 0
 )
 
 var ErrPostDelete = errors.New("post already delete, please dont repeat to click")
@@ -132,27 +131,16 @@ func DeletePost(uid int64, post *models.PostDelete) (err error) {
 				zap.Error(err))
 			return
 		}
-		// 修改redis中user管理的帖子结构
-		if err = redis.UserDeletePost(uid, post.PostId); err != nil {
-			zap.L().Error("redis UserDeletePost method err",
-				zap.Error(err))
-			return
-		}
-		// 修改redis中community管理的帖子结构
-		if err = redis.CommunityDeletePost(post.CommunityId, post.PostId); err != nil {
-			zap.L().Error("redis CommunityDeletePost method err",
+		// 修改redis中post结构
+		if err = redis.PostExpiredDelete(uid, post.PostId, post.CommunityId); err != nil {
+			zap.L().Error("redis PostExpiredDelete method is err",
 				zap.Error(err))
 		}
 	} else {
 		// 如果帖子没有过期,在进行软删除之前需要将帖子的vote_num数据从redis中取出进行更新
 		ticket := redis.GetPostVote(post.PostId)
-		if err = mysql.UpdateCtbPost(post.PostId, uint32(ticket)); err != nil {
-			zap.L().Error("mysql UpdateCtbPost method is err",
-				zap.Error(err))
-			return
-		}
-		if err = mysql.DeletePost(post.PostId); err != nil {
-			zap.L().Error("mysql DeletePost method is err",
+		if err = mysql.UpdateAndDeletePost(post.PostId, uint32(ticket)); err != nil {
+			zap.L().Error("mysql UpdateAndDeletePost method is err",
 				zap.Error(err))
 			return
 		}
@@ -166,10 +154,11 @@ func DeletePost(uid int64, post *models.PostDelete) (err error) {
 
 // getPostListByIds 获取帖子列表根据ids
 func getPostListByIds(ids []string) (postList []*PostService, err error) {
-	if len(ids) == NULLData {
+	if len(ids) <= 0 {
 		zap.L().Warn("redis post data is null")
 		return
 	}
+	// 获取到已经过期和未过期的帖子
 	tickets, err := redis.GetPostVotes(ids)
 	posts, err := mysql.GetPostListInOrder(ids)
 	if err != nil {
@@ -178,7 +167,7 @@ func getPostListByIds(ids []string) (postList []*PostService, err error) {
 		return
 	}
 	var community *models.CommunityDetail
-	postList = make([]*PostService, NULLData, len(posts))
+	postList = make([]*PostService, 0, len(posts))
 	for i, post := range posts {
 		community, err = mysql.GetCommunityDetail(post.CommunityId)
 		if err != nil {
@@ -187,7 +176,10 @@ func getPostListByIds(ids []string) (postList []*PostService, err error) {
 				zap.Error(err))
 			continue
 		}
-		post.VoteNum = tickets[i]
+		// 如果是还没有过期的，就直接将票数进行赋值
+		if post.Status == mysql.PostPublish {
+			post.VoteNum = tickets[i]
+		}
 		plist := &PostService{
 			Post:            post,
 			CommunityDetail: community,

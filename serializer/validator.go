@@ -33,7 +33,7 @@ func InitTrans(locale string) (err error) {
 		})
 
 		// 为Register注册自定义校验方法
-		v.RegisterStructValidation(UserServiceStructLevelValidation, models.UserRegister{})
+		v.RegisterStructValidation(UserPwdValidation, models.UserRegister{})
 
 		zhT := zh.New() // 中文翻译器
 		enT := en.New() // 英文翻译器
@@ -74,8 +74,8 @@ func removeTopStruct(fields map[string]string) map[string]string {
 	return res
 }
 
-// UserServiceStructLevelValidation 自定义UserService结构体校验函数
-func UserServiceStructLevelValidation(sl validator.StructLevel) {
+// UserPwdValidation 自定义UserService结构体校验函数
+func UserPwdValidation(sl validator.StructLevel) {
 	su := sl.Current().Interface().(models.UserRegister)
 
 	if su.Password != su.RePassword {

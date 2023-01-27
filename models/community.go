@@ -12,7 +12,7 @@ type Community struct {
 type CommunityDetail struct {
 	*Community
 	Status       uint8     `json:"status" db:"status" binding:"oneof=0 1 2"` // 规定 0为审核中, 1为已发布, 2为已删除
-	Introduction string    `json:"introduction" db:"introduction" form:"introduction" binding:"required"`
-	CreateTime   time.Time `json:"create_time" db:"create_time"`
-	UpdateTime   time.Time `json:"update_time" db:"update_time"`
+	Introduction string    `json:"introduction" db:"introduction" binding:"required"`
+	CreateAt     time.Time `json:"createAt" db:"create_time"`
+	UpdateAt     time.Time `json:"updateAt" db:"update_time"`
 }

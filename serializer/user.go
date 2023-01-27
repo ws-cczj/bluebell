@@ -2,8 +2,8 @@ package serializer
 
 type ResponseUserLogin struct {
 	UserId int64  `json:"user_id"`
-	Atoken string `json:"atoken,omitempty"`
-	Rtoken string `json:"rtoken,omitempty"`
+	Atoken string `json:"atoken"`
+	Rtoken string `json:"rtoken"`
 }
 
 type ResponseUserFollow struct {

@@ -76,7 +76,7 @@ func main() {
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit         // -- 如果接收不到信号就在这里一直堵塞
 	ctab.StopAll() // 关闭定时任务
-	zap.L().Info("Shutdown Server...")
+	zap.L().Debug("Shutdown Server...")
 	// -- 创建一个超过5秒超时的context
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -84,5 +84,5 @@ func main() {
 	if err = srv.Shutdown(ctx); err != nil {
 		zap.L().Error("Server Shutdown fail!", zap.Error(err))
 	}
-	zap.L().Info("Server exiting...")
+	zap.L().Debug("Server exiting...")
 }

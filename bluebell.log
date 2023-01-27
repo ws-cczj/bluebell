@@ -4451,3 +4451,49 @@
 [2023-01-21 00:21:41]	[34mINFO[0m	logger/crontablogger.go:12	stop
 [2023-01-21 00:21:41]	[34mINFO[0m	bluebell/main.go:79	Shutdown Server...
 [2023-01-21 00:21:41]	[34mINFO[0m	bluebell/main.go:87	Server exiting...
+[2023-01-27 17:47:38]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-01-27 17:47:38]	[35mDEBUG[0m	crontab/taskExec.go:49	帖子被删除清除数据任务开启!
+[2023-01-27 17:47:38]	[35mDEBUG[0m	crontab/taskExec.go:68	监视任务执行情况开启!
+[2023-01-27 17:47:38]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-01-27 17:47:38]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-27 17:47:38]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-27 17:47:38]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-27 17:50:35]	[34mINFO[0m	bluebell/main.go:79	Shutdown Server...
+[2023-01-27 17:50:35]	[34mINFO[0m	logger/crontablogger.go:12	stop
+[2023-01-27 17:50:35]	[34mINFO[0m	bluebell/main.go:87	Server exiting...
+[2023-01-27 17:54:07]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-01-27 17:54:07]	[35mDEBUG[0m	crontab/taskExec.go:49	帖子被删除清除数据任务开启!
+[2023-01-27 17:54:07]	[35mDEBUG[0m	crontab/taskExec.go:68	监视任务执行情况开启!
+[2023-01-27 17:54:07]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-01-27 17:54:07]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-27 17:54:07]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-27 17:54:07]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-27 17:55:42]	[35mDEBUG[0m	settings/settings.go:93	config was changed!	{"op": "WRITE         \"conf\\\\config.json\""}
+[2023-01-27 17:55:42]	[35mDEBUG[0m	settings/settings.go:93	config was changed!	{"op": "WRITE         \"conf\\\\config.json\""}
+[2023-01-27 17:56:42]	[35mDEBUG[0m	settings/settings.go:93	config was changed!	{"op": "WRITE         \"conf\\\\config.json\""}
+[2023-01-27 17:56:42]	[35mDEBUG[0m	settings/settings.go:93	config was changed!	{"op": "WRITE         \"conf\\\\config.json\""}
+[2023-01-27 17:56:52]	[34mINFO[0m	logger/crontablogger.go:12	stop
+[2023-01-27 17:56:52]	[34mINFO[0m	bluebell/main.go:79	Shutdown Server...
+[2023-01-27 17:56:52]	[34mINFO[0m	bluebell/main.go:87	Server exiting...
+[2023-01-27 17:56:55]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-01-27 17:56:55]	[35mDEBUG[0m	crontab/taskExec.go:49	帖子被删除清除数据任务开启!
+[2023-01-27 17:56:55]	[35mDEBUG[0m	crontab/taskExec.go:68	监视任务执行情况开启!
+[2023-01-27 17:56:55]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-01-27 17:56:55]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-27 17:56:55]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-27 17:56:55]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-27 17:57:54]	[34mINFO[0m	logger/crontablogger.go:12	stop
+[2023-01-27 17:57:54]	[34mINFO[0m	bluebell/main.go:79	Shutdown Server...
+[2023-01-27 17:57:54]	[34mINFO[0m	bluebell/main.go:87	Server exiting...
+[2023-01-27 17:57:56]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-01-27 17:57:56]	[35mDEBUG[0m	crontab/taskExec.go:49	帖子被删除清除数据任务开启!
+[2023-01-27 17:57:56]	[35mDEBUG[0m	crontab/taskExec.go:68	监视任务执行情况开启!
+[2023-01-27 17:57:56]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-01-27 17:57:56]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-27 17:57:56]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-27 17:57:56]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-01-27 17:58:55]	[35mDEBUG[0m	settings/settings.go:92	config was changed!	{"name": "conf\\config.json"}
+[2023-01-27 17:58:55]	[35mDEBUG[0m	settings/settings.go:92	config was changed!	{"name": "conf\\config.json"}
+[2023-01-27 17:59:45]	[34mINFO[0m	logger/crontablogger.go:12	stop
+[2023-01-27 17:59:45]	[34mINFO[0m	bluebell/main.go:79	Shutdown Server...
+[2023-01-27 17:59:45]	[34mINFO[0m	bluebell/main.go:87	Server exiting...

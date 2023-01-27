@@ -10,8 +10,8 @@ type Comment struct {
 	FavoriteNum int64     `json:"favorite_num"`
 	AuthorName  string    `json:"author_name" db:"author_name"`
 	Content     string    `json:"content" db:"content" form:"content" binding:"required"`
-	CreateTime  time.Time `json:"create_time" db:"create_time"`
-	UpdateTime  time.Time `json:"update_time" db:"update_time"`
+	CreateAt    time.Time `json:"CreateAt" db:"create_time"`
+	UpdateAt    time.Time `json:"UpdateAt" db:"update_time"`
 }
 
 type CommentDetail struct {

@@ -11,8 +11,8 @@ type Post struct {
 	AuthorName  string    `json:"author_name" db:"author_name"`
 	Title       string    `json:"title" db:"title"`
 	Content     string    `json:"content" db:"content"`
-	CreateTime  time.Time `json:"create_time" db:"create_time"`
-	UpdateTime  time.Time `json:"update_time" db:"update_time"`
+	CreateAt    time.Time `json:"createAt" db:"create_time"`
+	UpdateAt    time.Time `json:"updateAt" db:"update_time"`
 }
 
 type PostPut struct {

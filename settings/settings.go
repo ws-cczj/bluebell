@@ -3,6 +3,8 @@ package settings
 import (
 	"fmt"
 
+	"go.uber.org/zap"
+
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
 )
@@ -21,9 +23,19 @@ type AppConfig struct {
 	Mode       string `mapstructure:"mode"`
 	Version    string `mapstructure:"version"`
 	Port       string `mapstructure:"port"`
-	StartTime  string `mapstructure:"start_time"`
-	MachineID  int64  `mapstructure:"machine_id"`
+	*Jwt       `mapstructure:"jwt"`
+	*SnowFlake `mapstructure:"snowflake"`
 	*RateLimit `mapstructure:"ratelimit"`
+}
+
+type Jwt struct {
+	AtokenAt int64 `mapstructure:"atoken_at"`
+	RtokenAt int64 `mapstructure:"rtoken_at"`
+}
+
+type SnowFlake struct {
+	StartTime string `mapstructure:"start_time"`
+	MachineID int64  `mapstructure:"machine_id"`
 }
 
 type RateLimit struct {
@@ -40,21 +52,21 @@ type LogConfig struct {
 }
 
 type MysqlConfig struct {
-	Host     string `mapstructure:"host"`
+	MaxIdles int    `mapstructure:"max_idles_conns"`
+	MaxOpens int    `mapstructure:"max_opens_conns"`
 	Port     int    `mapstructure:"port"`
+	Host     string `mapstructure:"host"`
 	Dbname   string `mapstructure:"dbname"`
 	Username string `mapstructure:"username"`
 	Password string `mapstructure:"password"`
-	MaxIdles int    `mapstructure:"max_idles_conns"`
-	MaxOpens int    `mapstructure:"max_opens_conns"`
 }
 
 type RedisConfig struct {
-	Host     string `mapstructure:"host"`
 	Port     int    `mapstructure:"port"`
-	Password string `mapstructure:"password"`
 	Db       int    `mapstructure:"db"`
 	PoolSize int    `mapstructure:"pool_size"`
+	Host     string `mapstructure:"host"`
+	Password string `mapstructure:"password"`
 }
 
 func InitConfig() error {
@@ -69,14 +81,14 @@ func InitConfig() error {
 
 	// -- 将配置信息反序列化到 Conf 全局变量中去
 	if err = viper.Unmarshal(Conf); err != nil {
-		fmt.Println("Global conf unmarshal fail", err)
+		zap.L().Fatal("Global conf unmarshal fail", zap.Error(err))
 	}
 
 	viper.WatchConfig()
 	viper.OnConfigChange(func(in fsnotify.Event) {
-		fmt.Println("config is change!")
+		zap.L().Debug("config was changed!", zap.String("name", in.Name))
 		if err = viper.Unmarshal(Conf); err != nil {
-			fmt.Println("Global conf unmarshal fail", err)
+			zap.L().Fatal("Global conf unmarshal fail", zap.Error(err))
 		}
 	})
 	return nil
