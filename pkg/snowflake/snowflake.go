@@ -1,6 +1,7 @@
 package snowflake
 
 import (
+	"fmt"
 	"time"
 
 	sf "github.com/bwmarrin/snowflake"
@@ -9,15 +10,16 @@ import (
 // -- 每台机器相当于一个结点
 var node *sf.Node
 
-func InitSnowID(startTime string, machineID int64) (err error) {
-	var st time.Time
-	st, err = time.Parse("2006-01-02", startTime)
+func InitSnowID(startTime string, machineID int64) {
+	st, err := time.Parse("2006-01-02", startTime)
 	if err != nil {
-		return
+		panic(fmt.Errorf("init SnowFlake fail, err:%s", err))
 	}
 	sf.Epoch = st.UnixNano() / 1000000
 	node, err = sf.NewNode(machineID)
-	return
+	if err != nil {
+		panic(fmt.Errorf("init SnowFlake fail, err:%s", err))
+	}
 }
 func GenID() string {
 	return node.Generate().String()

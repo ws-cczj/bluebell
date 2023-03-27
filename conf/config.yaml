@@ -1,8 +1,8 @@
 app:
-  name: "bluebell"
+#  name: "bluebell"
   #mode: "release"
   mode: "debug"
-  version: "v0.1.3"
+#  version: "v0.1.3"
   port: ":4399"
   snowflake: # 雪花id生成器
     start_time: "2022-12-31"

@@ -12,20 +12,18 @@ import (
 var Conf = new(Config) // -- 定义全局变量进行存储配置信息,采用new是为了确保指针地址不发生变化
 
 type Config struct {
-	*AppConfig   `mapstructure:"app"`
-	*LogConfig   `mapstructure:"log"`
-	*MysqlConfig `mapstructure:"mysql"`
-	*RedisConfig `mapstructure:"redis"`
+	AppConfig `mapstructure:"app"`
+	LogConfig `mapstructure:"log"`
+	Mdb       MysqlConfig `mapstructure:"mysql"`
+	Rdb       RedisConfig `mapstructure:"redis"`
 }
 
 type AppConfig struct {
-	Name       string `mapstructure:"name"`
-	Mode       string `mapstructure:"mode"`
-	Version    string `mapstructure:"version"`
-	Port       string `mapstructure:"port"`
-	*Jwt       `mapstructure:"jwt"`
-	*SnowFlake `mapstructure:"snowflake"`
-	*RateLimit `mapstructure:"ratelimit"`
+	Mode      string `mapstructure:"mode"`
+	Port      string `mapstructure:"port"`
+	Jwt       `mapstructure:"jwt"`
+	SnowFlake `mapstructure:"snowflake"`
+	RateLimit `mapstructure:"ratelimit"`
 }
 
 type Jwt struct {
@@ -44,11 +42,12 @@ type RateLimit struct {
 }
 
 type LogConfig struct {
-	Level      string `mapstructure:"level"`
-	Filename   string `mapstructure:"filename"`
 	MaxSize    int    `mapstructure:"max_size"`
 	MaxAge     int    `mapstructure:"max_age"`
 	MaxBackups int    `mapstructure:"max_backups"`
+	Level      string `mapstructure:"level"`
+	Layout     string `mapstructure:"layout"`
+	Filename   string `mapstructure:"filename"`
 }
 
 type MysqlConfig struct {
@@ -69,27 +68,28 @@ type RedisConfig struct {
 	Password string `mapstructure:"password"`
 }
 
-func InitConfig() error {
+func init() {
 	viper.SetConfigFile("./conf/config.json")
 	//viper.SetConfigName("config")  // --设置配置文件得名称(不能获取后缀)
 	//viper.SetConfigType("yaml")    // -- 设置配置文件的类型(专用于远程获取配置信息时进行使用)
-	viper.AddConfigPath("./conf/") // -- 设置配置文件的路径
-	err := viper.ReadInConfig()
-	if err != nil {
-		panic(fmt.Errorf("Fatal error config file: %s \n", err))
-	}
+	//viper.AddConfigPath("./conf/") // -- 设置配置文件的路径
+	// 统一处理错误
+	var err error
+	defer func() {
+		if err != nil {
+			panic(fmt.Errorf("Fatal error config file: %s \n", err))
+		}
+	}()
+	err = viper.ReadInConfig()
 
 	// -- 将配置信息反序列化到 Conf 全局变量中去
-	if err = viper.Unmarshal(Conf); err != nil {
-		zap.L().Fatal("Global conf unmarshal fail", zap.Error(err))
-	}
+	err = viper.Unmarshal(Conf)
 
 	viper.WatchConfig()
 	viper.OnConfigChange(func(in fsnotify.Event) {
 		zap.L().Debug("config was changed!", zap.String("name", in.Name))
 		if err = viper.Unmarshal(Conf); err != nil {
-			zap.L().Fatal("Global conf unmarshal fail", zap.Error(err))
+			panic(fmt.Errorf("Fatal error config file: %s \n", err))
 		}
 	})
-	return nil
 }

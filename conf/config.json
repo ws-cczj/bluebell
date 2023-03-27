@@ -1,8 +1,6 @@
 {
   "app": {
-    "name": "bluebell",
     "mode": "debug",
-    "version": "v0.1.3",
     "port": ":4399",
     "jwt": {
       "atoken_at": 8640,
@@ -19,6 +17,7 @@
   },
   "log": {
     "level": "debug",
+    "layout": "[2006-01-02 15:04:05]",
     "filename": "bluebell.log",
     "max_size": 200,
     "max_age": 30,

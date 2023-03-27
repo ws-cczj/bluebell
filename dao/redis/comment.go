@@ -7,6 +7,7 @@ import (
 )
 
 // ---------------------------Comment Info
+
 // CreatePostComment 创建帖子评论的相关信息
 func CreatePostComment(pid string, commentId int) (err error) {
 	pipe := rdb.TxPipeline()

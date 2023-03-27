@@ -22,13 +22,18 @@ func GinLogger() gin.HandlerFunc {
 		c.Next()
 
 		cost := time.Since(start)
-		zap.L().Info(path,
-			zap.Int("status", c.Writer.Status()),
-			zap.String("Method", c.Request.Method),
-			zap.String("query", query),
-			zap.String("ip", c.ClientIP()),
-			zap.String("user-agent", c.Request.UserAgent()),
-			zap.Duration("cost", cost))
+		if c.Writer.Status() != http.StatusOK {
+			// 记录异常信息
+			zap.L().Error(query,
+				zap.Int("status", c.Writer.Status()),
+				zap.String("method", c.Request.Method),
+				zap.String("path", path),
+				zap.String("ip", c.ClientIP()),
+				zap.String("user-agent", c.Request.UserAgent()),
+				zap.String("errors", c.Errors.ByType(gin.ErrorTypePrivate).String()),
+				zap.Duration("cost", cost),
+			)
+		}
 	}
 }
 
@@ -42,36 +47,38 @@ func GinRecovery(stack bool) gin.HandlerFunc {
 				var brokenPipe bool
 				if ne, ok := err.(*net.OpError); ok {
 					if se, ok := ne.Err.(*os.SyscallError); ok {
-						if strings.Contains(strings.ToLower(se.Error()), "broken pipe") || strings.Contains(strings.ToLower(se.Error()), "connection reset by peer") {
+						if strings.Contains(strings.ToLower(se.Error()), "broken pipe") ||
+							strings.Contains(strings.ToLower(se.Error()), "connection reset by peer") {
 							brokenPipe = true
 						}
 					}
 				}
 
 				httpRequest, _ := httputil.DumpRequest(c.Request, false)
-				requests := strings.Split(string(httpRequest), "\r\n")
 				if brokenPipe {
 					zap.L().Error(c.Request.URL.Path,
 						zap.Any("error", err),
-						zap.Strings("request", requests),
+						zap.String("httpRequest", string(httpRequest)),
 					)
 					// If the connection is dead, we can't write a status to it.
 					c.Error(err.(error)) // nolint: errcheck
 					c.Abort()
 					return
 				}
-
+				zap.L().Error("[Recovery from panic]", zap.Any("error", err))
+				request := strings.Split(string(httpRequest), "\r\n")
 				if stack {
-					zap.L().Error("[Recovery from panic]",
-						zap.Any("error", err),
-						zap.Strings("request", requests),
-						zap.Strings("stack", strings.Split(string(debug.Stack()), "\n\t")),
-					)
+					split := strings.Split(string(debug.Stack()), "\n\t")
+					for _, str := range request {
+						zap.L().Error("[Recovery from request panic]", zap.String("request", str))
+					}
+					for _, str := range split {
+						zap.L().Error("[Recovery from Stack panic]", zap.String("stack", str))
+					}
 				} else {
-					zap.L().Error("[Recovery from panic]",
-						zap.Any("error", err),
-						zap.Strings("request", requests),
-					)
+					for _, str := range request {
+						zap.L().Error("[Recovery from request panic]", zap.String("request", str))
+					}
 				}
 				c.AbortWithStatus(http.StatusInternalServerError)
 			}

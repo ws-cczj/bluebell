@@ -6,7 +6,6 @@ import (
 	"fmt"
 
 	"github.com/go-redis/redis"
-	"go.uber.org/zap"
 )
 
 var (
@@ -14,20 +13,16 @@ var (
 	ErrVoteTimeExpired = errors.New("post vote time was expired")
 )
 
-func InitRedis(cfg *settings.RedisConfig) error {
-	red := redis.NewClient(&redis.Options{
-		Addr:     fmt.Sprintf("%s:%d", cfg.Host, cfg.Port),
-		Password: cfg.Password,
-		DB:       cfg.Db,
-		PoolSize: cfg.PoolSize, // -- 连接池大小
+func InitRedis() {
+	rdb = redis.NewClient(&redis.Options{
+		Addr:     fmt.Sprintf("%s:%d", settings.Conf.Rdb.Host, settings.Conf.Rdb.Port),
+		Password: settings.Conf.Rdb.Password,
+		DB:       settings.Conf.Rdb.Db,
+		PoolSize: settings.Conf.Rdb.PoolSize, // -- 连接池大小
 	})
-	_, err := red.Ping().Result()
-	if err != nil {
-		zap.L().Error("redis ping is fail", zap.Error(err))
-		return err
+	if _, err := rdb.Ping().Result(); err != nil {
+		panic(fmt.Errorf("redis ping fail, err: %s", err))
 	}
-	rdb = red
-	return nil
 }
 
 func Close() {

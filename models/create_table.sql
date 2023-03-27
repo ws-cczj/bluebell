@@ -12,8 +12,8 @@ CREATE TABLE `user`
     `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (`id`),
-    UNIQUE KEY `idx_username` (`username`) USING BTREE,
-    UNIQUE KEY `idx_user_id` (`user_id`) USING BTREE
+    UNIQUE KEY `idx_username` (`username`),
+    UNIQUE KEY `idx_user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='用户表';
 
 

@@ -33,23 +33,6 @@ func NewCrontabInstance() *Crontab {
 	return ctab
 }
 
-// GetKeysAndVals 获取当前任务列表中所有的任务信息
-func (c *Crontab) GetKeysAndVals() (keys []Task, vals []cron.EntryID) {
-	if !c.Enable {
-		return
-	}
-	cnt := 0
-	n := len(c.EntryIds)
-	keys = make([]Task, n, n)
-	vals = make([]cron.EntryID, n, n)
-	for s, id := range c.EntryIds {
-		keys[cnt] = s
-		vals[cnt] = id
-		cnt++
-	}
-	return
-}
-
 // RunAll 开始执行所有任务
 func (c *Crontab) RunAll() {
 	if c.Enable {

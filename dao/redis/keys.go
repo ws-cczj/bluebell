@@ -34,6 +34,7 @@ const (
 // addKeyPrefix 添加对象前缀
 func addKeyPrefix(keys ...string) string {
 	var build strings.Builder
+	build.Grow(len(keys) + 1)
 	build.WriteString(KeyPrefix)
 	for _, key := range keys {
 		build.WriteString(key)

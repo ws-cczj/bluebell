@@ -8,7 +8,6 @@ import (
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
-	"go.uber.org/zap"
 )
 
 var (
@@ -18,22 +17,19 @@ var (
 	ErrorNotComparePwd = errors.New("用户密码不匹配")
 )
 
-func InitMysql(cfg *settings.MysqlConfig) (err error) {
+func InitMysql() {
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True",
-		cfg.Username,
-		cfg.Password,
-		cfg.Host,
-		cfg.Port,
-		cfg.Dbname)
-	db, err = sqlx.Connect("mysql", dsn)
-	if err != nil {
-		// -- 将日志记录到日志库中
-		zap.L().Error("mysql connect is fail", zap.Error(err))
-		return err
+		settings.Conf.Mdb.Username,
+		settings.Conf.Mdb.Password,
+		settings.Conf.Mdb.Host,
+		settings.Conf.Mdb.Port,
+		settings.Conf.Mdb.Dbname)
+	var err error
+	if db, err = sqlx.Connect("mysql", dsn); err != nil {
+		panic(fmt.Errorf("mysql connect fail, err: %s", err))
 	}
-	db.SetMaxIdleConns(cfg.MaxIdles)
-	db.SetMaxOpenConns(cfg.MaxOpens)
-	return nil
+	db.SetMaxIdleConns(settings.Conf.Mdb.MaxIdles)
+	db.SetMaxOpenConns(settings.Conf.Mdb.MaxOpens)
 }
 
 func Close() {

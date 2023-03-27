@@ -17,18 +17,6 @@ func (l Log) Error(err error, msg string, keysAndValues ...interface{}) {
 	l.Logger.Error(msg, zapKVHandler(keysAndValues)...)
 }
 
-//// formatTimes formats any time.Time values as "2006-01-02 15:04:05".
-//func formatTimes(keysAndValues []interface{}) []interface{} {
-//	var formattedArgs []interface{}
-//	for _, arg := range keysAndValues {
-//		if t, ok := arg.(time.Time); ok {
-//			arg = t.Format("2006-01-02 15:04:05")
-//		}
-//		formattedArgs = append(formattedArgs, arg)
-//	}
-//	return formattedArgs
-//}
-
 // zapKVHandler 将key 和 values 处理为zapAny
 func zapKVHandler(keysAndValues ...interface{}) []zap.Field {
 	var kvs []zap.Field

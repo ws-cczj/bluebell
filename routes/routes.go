@@ -12,31 +12,33 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Setup(cfg *settings.AppConfig) *gin.Engine {
-	if cfg.Mode == gin.ReleaseMode {
-		gin.SetMode(cfg.Mode)
+func Setup() *gin.Engine {
+	if settings.Conf.Mode == gin.ReleaseMode {
+		gin.SetMode(gin.ReleaseMode)
 	}
 	if err := silr.InitTrans("zh"); err != nil {
 		zap.L().Error("init translation fail!", zap.Error(err))
 	}
 	r := gin.New()
 	r.Use(logger.GinLogger(), logger.GinRecovery(true),
-		middleware.RateLimitMiddleware(cfg.GenInterval, cfg.MaxCaps))
+		middleware.RateLimitMiddleware(settings.Conf.GenInterval, settings.Conf.MaxCaps))
 
 	//pprof.Register(r)
 	// api/v1
 	v1 := r.Group("/api/v1")
-	v1.POST("/register", api.UserRegisterHandler)
-	v1.POST("/login", api.UserLoginHandler)
-	// community 社区
-	v1.GET("/community", api.CommunityHandler)
-	v1.GET("/community/:cid", api.CommunityDetailHandler)
-	v1.GET("/community/:cid/posts", api.CommunityPostHandler)
-	// post 帖子
-	v1.GET("/posts", api.PostListHandler)
-	v1.GET("/post/:pid", api.PostDetailHandler)
-	// comment 评论
-	v1.GET("/comment/:pid", api.CommentListHandler)
+	{
+		v1.POST("/register", api.UserRegisterHandler)
+		v1.POST("/login", api.UserLoginHandler)
+		// community 社区
+		v1.GET("/community", api.CommunityHandler)
+		v1.GET("/community/:cid", api.CommunityDetailHandler)
+		v1.GET("/community/:cid/posts", api.CommunityPostHandler)
+		// post 帖子
+		v1.GET("/posts", api.PostListHandler)
+		v1.GET("/post/:pid", api.PostDetailHandler)
+		// comment 评论
+		v1.GET("/comment/:pid", api.CommentListHandler)
+	}
 	// jwt auth 用户认证
 	v1.Use(middleware.JWTAuthMiddleware())
 	{

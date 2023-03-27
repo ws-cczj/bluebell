@@ -4708,3 +4708,132 @@
 [2023-01-27 23:40:44]	[34mINFO[0m	logger/crontablogger.go:12	stop
 [2023-01-27 23:40:44]	[35mDEBUG[0m	bluebell/main.go:79	Shutdown Server...
 [2023-01-27 23:40:44]	[35mDEBUG[0m	bluebell/main.go:87	Server exiting...
+[2023-02-10 17:45:33]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-02-10 17:45:33]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-02-10 17:45:33]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-02-10 17:45:33]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-02-10 17:46:39]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/posts	{"status": 200, "Method": "GET", "query": "", "ip": "::1", "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36 Edg/109.0.1518.78", "cost": 0.0459855}
+[2023-02-10 17:46:40]	[34mINFO[0m	logger/ginlogger.go:25	/favicon.ico	{"status": 404, "Method": "GET", "query": "", "ip": "::1", "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36 Edg/109.0.1518.78", "cost": 0}
+[2023-02-10 17:49:36]	[34mINFO[0m	logger/crontablogger.go:12	stop
+[2023-02-10 17:49:39]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-02-10 17:49:39]	[35mDEBUG[0m	crontab/taskExec.go:49	帖子被删除清除数据任务开启!
+[2023-02-10 17:49:39]	[35mDEBUG[0m	crontab/taskExec.go:68	监视任务执行情况开启!
+[2023-02-10 17:49:39]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-02-10 17:49:39]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-02-10 17:49:39]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-02-10 17:49:39]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-02-10 17:49:41]	[34mINFO[0m	logger/crontablogger.go:12	stop
+[2023-02-10 17:49:41]	[35mDEBUG[0m	bluebell/main.go:54	Shutdown Server...
+{"level":"\u001b[34mINFO\u001b[0m","ts":"[2023-02-10 17:57:35]","caller":"logger/crontablogger.go:12","msg":"start"}
+{"level":"\u001b[34mINFO\u001b[0m","ts":"[2023-02-10 17:57:35]","caller":"logger/crontablogger.go:12","msg":"schedule"}
+{"level":"\u001b[34mINFO\u001b[0m","ts":"[2023-02-10 17:57:35]","caller":"logger/crontablogger.go:12","msg":"schedule"}
+{"level":"\u001b[34mINFO\u001b[0m","ts":"[2023-02-10 17:57:35]","caller":"logger/crontablogger.go:12","msg":"schedule"}
+{"level":"\u001b[34mINFO\u001b[0m","ts":"[2023-02-10 18:00:00]","caller":"logger/crontablogger.go:12","msg":"wake"}
+{"level":"\u001b[34mINFO\u001b[0m","ts":"[2023-02-10 18:00:00]","caller":"logger/crontablogger.go:12","msg":"run"}
+{"level":"\u001b[34mINFO\u001b[0m","ts":"[2023-02-10 18:00:00]","caller":"crontab/taskExec.go:57","msg":"定时任务日志:","[执行]:":"帖子投票时间过期任务","[Id]:":1,"[上次执行时间]:":"[2023-02-10 17:57:35]","[下次执行时间]:":"[2023-02-11 02:00:00]"}
+{"level":"\u001b[34mINFO\u001b[0m","ts":"[2023-02-10 18:00:00]","caller":"crontab/taskExec.go:57","msg":"定时任务日志:","[执行]:":"帖子被删除清除数据任务","[Id]:":2,"[上次执行时间]:":"[2023-02-10 17:57:35]","[下次执行时间]:":"[2023-02-11 00:00:00]"}
+{"level":"\u001b[34mINFO\u001b[0m","ts":"[2023-02-10 18:00:00]","caller":"crontab/taskExec.go:57","msg":"定时任务日志:","[执行]:":"监视任务执行情况","[Id]:":3,"[上次执行时间]:":"[2023-02-10 17:57:35]","[下次执行时间]:":"[2023-02-10 20:00:00]"}
+{"level":"\u001b[34mINFO\u001b[0m","ts":"[2023-02-10 18:00:01]","caller":"logger/crontablogger.go:12","msg":"stop"}
+[2023-02-10 18:00:48]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-02-10 18:00:48]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-02-10 18:00:48]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-02-10 18:00:48]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-02-10 18:01:10]	[34mINFO[0m	logger/ginlogger.go:25	/api/v1/posts	{"status": 200, "Method": "GET", "query": "", "ip": "::1", "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36 Edg/109.0.1518.78", "cost": 0.0037624}
+[2023-02-10 18:02:58]	[34mINFO[0m	logger/crontablogger.go:12	stop
+[2023-02-10 18:35:14]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-02-10 18:35:14]	[35mDEBUG[0m	crontab/taskExec.go:49	帖子被删除清除数据任务开启!
+[2023-02-10 18:35:14]	[35mDEBUG[0m	crontab/taskExec.go:68	监视任务执行情况开启!
+[2023-02-10 18:35:14]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-02-10 18:35:14]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-02-10 18:35:14]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-02-10 18:35:14]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-02-10 18:35:36]	[34mINFO[0m	logger/crontablogger.go:12	stop
+[2023-02-10 18:35:36]	[35mDEBUG[0m	bluebell/main.go:53	Shutdown Server...
+[2023-02-10 22:22:17]	[34mINFO[0m	bluebell/main.go:22	test info	{"test String": "ok", "test cnt": 1}
+[2023-02-10 22:22:17]	[35mDEBUG[0m	bluebell/main.go:23	test debug	{"test String": "ok", "test cnt": 2}
+[2023-02-10 22:22:17]	[31mERROR[0m	bluebell/main.go:24	test error	{"test String": "ok", "test cnt": 3}
+[2023-02-10 22:22:17]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-02-10 22:22:17]	[35mDEBUG[0m	crontab/taskExec.go:49	帖子被删除清除数据任务开启!
+[2023-02-10 22:22:17]	[35mDEBUG[0m	crontab/taskExec.go:68	监视任务执行情况开启!
+[2023-02-10 22:22:17]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-02-10 22:22:17]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-02-10 22:22:17]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-02-10 22:22:17]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-02-10 22:45:34]	[34mINFO[0m	logger/crontablogger.go:12	stop
+[2023-02-10 22:45:34]	[35mDEBUG[0m	bluebell/main.go:55	Shutdown Server...
+[2023-02-10 22:45:55]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-02-10 22:45:55]	[35mDEBUG[0m	crontab/taskExec.go:49	帖子被删除清除数据任务开启!
+[2023-02-10 22:45:55]	[35mDEBUG[0m	crontab/taskExec.go:68	监视任务执行情况开启!
+[2023-02-10 22:47:11]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-02-10 22:47:11]	[35mDEBUG[0m	crontab/taskExec.go:49	帖子被删除清除数据任务开启!
+[2023-02-10 22:47:11]	[35mDEBUG[0m	crontab/taskExec.go:68	监视任务执行情况开启!
+[2023-02-10 22:47:11]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-02-10 22:47:11]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-02-10 22:47:11]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-02-10 22:47:11]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-02-10 22:47:18]	[34mINFO[0m	logger/crontablogger.go:12	stop
+[2023-02-10 22:47:18]	[35mDEBUG[0m	bluebell/main.go:55	Shutdown Server...
+[2023-02-10 22:50:10]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-02-10 22:50:10]	[35mDEBUG[0m	crontab/taskExec.go:49	帖子被删除清除数据任务开启!
+[2023-02-10 22:50:10]	[35mDEBUG[0m	crontab/taskExec.go:68	监视任务执行情况开启!
+[2023-02-10 22:52:55]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-02-10 22:52:55]	[35mDEBUG[0m	crontab/taskExec.go:49	帖子被删除清除数据任务开启!
+[2023-02-10 22:52:55]	[35mDEBUG[0m	crontab/taskExec.go:68	监视任务执行情况开启!
+[2023-02-10 22:52:55]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-02-10 22:52:55]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-02-10 22:52:55]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-02-10 22:52:55]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-02-10 22:53:10]	[31mERROR[0m	logger/ginlogger.go:75	[Recovery from panic]	{"error": "runtime error: invalid memory address or nil pointer dereference", "request": "GET /api/v1/test HTTP/1.1\r\nHost: localhost:4399\r\nAccept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9\r\nAccept-Encoding: gzip, deflate, br\r\nAccept-Language: zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6,zh-TW;q=0.5\r\nConnection: keep-alive\r\nCookie: Idea-ae6c57af=633334f6-7f38-43e0-b449-208187bc886b\r\nSec-Ch-Ua: \"Not_A Brand\";v=\"99\", \"Microsoft Edge\";v=\"109\", \"Chromium\";v=\"109\"\r\nSec-Ch-Ua-Mobile: ?0\r\nSec-Ch-Ua-Platform: \"Windows\"\r\nSec-Fetch-Dest: document\r\nSec-Fetch-Mode: navigate\r\nSec-Fetch-Site: none\r\nSec-Fetch-User: ?1\r\nUpgrade-Insecure-Requests: 1\r\nUser-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36 Edg/109.0.1518.78\r\n\r\n"}
+[2023-02-10 22:53:10]	[31mERROR[0m	logger/ginlogger.go:78	[Recovery from Stack panic]	{"stack": "goroutine 82 [running]:\nruntime/debug.Stack()\n\tC:/Environment/Go/src/runtime/debug/stack.go:24 +0x65\nbluebell/logger.GinRecovery.func1.1()\n\tC:/Users/18446/GolandProjects/project/bluebell/logger/ginlogger.go:69 +0x1c5\npanic({0x5b9a20, 0xa63080})\n\tC:/Environment/Go/src/runtime/panic.go:884 +0x212\ngithub.com/robfig/cron/v3.(*Cron).Start(0x0)\n\tC:/Environment/Go/go_work/pkg/mod/github.com/robfig/cron/v3@v3.0.1/cron.go:216 +0x38\nbluebell/crontab.(*Crontab).RunAll(...)\n\tC:/Users/18446/GolandProjects/project/bluebell/crontab/crontab.go:59\nbluebell/api.Test(0xc0000868a0?)\n\tC:/Users/18446/GolandProjects/project/bluebell/api/user.go:143 +0x3e\ngithub.com/gin-gonic/gin.(*Context).Next(...)\n\tC:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/context.go:173\nbluebell/middleware.RateLimitMiddleware.func1(0xc0000ea400)\n\tC:/Users/18446/GolandProjects/project/bluebell/middleware/ratelimit.go:24 +0xb4\ngithub.com/gin-gonic/gin.(*Context).Next(...)\n\tC:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/context.go:173\nbluebell/logger.GinRecovery.func1(0xc0000ea400)\n\tC:/Users/18446/GolandProjects/project/bluebell/logger/ginlogger.go:88 +0x76\ngithub.com/gin-gonic/gin.(*Context).Next(...)\n\tC:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/context.go:173\nbluebell/logger.GinLogger.func1(0xc0000ea400)\n\tC:/Users/18446/GolandProjects/project/bluebell/logger/ginlogger.go:22 +0xa2\ngithub.com/gin-gonic/gin.(*Context).Next(...)\n\tC:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/context.go:173\ngithub.com/gin-gonic/gin.(*Engine).handleHTTPRequest(0xc000505520, 0xc0000ea400)\n\tC:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/gin.go:616 +0x671\ngithub.com/gin-gonic/gin.(*Engine).ServeHTTP(0xc000505520, {0x745ec8?, 0xc0003a8000}, 0xc0000ea200)\n\tC:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/gin.go:572 +0x1dd\nnet/http.serverHandler.ServeHTTP({0xc0000e8570?}, {0x745ec8, 0xc0003a8000}, 0xc0000ea200)\n\tC:/Environment/Go/src/net/http/server.go:2947 +0x30c\nnet/http.(*conn).serve(0xc0003e60a0, {0x746780, 0xc000348390})\n\tC:/Environment/Go/src/net/http/server.go:1991 +0x607\ncreated by net/http.(*Server).Serve\n\tC:/Environment/Go/src/net/http/server.go:3102 +0x4db\n"}
+[2023-02-10 22:53:10]	[31mERROR[0m	logger/ginlogger.go:27		{"status": 500, "method": "GET", "path": "/api/v1/test", "ip": "::1", "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36 Edg/109.0.1518.78", "errors": "", "cost": 0.0021507}
+[2023-02-10 22:58:40]	[35mDEBUG[0m	bluebell/main.go:52	Shutdown Server...
+[2023-02-10 22:58:40]	[34mINFO[0m	logger/crontablogger.go:12	stop
+[2023-02-10 22:58:42]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-02-10 22:58:42]	[35mDEBUG[0m	crontab/taskExec.go:49	帖子被删除清除数据任务开启!
+[2023-02-10 22:58:42]	[35mDEBUG[0m	crontab/taskExec.go:68	监视任务执行情况开启!
+[2023-02-10 22:58:42]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-02-10 22:58:42]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-02-10 22:58:42]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-02-10 22:58:42]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-02-10 22:58:45]	[31mERROR[0m	logger/ginlogger.go:71	[Recovery from panic]	{"error": "runtime error: invalid memory address or nil pointer dereference"}
+[2023-02-10 22:58:45]	[31mERROR[0m	logger/ginlogger.go:74	[Recovery from request panic]	{"request": "GET /api/v1/test HTTP/1.1"}
+[2023-02-10 22:58:45]	[31mERROR[0m	logger/ginlogger.go:74	[Recovery from request panic]	{"request": "Host: localhost:4399"}
+[2023-02-10 22:58:45]	[31mERROR[0m	logger/ginlogger.go:74	[Recovery from request panic]	{"request": "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9"}
+[2023-02-10 22:58:45]	[31mERROR[0m	logger/ginlogger.go:74	[Recovery from request panic]	{"request": "Accept-Encoding: gzip, deflate, br"}
+[2023-02-10 22:58:45]	[31mERROR[0m	logger/ginlogger.go:74	[Recovery from request panic]	{"request": "Accept-Language: zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6,zh-TW;q=0.5"}
+[2023-02-10 22:58:45]	[31mERROR[0m	logger/ginlogger.go:74	[Recovery from request panic]	{"request": "Cache-Control: max-age=0"}
+[2023-02-10 22:58:45]	[31mERROR[0m	logger/ginlogger.go:74	[Recovery from request panic]	{"request": "Connection: keep-alive"}
+[2023-02-10 22:58:45]	[31mERROR[0m	logger/ginlogger.go:74	[Recovery from request panic]	{"request": "Cookie: Idea-ae6c57af=633334f6-7f38-43e0-b449-208187bc886b"}
+[2023-02-10 22:58:45]	[31mERROR[0m	logger/ginlogger.go:74	[Recovery from request panic]	{"request": "Sec-Ch-Ua: \"Not_A Brand\";v=\"99\", \"Microsoft Edge\";v=\"109\", \"Chromium\";v=\"109\""}
+[2023-02-10 22:58:45]	[31mERROR[0m	logger/ginlogger.go:74	[Recovery from request panic]	{"request": "Sec-Ch-Ua-Mobile: ?0"}
+[2023-02-10 22:58:45]	[31mERROR[0m	logger/ginlogger.go:74	[Recovery from request panic]	{"request": "Sec-Ch-Ua-Platform: \"Windows\""}
+[2023-02-10 22:58:45]	[31mERROR[0m	logger/ginlogger.go:74	[Recovery from request panic]	{"request": "Sec-Fetch-Dest: document"}
+[2023-02-10 22:58:45]	[31mERROR[0m	logger/ginlogger.go:74	[Recovery from request panic]	{"request": "Sec-Fetch-Mode: navigate"}
+[2023-02-10 22:58:45]	[31mERROR[0m	logger/ginlogger.go:74	[Recovery from request panic]	{"request": "Sec-Fetch-Site: none"}
+[2023-02-10 22:58:45]	[31mERROR[0m	logger/ginlogger.go:74	[Recovery from request panic]	{"request": "Sec-Fetch-User: ?1"}
+[2023-02-10 22:58:45]	[31mERROR[0m	logger/ginlogger.go:74	[Recovery from request panic]	{"request": "Upgrade-Insecure-Requests: 1"}
+[2023-02-10 22:58:45]	[31mERROR[0m	logger/ginlogger.go:74	[Recovery from request panic]	{"request": "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36 Edg/109.0.1518.78"}
+[2023-02-10 22:58:45]	[31mERROR[0m	logger/ginlogger.go:74	[Recovery from request panic]	{"request": ""}
+[2023-02-10 22:58:45]	[31mERROR[0m	logger/ginlogger.go:74	[Recovery from request panic]	{"request": ""}
+[2023-02-10 22:58:45]	[31mERROR[0m	logger/ginlogger.go:77	[Recovery from Stack panic]	{"stack": "goroutine 33 [running]:\nruntime/debug.Stack()"}
+[2023-02-10 22:58:45]	[31mERROR[0m	logger/ginlogger.go:77	[Recovery from Stack panic]	{"stack": "C:/Environment/Go/src/runtime/debug/stack.go:24 +0x65\nbluebell/logger.GinRecovery.func1.1()"}
+[2023-02-10 22:58:45]	[31mERROR[0m	logger/ginlogger.go:77	[Recovery from Stack panic]	{"stack": "C:/Users/18446/GolandProjects/project/bluebell/logger/ginlogger.go:69 +0x1e5\npanic({0xf19a20, 0x13c3080})"}
+[2023-02-10 22:58:45]	[31mERROR[0m	logger/ginlogger.go:77	[Recovery from Stack panic]	{"stack": "C:/Environment/Go/src/runtime/panic.go:884 +0x212\ngithub.com/robfig/cron/v3.(*Cron).Start(0x0)"}
+[2023-02-10 22:58:45]	[31mERROR[0m	logger/ginlogger.go:77	[Recovery from Stack panic]	{"stack": "C:/Environment/Go/go_work/pkg/mod/github.com/robfig/cron/v3@v3.0.1/cron.go:216 +0x38\nbluebell/crontab.(*Crontab).RunAll(...)"}
+[2023-02-10 22:58:45]	[31mERROR[0m	logger/ginlogger.go:77	[Recovery from Stack panic]	{"stack": "C:/Users/18446/GolandProjects/project/bluebell/crontab/crontab.go:59\nbluebell/api.Test(0xc00008c8a0?)"}
+[2023-02-10 22:58:45]	[31mERROR[0m	logger/ginlogger.go:77	[Recovery from Stack panic]	{"stack": "C:/Users/18446/GolandProjects/project/bluebell/api/user.go:143 +0x3e\ngithub.com/gin-gonic/gin.(*Context).Next(...)"}
+[2023-02-10 22:58:45]	[31mERROR[0m	logger/ginlogger.go:77	[Recovery from Stack panic]	{"stack": "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/context.go:173\nbluebell/middleware.RateLimitMiddleware.func1(0xc0001c6200)"}
+[2023-02-10 22:58:45]	[31mERROR[0m	logger/ginlogger.go:77	[Recovery from Stack panic]	{"stack": "C:/Users/18446/GolandProjects/project/bluebell/middleware/ratelimit.go:24 +0xb4\ngithub.com/gin-gonic/gin.(*Context).Next(...)"}
+[2023-02-10 22:58:45]	[31mERROR[0m	logger/ginlogger.go:77	[Recovery from Stack panic]	{"stack": "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/context.go:173\nbluebell/logger.GinRecovery.func1(0xc0001c6200)"}
+[2023-02-10 22:58:45]	[31mERROR[0m	logger/ginlogger.go:77	[Recovery from Stack panic]	{"stack": "C:/Users/18446/GolandProjects/project/bluebell/logger/ginlogger.go:89 +0x76\ngithub.com/gin-gonic/gin.(*Context).Next(...)"}
+[2023-02-10 22:58:45]	[31mERROR[0m	logger/ginlogger.go:77	[Recovery from Stack panic]	{"stack": "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/context.go:173\nbluebell/logger.GinLogger.func1(0xc0001c6200)"}
+[2023-02-10 22:58:45]	[31mERROR[0m	logger/ginlogger.go:77	[Recovery from Stack panic]	{"stack": "C:/Users/18446/GolandProjects/project/bluebell/logger/ginlogger.go:22 +0xa2\ngithub.com/gin-gonic/gin.(*Context).Next(...)"}
+[2023-02-10 22:58:45]	[31mERROR[0m	logger/ginlogger.go:77	[Recovery from Stack panic]	{"stack": "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/context.go:173\ngithub.com/gin-gonic/gin.(*Engine).handleHTTPRequest(0xc0005056c0, 0xc0001c6200)"}
+[2023-02-10 22:58:45]	[31mERROR[0m	logger/ginlogger.go:77	[Recovery from Stack panic]	{"stack": "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/gin.go:616 +0x671\ngithub.com/gin-gonic/gin.(*Engine).ServeHTTP(0xc0005056c0, {0x10a5f68?, 0xc00039c000}, 0xc0001c6100)"}
+[2023-02-10 22:58:45]	[31mERROR[0m	logger/ginlogger.go:77	[Recovery from Stack panic]	{"stack": "C:/Environment/Go/go_work/pkg/mod/github.com/gin-gonic/gin@v1.8.1/gin.go:572 +0x1dd\nnet/http.serverHandler.ServeHTTP({0xc0004025d0?}, {0x10a5f68, 0xc00039c000}, 0xc0001c6100)"}
+[2023-02-10 22:58:45]	[31mERROR[0m	logger/ginlogger.go:77	[Recovery from Stack panic]	{"stack": "C:/Environment/Go/src/net/http/server.go:2947 +0x30c\nnet/http.(*conn).serve(0xc0000a0e60, {0x10a6820, 0xc0003bacf0})"}
+[2023-02-10 22:58:45]	[31mERROR[0m	logger/ginlogger.go:77	[Recovery from Stack panic]	{"stack": "C:/Environment/Go/src/net/http/server.go:1991 +0x607\ncreated by net/http.(*Server).Serve"}
+[2023-02-10 22:58:45]	[31mERROR[0m	logger/ginlogger.go:77	[Recovery from Stack panic]	{"stack": "C:/Environment/Go/src/net/http/server.go:3102 +0x4db\n"}
+[2023-02-10 22:58:45]	[31mERROR[0m	logger/ginlogger.go:27		{"status": 500, "method": "GET", "path": "/api/v1/test", "ip": "::1", "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36 Edg/109.0.1518.78", "errors": "", "cost": 0.0063364}
+[2023-02-10 23:03:07]	[34mINFO[0m	logger/crontablogger.go:12	stop
+[2023-02-10 23:03:07]	[35mDEBUG[0m	bluebell/main.go:52	Shutdown Server...

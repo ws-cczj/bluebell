@@ -5,93 +5,57 @@ import (
 	"os"
 	"time"
 
-	"github.com/gin-gonic/gin"
 	"github.com/natefinch/lumberjack"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
 
-// InitLogger 初始化日志
-func InitLogger(cfg *settings.LogConfig) error {
-	encoder := getEncode()
-	syncer := getLogWriter(
-		cfg.Filename,
-		cfg.MaxSize,
-		cfg.MaxAge,
-		cfg.MaxBackups,
-	)
-	var l = new(zapcore.Level)
-	err := l.UnmarshalText([]byte(cfg.Level))
-	if err != nil {
-		return err
-	}
+// init 初始化日志库
+func init() {
+	encoderConfig := zap.NewProductionEncoderConfig()
+	// 打印级别为大写 & 彩色
+	encoderConfig.EncodeLevel = zapcore.CapitalColorLevelEncoder
+	// 时间编码进行指定格式解析
+	encoderConfig.EncodeTime = parseTime(settings.Conf.Layout)
 
-	// -- 用于开发者模式将日志打印到控制台
+	// 日志输出配置, 借助另外一个库 lumberjack 协助完成日志切割。
+	lumberjackLogger := &lumberjack.Logger{
+		Filename:   settings.Conf.Filename,   // -- 日志文件名
+		MaxSize:    settings.Conf.MaxSize,    // -- 最大日志数 M为单位!!!
+		MaxAge:     settings.Conf.MaxAge,     // -- 最大存在天数
+		MaxBackups: settings.Conf.MaxBackups, // -- 最大备份数量
+		Compress:   false,                    // --是否压缩
+	}
+	syncer := zapcore.AddSync(lumberjackLogger)
+
+	// -- 用于开发者模式和生产模式之间的切换
 	var core zapcore.Core
-	if settings.Conf.AppConfig.Mode == gin.DebugMode {
+	if settings.Conf.AppConfig.Mode == "debug" {
+		encoder := zapcore.NewConsoleEncoder(encoderConfig)
 		core = zapcore.NewTee(
-			zapcore.NewCore(encoder, syncer, l),
-			zapcore.NewCore(encoder, zapcore.Lock(os.Stdout), l),
+			zapcore.NewCore(encoder, syncer, zapcore.DebugLevel),
+			zapcore.NewCore(encoder, zapcore.Lock(os.Stdout), zapcore.DebugLevel),
 		)
 	} else {
-		core = zapcore.NewCore(encoder, syncer, l)
+		encoder := zapcore.NewJSONEncoder(encoderConfig)
+		core = zapcore.NewCore(encoder, syncer, zapcore.InfoLevel)
 	}
-
 	lg := zap.New(core, zap.AddCaller()) // --添加函数调用信息
-	zap.ReplaceGlobals(lg)               // -- 将日志替换到全局的zaplogger中去
-	return nil
+	zap.ReplaceGlobals(lg)               // 替换该日志为全局日志
 }
 
-// getEncode 进行自定义的日志输出格式
-func getEncode() zapcore.Encoder {
-	encoderConfig := zap.NewProductionEncoderConfig()
-	// -- 自定义时间格式
-	encoderConfig = zapcore.EncoderConfig{
-		TimeKey:        "ts",
-		LevelKey:       "level",
-		NameKey:        "logger",
-		CallerKey:      "caller",
-		FunctionKey:    zapcore.OmitKey,
-		MessageKey:     "msg",
-		StacktraceKey:  "stacktrace",
-		LineEnding:     zapcore.DefaultLineEnding,
-		EncodeLevel:    zapcore.CapitalColorLevelEncoder,
-		EncodeTime:     getEncodeTime(),
-		EncodeDuration: zapcore.SecondsDurationEncoder,
-		EncodeCaller:   zapcore.ShortCallerEncoder,
-	}
-	return zapcore.NewConsoleEncoder(encoderConfig)
-}
-
-// getLogWriter 进行日志切割
-func getLogWriter(filename string, max_size, max_age, max_backups int) zapcore.WriteSyncer {
-	lumberjackLogger := &lumberjack.Logger{
-		Filename:   filename,    // -- 日志文件名
-		MaxSize:    max_size,    // -- 最大日志数 M为单位!!!
-		MaxAge:     max_age,     // -- 最大存在天数
-		MaxBackups: max_backups, // -- 最大备份数量
-		Compress:   false,       // --是否压缩
-	}
-	return zapcore.AddSync(lumberjackLogger)
-}
-
-// encodeTimeLayout 进行时间格式的解析
-func encodeTimeLayout(t time.Time, layout string, enc zapcore.PrimitiveArrayEncoder) {
-	type appendTimeEncoder interface {
-		AppendTimeLayout(time.Time, string)
-	}
-
-	if enc, ok := enc.(appendTimeEncoder); ok {
-		enc.AppendTimeLayout(t, layout)
-		return
-	}
-
-	enc.AppendString(t.Format(layout))
-}
-
-// getEncodeTime 自定义的日志打印时间格式
-func getEncodeTime() func(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
+// parseTime 进行时间格式处理
+func parseTime(layout string) zapcore.TimeEncoder {
 	return func(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
-		encodeTimeLayout(t, "[2006-01-02 15:04:05]", enc)
+		type appendTimeEncoder interface {
+			AppendTimeLayout(time.Time, string)
+		}
+
+		if enc, ok := enc.(appendTimeEncoder); ok {
+			enc.AppendTimeLayout(t, layout)
+			return
+		}
+
+		enc.AppendString(t.Format(layout))
 	}
 }
