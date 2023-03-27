@@ -11,7 +11,6 @@ import (
 
 type Crontab struct {
 	*cron.Cron
-	Enable   bool
 	PreTime  map[cron.EntryID]time.Time
 	EntryIds map[Task]cron.EntryID
 }
@@ -35,27 +34,16 @@ func NewCrontabInstance() *Crontab {
 
 // RunAll 开始执行所有任务
 func (c *Crontab) RunAll() {
-	if c.Enable {
-		return
-	}
-	c.Enable = true
 	c.Cron.Start()
 }
 
 // StopAll 停止所有任务的执行
 func (c *Crontab) StopAll() {
-	if !c.Enable {
-		return
-	}
 	c.Cron.Stop()
-	c.Enable = false
 }
 
 // RemoveTask 移除任务
 func (c *Crontab) RemoveTask(t Task) {
-	if !c.Enable {
-		return
-	}
 	entryIds := c.EntryIds
 	if id, ok := entryIds[t]; ok {
 		c.Cron.Remove(id)
