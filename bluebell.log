@@ -4837,3 +4837,14 @@
 [2023-02-10 22:58:45]	[31mERROR[0m	logger/ginlogger.go:27		{"status": 500, "method": "GET", "path": "/api/v1/test", "ip": "::1", "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36 Edg/109.0.1518.78", "errors": "", "cost": 0.0063364}
 [2023-02-10 23:03:07]	[34mINFO[0m	logger/crontablogger.go:12	stop
 [2023-02-10 23:03:07]	[35mDEBUG[0m	bluebell/main.go:52	Shutdown Server...
+[2023-04-01 14:06:03]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-04-01 14:06:03]	[35mDEBUG[0m	crontab/taskExec.go:49	帖子被删除清除数据任务开启!
+[2023-04-01 14:06:03]	[35mDEBUG[0m	crontab/taskExec.go:68	监视任务执行情况开启!
+[2023-04-01 14:06:03]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-04-01 14:06:03]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-04-01 14:06:03]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-04-01 14:06:03]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-04-01 14:12:13]	[31mERROR[0m	logger/ginlogger.go:27		{"status": 404, "method": "GET", "path": "/favicon.ico", "ip": "::1", "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36 Edg/111.0.1661.62", "errors": "", "cost": 0}
+[2023-04-01 14:14:55]	[31mERROR[0m	logger/ginlogger.go:27		{"status": 503, "method": "GET", "path": "/api/v1/user/communitys", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "errors": "", "cost": 0.0009142}
+[2023-04-01 14:15:10]	[31mERROR[0m	logger/ginlogger.go:27		{"status": 503, "method": "GET", "path": "/api/v1/user/10002281952972800/to_follow", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "errors": "", "cost": 0}
+[2023-04-01 14:35:26]	[35mDEBUG[0m	bluebell/main.go:46	Shutdown Server...

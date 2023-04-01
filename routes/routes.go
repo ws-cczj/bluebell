@@ -20,8 +20,8 @@ func Setup() *gin.Engine {
 		zap.L().Error("init translation fail!", zap.Error(err))
 	}
 	r := gin.New()
-	r.Use(logger.GinLogger(), logger.GinRecovery(true),
-		middleware.RateLimitMiddleware(settings.Conf.GenInterval, settings.Conf.MaxCaps))
+	r.Use(middleware.Cors(), logger.GinLogger(), logger.GinRecovery(true),
+		middleware.RateLimit(settings.Conf.GenInterval, settings.Conf.MaxCaps))
 
 	//pprof.Register(r)
 	// api/v1
@@ -45,9 +45,9 @@ func Setup() *gin.Engine {
 		// user 用户
 		v1.GET("/user/communitys", api.UserCommunityHandler)
 		v1.GET("/user/posts", api.UserPostsHandler)
-		v1.POST("user/follow", api.UserFollowHandler)
-		v1.GET("user/:uid/to_follow", api.UserToFollowListHandler)
-		v1.GET("user/:uid/follow", api.UserFollowListHandler)
+		v1.POST("/user/follow", api.UserFollowHandler)
+		v1.GET("/user/:uid/to_follow", api.UserToFollowListHandler)
+		v1.GET("/user/:uid/follow", api.UserFollowListHandler)
 		// community 社区
 		v1.POST("/community", api.CommunityCreateHandler)
 		// post 帖子

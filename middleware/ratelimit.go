@@ -9,8 +9,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// RateLimitMiddleware 令牌桶限流中间件
-func RateLimitMiddleware(fillInterval, cap int64) func(c *gin.Context) {
+// RateLimit 令牌桶限流中间件
+func RateLimit(fillInterval, cap int64) func(c *gin.Context) {
 	bucket := ratelimit.NewBucket(time.Duration(fillInterval)*time.Second, cap)
 	return func(c *gin.Context) {
 		// 如果取不到令牌就中断本次请求返回 rate limit...
