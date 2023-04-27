@@ -7,13 +7,14 @@ import (
 	"bluebell/service"
 	"strconv"
 
-	"github.com/gin-gonic/gin"
+	"github.com/ws-cczj/gee"
+
 	"go.uber.org/zap"
 )
 
 // CommunityCreateHandler 创建社区
-func CommunityCreateHandler(c *gin.Context) {
-	community := new(models.CommunityDetail)
+func CommunityCreateHandler(c *gee.Context) {
+	community := models.NewCommunityDetail()
 	if err := c.ShouldBind(community); err != nil {
 		zap.L().Error("Community Create params is not illegal", zap.Error(err))
 		silr.ResponseValidatorError(c, err)
@@ -30,8 +31,8 @@ func CommunityCreateHandler(c *gin.Context) {
 		silr.ResponseError(c, e.TokenInvalidAuth)
 		return
 	}
-	community.Community.AuthorId = uid
-	community.Community.AuthorName = uname
+	community.AuthorId = uid
+	community.AuthorName = uname
 	if err = service.NewCommunityInstance().Create(community); err != nil {
 		zap.L().Error("CommunityCreate method err",
 			zap.Error(err))
@@ -42,7 +43,7 @@ func CommunityCreateHandler(c *gin.Context) {
 }
 
 // CommunityHandler 返回社区的列表信息
-func CommunityHandler(c *gin.Context) {
+func CommunityHandler(c *gee.Context) {
 	data, err := service.NewCommunityInstance().List()
 	if err != nil {
 		zap.L().Error("CommunityList select data is failed", zap.Error(err))
@@ -53,7 +54,7 @@ func CommunityHandler(c *gin.Context) {
 }
 
 // CommunityDetailHandler 通过ID获取到详细的社区情况
-func CommunityDetailHandler(c *gin.Context) {
+func CommunityDetailHandler(c *gee.Context) {
 	cidStr := c.Param("cid")
 	cid, err := strconv.ParseInt(cidStr, 10, 32)
 	if err != nil {
@@ -71,7 +72,7 @@ func CommunityDetailHandler(c *gin.Context) {
 }
 
 // CommunityPostHandler 获取该社区的所有帖子
-func CommunityPostHandler(c *gin.Context) {
+func CommunityPostHandler(c *gee.Context) {
 	page, size, order := getPostListInfo(c)
 	cid := c.Param("cid")
 	data, err := service.NewCommunityInstance().PostListInOrder(page, size, cid, order)

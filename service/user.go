@@ -4,10 +4,11 @@ import (
 	"bluebell/dao/mysql"
 	"bluebell/dao/redis"
 	"bluebell/models"
-	"bluebell/pkg/encrypt"
 	"bluebell/pkg/jwt"
 	"bluebell/pkg/snowflake"
 	silr "bluebell/serializer"
+	"crypto/md5"
+	"encoding/hex"
 
 	"go.uber.org/zap"
 )
@@ -28,7 +29,7 @@ func (u User) Register(user *models.UserRegister) (err error) {
 	}
 	// 2. 生成UserID
 	user.UserId = snowflake.GenID()
-	user.Password = encrypt.Md5Password(user.Password)
+	user.Password = Md5Password(user.Password)
 	// 3. 添加用户到数据库
 	if err = mysql.InsertUser(user); err != nil {
 		zap.L().Error("mysql User Insert method err", zap.Error(err))
@@ -38,7 +39,7 @@ func (u User) Register(user *models.UserRegister) (err error) {
 
 // Login 用户登录
 func (User) Login(user *models.UserLogin) (atoken, rtoken string, err error) {
-	pwdParam := encrypt.Md5Password(user.Password)
+	pwdParam := Md5Password(user.Password)
 	if err = mysql.CheckLoginInfo(user); err != nil {
 		zap.L().Error("mysql checkLoginInfo method err", zap.Error(err))
 		return
@@ -97,4 +98,13 @@ func (User) CommunityList(uid string) ([]*models.Community, error) {
 func (User) PostList(uid string) ([]*models.Post, error) {
 	pidNums := redis.GetUserPostNums(uid)
 	return mysql.GetUserPostList(uid, pidNums)
+}
+
+const secret = "cczjblog.top"
+
+// Md5Password 对password进行md5加密处理
+func Md5Password(password string) string {
+	h := md5.New()
+	h.Write([]byte(secret))
+	return hex.EncodeToString(h.Sum([]byte(password)))
 }

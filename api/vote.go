@@ -5,13 +5,13 @@ import (
 	silr "bluebell/serializer"
 	"bluebell/service"
 
-	"go.uber.org/zap"
+	"github.com/ws-cczj/gee"
 
-	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 // PostVotesHandler 帖子投票
-func PostVotesHandler(c *gin.Context) {
+func PostVotesHandler(c *gee.Context) {
 	v := new(service.PostVote)
 	if err := c.ShouldBind(v); err != nil {
 		zap.L().Error("postVote ShouldBind method failed", zap.Error(err))

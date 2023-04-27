@@ -4,7 +4,7 @@ import (
 	"errors"
 	"strconv"
 
-	"github.com/gin-gonic/gin"
+	"github.com/ws-cczj/gee"
 )
 
 const ContextUserIDKey = "user_id"
@@ -13,7 +13,7 @@ const ContextUsernameKey = "username"
 var ErrorUserNotLogin = errors.New("用户还未登录")
 
 // getCurrentUserId 获取当前的userId
-func getCurrentUserId(c *gin.Context) (userID string, err error) {
+func getCurrentUserId(c *gee.Context) (userID string, err error) {
 	uid, ok := c.Get(ContextUserIDKey)
 	if !ok {
 		err = ErrorUserNotLogin
@@ -27,7 +27,7 @@ func getCurrentUserId(c *gin.Context) (userID string, err error) {
 }
 
 // getCurrentUserId 获取当前用户的username
-func getCurrentUsername(c *gin.Context) (username string, err error) {
+func getCurrentUsername(c *gee.Context) (username string, err error) {
 	uname, ok := c.Get(ContextUsernameKey)
 	if !ok {
 		err = ErrorUserNotLogin
@@ -41,7 +41,7 @@ func getCurrentUsername(c *gin.Context) (username string, err error) {
 }
 
 // getPostListInfo 获取帖子的参数信息
-func getPostListInfo(c *gin.Context) (page, size int64, order string) {
+func getPostListInfo(c *gee.Context) (page, size int64, order string) {
 	var err error
 	pageStr := c.Query("page")
 	sizeStr := c.Query("size")

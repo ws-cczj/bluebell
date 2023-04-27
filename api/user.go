@@ -7,13 +7,13 @@ import (
 	silr "bluebell/serializer"
 	"bluebell/service"
 
-	"go.uber.org/zap"
+	"github.com/ws-cczj/gee"
 
-	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 // UserRegisterHandler 响应用户注册
-func UserRegisterHandler(c *gin.Context) {
+func UserRegisterHandler(c *gee.Context) {
 	u := new(models.UserRegister)
 	if err := c.ShouldBind(u); err != nil {
 		zap.L().Error("register params is not illegal", zap.Error(err))
@@ -33,7 +33,7 @@ func UserRegisterHandler(c *gin.Context) {
 }
 
 // UserLoginHandler 响应用户登录
-func UserLoginHandler(c *gin.Context) {
+func UserLoginHandler(c *gee.Context) {
 	u := new(models.UserLogin)
 	if err := c.ShouldBind(u); err != nil {
 		zap.L().Error("register params is not illegal", zap.Error(err))
@@ -57,7 +57,7 @@ func UserLoginHandler(c *gin.Context) {
 }
 
 // UserFollowHandler 用户关注
-func UserFollowHandler(c *gin.Context) {
+func UserFollowHandler(c *gee.Context) {
 	u := new(models.UserFollow)
 	if err := c.ShouldBind(u); err != nil {
 		zap.L().Error("userFollowHandler method param is illegal", zap.Error(err))
@@ -79,7 +79,7 @@ func UserFollowHandler(c *gin.Context) {
 }
 
 // UserToFollowListHandler 用户关注列表
-func UserToFollowListHandler(c *gin.Context) {
+func UserToFollowListHandler(c *gee.Context) {
 	uid := c.Param("uid")
 	data, err := service.NewUserInstance().ToFollowList(uid)
 	if err != nil {
@@ -91,7 +91,7 @@ func UserToFollowListHandler(c *gin.Context) {
 }
 
 // UserFollowListHandler 用户粉丝列表
-func UserFollowListHandler(c *gin.Context) {
+func UserFollowListHandler(c *gee.Context) {
 	uid := c.Param("uid")
 	data, err := service.NewUserInstance().FollowList(uid)
 	if err != nil {
@@ -103,7 +103,7 @@ func UserFollowListHandler(c *gin.Context) {
 }
 
 // UserCommunityHandler 用户管理的社区
-func UserCommunityHandler(c *gin.Context) {
+func UserCommunityHandler(c *gee.Context) {
 	uid, err := getCurrentUserId(c)
 	if err != nil {
 		zap.L().Error("getCurrentUserId method err", zap.Error(err))
@@ -121,7 +121,7 @@ func UserCommunityHandler(c *gin.Context) {
 }
 
 // UserPostsHandler 用户发布的帖子
-func UserPostsHandler(c *gin.Context) {
+func UserPostsHandler(c *gee.Context) {
 	uid, err := getCurrentUserId(c)
 	if err != nil {
 		zap.L().Error("getCurrentUserId method err", zap.Error(err))

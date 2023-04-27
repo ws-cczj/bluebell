@@ -87,6 +87,9 @@ func (Comment) GetListAll(pid, order string) (commentDatas []*CommentAll, err er
 		zap.L().Error("redis GetFatherCommentId method err", zap.Error(err))
 		return
 	}
+	if len(fList) <= 0 {
+		return
+	}
 	// 3. 无需对子评论进行排序处理，只需要根据排序过后的父评论去查找子评论即可
 	cList, err := redis.GetAllCommentId(fList)
 	if err != nil {

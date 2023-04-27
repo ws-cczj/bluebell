@@ -2,26 +2,25 @@ package routes
 
 import (
 	"bluebell/api"
-	"bluebell/logger"
 	"bluebell/middleware"
 	silr "bluebell/serializer"
 	"bluebell/settings"
 
-	"go.uber.org/zap"
+	"github.com/ws-cczj/gee"
 
-	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
-func Setup() *gin.Engine {
-	if settings.Conf.Mode == gin.ReleaseMode {
-		gin.SetMode(gin.ReleaseMode)
-	}
-	if err := silr.InitTrans("zh"); err != nil {
+func Setup() *gee.Engine {
+
+	r := gee.Default(gee.WithExitOp(true),
+		gee.WithReleaseMode(settings.Conf.Mode == "release"),
+		gee.WithMiddlewares(gee.Cors(), gee.Logger(), gee.Recover(),
+			middleware.RateLimit(settings.Conf.GenInterval, settings.Conf.MaxCaps)))
+
+	if err := silr.InitTrans("zh", r); err != nil {
 		zap.L().Error("init translation fail!", zap.Error(err))
 	}
-	r := gin.New()
-	r.Use(middleware.Cors(), logger.GinLogger(), logger.GinRecovery(true),
-		middleware.RateLimit(settings.Conf.GenInterval, settings.Conf.MaxCaps))
 
 	//pprof.Register(r)
 	// api/v1
@@ -40,29 +39,27 @@ func Setup() *gin.Engine {
 		v1.GET("/comment/:pid", api.CommentListHandler)
 	}
 	// jwt auth 用户认证
-	v1.Use(middleware.JWTAuthMiddleware())
+	admin := v1.Group("/admin")
+	admin.Use(middleware.JWTAuthMiddleware())
 	{
 		// user 用户
-		v1.GET("/user/communitys", api.UserCommunityHandler)
-		v1.GET("/user/posts", api.UserPostsHandler)
-		v1.POST("/user/follow", api.UserFollowHandler)
-		v1.GET("/user/:uid/to_follow", api.UserToFollowListHandler)
-		v1.GET("/user/:uid/follow", api.UserFollowListHandler)
+		admin.GET("/user/communitys", api.UserCommunityHandler)
+		admin.GET("/user/posts", api.UserPostsHandler)
+		admin.POST("/user/follow", api.UserFollowHandler)
+		admin.GET("/user/:uid/to_follow", api.UserToFollowListHandler)
+		admin.GET("/user/:uid/follow", api.UserFollowListHandler)
 		// community 社区
-		v1.POST("/community", api.CommunityCreateHandler)
+		admin.POST("/community", api.CommunityCreateHandler)
 		// post 帖子
-		v1.POST("/post", api.PostPublishHandler)
-		v1.PUT("/post/:pid", api.PostPutHandler)
-		v1.DELETE("/post/:pid", api.PostDeleteHandler)
-		v1.POST("/votes", api.PostVotesHandler)
+		admin.POST("/post", api.PostPublishHandler)
+		admin.PUT("/post/:pid", api.PostPutHandler)
+		admin.DELETE("/post/:pid", api.PostDeleteHandler)
+		admin.POST("/votes", api.PostVotesHandler)
 		// comment 评论
-		v1.POST("/comment", api.CommentPublishHandler)
-		v1.DELETE("/comment", api.CommentDeleteHandler)
-		v1.POST("/comment/favorite", api.CommentFavoriteHandler)
+		admin.POST("/comment", api.CommentPublishHandler)
+		admin.DELETE("/comment", api.CommentDeleteHandler)
+		admin.POST("/comment/favorite", api.CommentFavoriteHandler)
 	}
 
-	r.NoRoute(func(c *gin.Context) {
-		silr.ResponseNotFound(c)
-	})
 	return r
 }

@@ -4,12 +4,10 @@ import (
 	"bluebell/pkg/e"
 	"net/http"
 
+	"github.com/ws-cczj/gee"
+
 	"github.com/go-playground/validator/v10"
-
-	"github.com/gin-gonic/gin"
 )
-
-const NotFoundRoute = "请求路径未找到"
 
 // Response 基础序列化器
 type Response struct {
@@ -19,7 +17,7 @@ type Response struct {
 }
 
 // ResponseError 错误响应体
-func ResponseError(c *gin.Context, code e.ResCode) {
+func ResponseError(c *gee.Context, code e.ResCode) {
 	c.JSON(http.StatusServiceUnavailable, Response{
 		Status: code,
 		Msg:    code.Msg(),
@@ -27,12 +25,12 @@ func ResponseError(c *gin.Context, code e.ResCode) {
 }
 
 // ResponseErrorWithRes 带有响应体的响应体
-func ResponseErrorWithRes(c *gin.Context, res Response) {
+func ResponseErrorWithRes(c *gee.Context, res Response) {
 	c.JSON(http.StatusServiceUnavailable, res)
 }
 
 // ResponseSuccess 响应成功
-func ResponseSuccess(c *gin.Context, data interface{}) {
+func ResponseSuccess(c *gee.Context, data interface{}) {
 	code := e.CodeSUCCESS
 	switch data.(type) {
 	case ResponseUserLogin:
@@ -48,16 +46,8 @@ func ResponseSuccess(c *gin.Context, data interface{}) {
 	}
 }
 
-// ResponseNotFound 路由未找到
-func ResponseNotFound(c *gin.Context) {
-	c.JSON(http.StatusNotFound, Response{
-		Status: http.StatusNotFound,
-		Msg:    NotFoundRoute,
-	})
-}
-
 // ResponseValidatorError 处理翻译器错误请求
-func ResponseValidatorError(c *gin.Context, err error) {
+func ResponseValidatorError(c *gee.Context, err error) {
 	errs, ok := err.(validator.ValidationErrors)
 	if !ok {
 		ResponseError(c, e.CodeInvalidParams)

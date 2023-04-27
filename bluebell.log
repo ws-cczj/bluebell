@@ -4848,3 +4848,71 @@
 [2023-04-01 14:14:55]	[31mERROR[0m	logger/ginlogger.go:27		{"status": 503, "method": "GET", "path": "/api/v1/user/communitys", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "errors": "", "cost": 0.0009142}
 [2023-04-01 14:15:10]	[31mERROR[0m	logger/ginlogger.go:27		{"status": 503, "method": "GET", "path": "/api/v1/user/10002281952972800/to_follow", "ip": "::1", "user-agent": "PostmanRuntime/7.29.0", "errors": "", "cost": 0}
 [2023-04-01 14:35:26]	[35mDEBUG[0m	bluebell/main.go:46	Shutdown Server...
+[2023-04-25 21:29:35]	[35mDEBUG[0m	crontab/taskExec.go:28	帖子投票时间过期任务开启!
+[2023-04-25 21:29:35]	[35mDEBUG[0m	crontab/taskExec.go:49	帖子被删除清除数据任务开启!
+[2023-04-25 21:29:35]	[35mDEBUG[0m	crontab/taskExec.go:68	监视任务执行情况开启!
+[2023-04-25 21:29:35]	[34mINFO[0m	logger/crontablogger.go:12	start
+[2023-04-25 21:29:35]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-04-25 21:29:35]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-04-25 21:29:35]	[34mINFO[0m	logger/crontablogger.go:12	schedule
+[2023-04-27 17:56:52]	[35mDEBUG[0m	crontab/taskExec.go:40	帖子被删除清除数据任务开启!
+[2023-04-27 17:56:52]	[35mDEBUG[0m	crontab/taskExec.go:60	帖子投票时间过期任务开启!
+[2023-04-27 17:56:52]	[35mDEBUG[0m	crontab/taskExec.go:79	监视任务执行情况开启!
+[2023-04-27 17:56:52]	[34mINFO[0m	logger/logger.go:68	start
+[2023-04-27 17:56:52]	[34mINFO[0m	logger/logger.go:68	schedule
+[2023-04-27 17:56:52]	[34mINFO[0m	logger/logger.go:68	schedule
+[2023-04-27 17:56:52]	[34mINFO[0m	logger/logger.go:68	schedule
+[2023-04-27 18:00:01]	[35mDEBUG[0m	crontab/taskExec.go:40	帖子被删除清除数据任务开启!
+[2023-04-27 18:00:01]	[35mDEBUG[0m	crontab/taskExec.go:60	帖子投票时间过期任务开启!
+[2023-04-27 18:00:01]	[35mDEBUG[0m	crontab/taskExec.go:79	监视任务执行情况开启!
+[2023-04-27 18:00:01]	[34mINFO[0m	logger/logger.go:68	start
+[2023-04-27 18:00:01]	[34mINFO[0m	logger/logger.go:68	schedule
+[2023-04-27 18:00:01]	[34mINFO[0m	logger/logger.go:68	schedule
+[2023-04-27 18:00:01]	[34mINFO[0m	logger/logger.go:68	schedule
+[2023-04-27 18:00:27]	[35mDEBUG[0m	crontab/taskExec.go:40	帖子被删除清除数据任务开启!
+[2023-04-27 18:00:27]	[35mDEBUG[0m	crontab/taskExec.go:60	帖子投票时间过期任务开启!
+[2023-04-27 18:00:27]	[35mDEBUG[0m	crontab/taskExec.go:79	监视任务执行情况开启!
+[2023-04-27 18:00:27]	[34mINFO[0m	logger/logger.go:68	start
+[2023-04-27 18:00:27]	[34mINFO[0m	logger/logger.go:68	schedule
+[2023-04-27 18:00:27]	[34mINFO[0m	logger/logger.go:68	schedule
+[2023-04-27 18:00:27]	[34mINFO[0m	logger/logger.go:68	schedule
+[2023-04-27 18:10:01]	[35mDEBUG[0m	crontab/taskExec.go:40	帖子被删除清除数据任务开启!
+[2023-04-27 18:10:01]	[35mDEBUG[0m	crontab/taskExec.go:60	帖子投票时间过期任务开启!
+[2023-04-27 18:10:01]	[35mDEBUG[0m	crontab/taskExec.go:79	监视任务执行情况开启!
+[2023-04-27 18:10:01]	[34mINFO[0m	logger/logger.go:68	start
+[2023-04-27 18:10:01]	[34mINFO[0m	logger/logger.go:68	schedule
+[2023-04-27 18:10:01]	[34mINFO[0m	logger/logger.go:68	schedule
+[2023-04-27 18:10:01]	[34mINFO[0m	logger/logger.go:68	schedule
+[2023-04-27 18:10:57]	[35mDEBUG[0m	crontab/taskExec.go:40	帖子被删除清除数据任务开启!
+[2023-04-27 18:10:57]	[35mDEBUG[0m	crontab/taskExec.go:60	帖子投票时间过期任务开启!
+[2023-04-27 18:10:57]	[35mDEBUG[0m	crontab/taskExec.go:79	监视任务执行情况开启!
+[2023-04-27 18:10:57]	[34mINFO[0m	logger/logger.go:68	start
+[2023-04-27 18:10:57]	[34mINFO[0m	logger/logger.go:68	schedule
+[2023-04-27 18:10:57]	[34mINFO[0m	logger/logger.go:68	schedule
+[2023-04-27 18:10:57]	[34mINFO[0m	logger/logger.go:68	schedule
+[2023-04-27 18:13:30]	[35mDEBUG[0m	crontab/taskExec.go:40	帖子被删除清除数据任务开启!
+[2023-04-27 18:13:30]	[35mDEBUG[0m	crontab/taskExec.go:60	帖子投票时间过期任务开启!
+[2023-04-27 18:13:30]	[35mDEBUG[0m	crontab/taskExec.go:79	监视任务执行情况开启!
+[2023-04-27 18:13:30]	[34mINFO[0m	logger/logger.go:68	start
+[2023-04-27 18:13:30]	[34mINFO[0m	logger/logger.go:68	schedule
+[2023-04-27 18:13:30]	[34mINFO[0m	logger/logger.go:68	schedule
+[2023-04-27 18:13:30]	[34mINFO[0m	logger/logger.go:68	schedule
+[2023-04-27 18:13:36]	[31mERROR[0m	api/community.go:19	Community Create params is not illegal	{"error": "Key: 'CommunityDetail.Community.name' Error:Field validation for 'name' failed on the 'required' tag"}
+[2023-04-27 18:16:33]	[35mDEBUG[0m	crontab/taskExec.go:40	帖子被删除清除数据任务开启!
+[2023-04-27 18:16:33]	[35mDEBUG[0m	crontab/taskExec.go:60	帖子投票时间过期任务开启!
+[2023-04-27 18:16:33]	[35mDEBUG[0m	crontab/taskExec.go:79	监视任务执行情况开启!
+[2023-04-27 18:16:33]	[34mINFO[0m	logger/logger.go:68	start
+[2023-04-27 18:16:33]	[34mINFO[0m	logger/logger.go:68	schedule
+[2023-04-27 18:16:33]	[34mINFO[0m	logger/logger.go:68	schedule
+[2023-04-27 18:16:33]	[34mINFO[0m	logger/logger.go:68	schedule
+[2023-04-27 20:17:51]	[35mDEBUG[0m	crontab/taskExec.go:40	帖子被删除清除数据任务开启!
+[2023-04-27 20:17:51]	[35mDEBUG[0m	crontab/taskExec.go:60	帖子投票时间过期任务开启!
+[2023-04-27 20:17:51]	[35mDEBUG[0m	crontab/taskExec.go:79	监视任务执行情况开启!
+[2023-04-27 20:17:51]	[34mINFO[0m	logger/logger.go:68	start
+[2023-04-27 20:17:51]	[34mINFO[0m	logger/logger.go:68	schedule
+[2023-04-27 20:17:51]	[34mINFO[0m	logger/logger.go:68	schedule
+[2023-04-27 20:17:51]	[34mINFO[0m	logger/logger.go:68	schedule
+[2023-04-27 20:19:07]	[31mERROR[0m	service/post.go:181	GetPostDetailById method is failed	{"postid": "10013193741012992", "error": "sql: no rows in result set"}
+[2023-04-27 20:19:07]	[31mERROR[0m	api/post.go:48	PostDetailById select data is failed	{"error": "sql: no rows in result set"}
+[2023-04-27 20:24:07]	[31mERROR[0m	service/comment.go:99	mysql GetCommentById method err	{"error": "empty slice passed to 'in' query"}
+[2023-04-27 20:24:07]	[31mERROR[0m	api/comment.go:87	service favoriteBuild method err	{"error": "empty slice passed to 'in' query"}

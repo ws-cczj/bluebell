@@ -6,12 +6,13 @@ import (
 	silr "bluebell/serializer"
 	"bluebell/service"
 
-	"github.com/gin-gonic/gin"
+	"github.com/ws-cczj/gee"
+
 	"go.uber.org/zap"
 )
 
 // CommentPublishHandler 评论发布
-func CommentPublishHandler(c *gin.Context) {
+func CommentPublishHandler(c *gee.Context) {
 	// 1. 绑定参数
 	comment := new(models.CommentDetail)
 	if err := c.ShouldBind(comment); err != nil {
@@ -41,7 +42,7 @@ func CommentPublishHandler(c *gin.Context) {
 }
 
 // CommentFavoriteHandler 评论点赞或取消点赞
-func CommentFavoriteHandler(c *gin.Context) {
+func CommentFavoriteHandler(c *gee.Context) {
 	favorite := new(models.Favorite)
 	if err := c.ShouldBind(favorite); err != nil {
 		zap.L().Error("Comment Favorite params is not illegal", zap.Error(err))
@@ -62,7 +63,7 @@ func CommentFavoriteHandler(c *gin.Context) {
 }
 
 // CommentDeleteHandler 删除评论
-func CommentDeleteHandler(c *gin.Context) {
+func CommentDeleteHandler(c *gee.Context) {
 	commentD := new(models.CommentDelete)
 	if err := c.ShouldBind(commentD); err != nil {
 		zap.L().Error("CommentDeleteHandler ShouldBind method err", zap.Error(err))
@@ -78,7 +79,7 @@ func CommentDeleteHandler(c *gin.Context) {
 }
 
 // CommentListHandler 获取所有评论信息
-func CommentListHandler(c *gin.Context) {
+func CommentListHandler(c *gee.Context) {
 	pid := c.Param("pid")
 	order := c.Query("order")
 	data, err := service.NewCommentInstance().GetListAll(pid, order)

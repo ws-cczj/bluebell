@@ -16,3 +16,10 @@ type CommunityDetail struct {
 	CreateAt     time.Time `json:"createAt" db:"create_time"`
 	UpdateAt     time.Time `json:"updateAt" db:"update_time"`
 }
+
+// NewCommunityDetail 实例化结构体
+func NewCommunityDetail() *CommunityDetail {
+	return &CommunityDetail{
+		Community: new(Community),
+	}
+}

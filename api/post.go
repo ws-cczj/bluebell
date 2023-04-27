@@ -6,12 +6,13 @@ import (
 	silr "bluebell/serializer"
 	"bluebell/service"
 
-	"github.com/gin-gonic/gin"
+	"github.com/ws-cczj/gee"
+
 	"go.uber.org/zap"
 )
 
 // PostPublishHandler 帖子发布
-func PostPublishHandler(c *gin.Context) {
+func PostPublishHandler(c *gee.Context) {
 	// 1. 获取创建帖子的数据
 	p := new(service.Publish)
 	if err := c.ShouldBind(p); err != nil {
@@ -40,7 +41,7 @@ func PostPublishHandler(c *gin.Context) {
 }
 
 // PostDetailHandler 根据帖子ID获取帖子详情
-func PostDetailHandler(c *gin.Context) {
+func PostDetailHandler(c *gee.Context) {
 	pid := c.Param("pid")
 	p := new(service.PostAll)
 	if err := p.DetailById(pid); err != nil {
@@ -52,7 +53,7 @@ func PostDetailHandler(c *gin.Context) {
 }
 
 // PostPutHandler 修改帖子
-func PostPutHandler(c *gin.Context) {
+func PostPutHandler(c *gee.Context) {
 	// 1. 获取修改帖子的数据
 	p := new(models.PostPut)
 	if err := c.ShouldBind(p); err != nil {
@@ -71,7 +72,7 @@ func PostPutHandler(c *gin.Context) {
 }
 
 // PostDeleteHandler 删除帖子
-func PostDeleteHandler(c *gin.Context) {
+func PostDeleteHandler(c *gee.Context) {
 	p := new(models.PostDelete)
 	if err := c.ShouldBind(p); err != nil {
 		zap.L().Error("post delete params is not illegal", zap.Error(err))
@@ -93,7 +94,7 @@ func PostDeleteHandler(c *gin.Context) {
 }
 
 // PostListHandler 顺序获取所有帖子
-func PostListHandler(c *gin.Context) {
+func PostListHandler(c *gee.Context) {
 	page, size, order := getPostListInfo(c)
 	data, err := service.NewPostInstance().ListInOrder(page, size, order)
 	if err != nil {
